@@ -1,0 +1,105 @@
+// 滚动条样式
+.menu-scrollbar::-webkit-scrollbar,
+.common-scrollbar::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 0;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 0
+}
+
+
+.el-button{
+    height:32px;
+    font-weight: 400;
+}
+.el-button--primary {
+    color: #fff;
+    background-color: #2d8cf0;
+    border-color: #2d8cf0;
+    padding: 0 15px;
+}
+.el-button--primary:hover{
+    color: #fff;
+    background-color: #57a3f3;
+    border-color: #57a3f3;
+}
+.el-button--primary:focus{
+    color: #fff;
+    background-color: #57a3f3;
+    border-color: #57a3f3;
+}
+
+
+::v-deep .el-table .el-table__cell {
+    text-align: center;
+    padding: 8px 0;
+}
+::v-deep .el-table th {
+      white-space: nowrap;
+      overflow: hidden;
+      background-color: rgba(36, 106, 217, 0.20);
+}
+::v-deep .el-table thead.is-group th.el-table__cell{
+    background-color: rgba(36, 106, 217, 0.20);
+}
+::v-deep .el-table thead {
+      color: #515a6e;
+      font-weight: 500;
+}
+::v-deep .el-table .cell{
+    line-height: 21px;
+}
+::v-deep .ivu-table th{
+    background-color:rgba(36, 106, 217, 0.2);
+    color:#333333;
+    font-size:14px;
+    height:42px
+}
+
+.ivu-menu-item{
+    width: 224px;
+    height: 49px;
+}
+.sider-menu .menu-item-title {
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    line-height: 20px;
+}
+::v-deep .ivu-menu-vertical .ivu-menu-submenu-title-icon{
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 50%;
+    left: 198px;
+    right: 10px
+}
+::v-deep .top-menu .el-menu-demo > li {
+    width: 146px;
+    height: 36px;
+    line-height: 36px;
+    color:#fff;
+    margin-top: 14px
+}
+::v-deep .top-menu .el-menu-demo > li:hover {
+    color:#fff;
+}
+::v-deep .top-menu .el-menu-demo > li > div.el-submenu__title{
+    height:36px;
+    line-height: 36px;
+}
+
+::v-deep ivu-select-dropdown ivu-transfer-no-max-height{
+    z-index: 1000;
+    left: -45px
+}
+::v-deep .ivu-color-picker .ivu-select-dropdown{
+    position: static!important;
+
+}
+::v-deep .ivu-input-icon{
+    display: none;
+}
+::v-deep .ivu-input-icon-normal+.ivu-input{
+    padding: 4px 7px
+}

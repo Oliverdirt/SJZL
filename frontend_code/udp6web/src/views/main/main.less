@@ -1,0 +1,51 @@
+@import '../../base.less';
+.main {
+  width: 100%;
+  height: 100%;
+  &-sider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    height: 100%;
+    overflow: auto;
+    background-color: @theme1-color;
+    transition: width .3s ease-in-out;
+    .logo-main {
+      padding-right: 10px;
+      height: 64px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-origin: content-box;
+    }
+    .logo-min {
+      height: 64px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-origin: content-box;
+    }
+  }
+  &-header {
+    width:100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    overflow: auto;
+    min-width: 992px;
+    transition: left .3s ease-in-out;
+  }
+
+  &-content {
+    position: absolute;
+    top: 104px;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    min-width: 992px;
+    background-color: #F0F2F5;
+    transition: left .3s ease-in-out;
+    padding: 16px 24px;
+  }
+}
