@@ -1,0 +1,123 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    <property name="autoIncrement" value="false" dbms="mysql,mssql,h2,postgresql,sybase"/>
+    <property name="intType" value="bigint" dbms="postgresql"/>
+    <property name="intType" value="int(11)" dbms="mysql,mssql,h2,oracle,sybase,maridb"/>
+    <property name="longType" value="bigint" dbms="mysql,postgresql"/>
+    <property name="longType" value="bigint" dbms="mssql,h2,oracle,sybase,maridb"/>
+
+    <!--  租户表  -->
+    <changeSet id="TENANT-20220119-002" author="ctsi" >
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_tenant"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_tenant" remarks="租户表">
+            <column name="id" type="bigint" remarks="租户id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="tenant_account" type="varchar(32)"  remarks="租户账号">
+                <constraints nullable="false" />
+            </column>
+            <column name="tenant_name" type="varchar(64)"  remarks="租户名称">
+                <constraints nullable="false" />
+            </column>
+            <column name="contacts" type="varchar(32)"  remarks="租户名称">
+                <constraints nullable="true" />
+            </column>
+            <column name="phone" type="varchar(11)"  remarks="联系电话">
+                <constraints nullable="true" />
+            </column>
+            <column  name="expire_time" type="date" remarks="过期时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="active_flag" type="varchar(1)" remarks="0:未激活，1：激活" >
+                <constraints nullable="true" />
+            </column>
+
+        </createTable>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_tenant">
+            <column name="id" value="1478649882954985474"/>
+            <column name="tenant_account" value="default"/>
+            <column name="tenant_name" value="默认租户账号"/>
+            <column name="contacts" value="default"/>
+            <column name="phone" value=""/>
+            <column name="expire_time" value="2050-02-05 16:48:09"/>
+            <column name="active_flag" value="1"/>
+        </ext:insert>
+        <!--   部门关系     -->
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="66"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1478922565458399234"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="67"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1483275049199054850"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="68"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1483275153251348481"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="69"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1483275279428595714"/>
+        </ext:insert>
+        <!--   角色关系     -->
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="70"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1479374880020488193"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="71"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1481440682481438721"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="72"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1481440999885393921"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="73"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1481441095196758018"/>
+        </ext:insert>
+        <!--   用户关系     -->
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="62"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="200"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="63"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="202"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="64"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="203"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="65"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="204"/>
+        </ext:insert>
+        <rollback>
+            <dropTable tableName="cscp_tenant"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

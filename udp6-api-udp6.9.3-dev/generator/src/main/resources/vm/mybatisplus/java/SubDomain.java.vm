@@ -1,0 +1,75 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+
+#set($BetweenDONum=0)
+#foreach ($column in $table.subTable.columns)
+#if($column.queryType == "between")
+#set($BetweenDONum=$BetweenDONum+1)
+#break
+#end
+#end
+package ${packageName}.domain;
+
+import com.ctsi.ssdc.util.LongtoStringSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.io.Serializable;
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModel;
+import com.ctsi.ssdc.annocation.AutoId;
+#if($BetweenDONum > 0)
+import com.ctsi.ssdc.model.BetweenDO;
+import java.util.List;
+#end
+#if($table.subTable.isFeildValid == 1)
+import javax.validation.constraints.Pattern;
+#end
+#foreach ($import in $subImportList)
+import ${import};
+#end
+/**
+ *  ${subClassName} 实体类
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+@Data
+@TableName("${table.subTable.tableName}")
+@ApiModel(description = "${subClassName}")
+public class ${subClassName}  implements Serializable{
+#foreach ($column in $table.subTable.columns)
+    /**
+     * ${column.columnComment}
+     *
+     */
+    @ApiModelProperty("${column.columnComment}")
+    @TableField(value = "${column.columnName}")
+#if($column.isPk == 1)
+    @AutoId(primaryKey = "${column.columnName}")
+    @TableId
+#end
+#if($column.javaType == 'Long')
+    @JsonSerialize(using = LongtoStringSerialize.class)
+#end
+#if($column.javaType == 'Date')
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+#elseif($column.javaType == 'ZonedDateTime')
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+#end
+#if($column.validateRule != "")
+    @Pattern(regexp = "${column.obtainRulevalue()}",message = "${column.obtainRuleinfo()}")
+#end
+    private $column.javaType $column.javaField;
+#end
+
+#if($BetweenDONum > 0)
+@TableField(exist = false)
+private List<BetweenDO> ${subclassName}FeildsBetween;
+#end
+
+}

@@ -1,0 +1,249 @@
+package ${packageName}.service.impl;
+#set($BetweenDONum=0)
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#foreach ($column in $columns)
+#if($column.queryType == "between")
+#set($BetweenDONum=$BetweenDONum+1)
+#break
+#end
+#end
+#if($table.formType == 2 || ${table.subTable})
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+#end
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+#if($table.formType != 2)
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import ${packageName}.domain.${ClassName};
+import ${packageName}.mapper.${ClassName}Mapper;
+import org.springframework.transaction.annotation.Transactional;
+#if(${table.subTable})
+import ${packageName}.mapper.${subClassName}Mapper;
+#end
+#if(${table.subTable})
+import ${packageName}.domain.${subClassName};
+#end
+import ${packageName}.service.${ClassName}Service;
+import org.springframework.stereotype.Service;
+import com.ctsi.ssdc.model.AjaxResult;
+#if($BetweenDONum > 0)
+import com.ctsi.ssdc.model.BetweenDO;
+import org.springframework.transaction.annotation.Transactional;
+#end
+#if($table.formType == 2 ||$BetweenDONum > 0)
+import java.util.ArrayList;
+import java.util.List;
+#end
+#if($table.formType == 2)
+import java.util.stream.Collectors;
+#end
+import javax.annotation.Resource;
+import java.util.Objects;
+
+/**
+ * 服务实现类
+ *
+ * @author ${author}
+ * @since ${datetime}
+ */
+@Service
+public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${ClassName}> implements ${ClassName}Service {
+
+    @Resource ${ClassName}Mapper ${className}Mapper;
+#if(${table.subTable})
+    @Resource ${subClassName}Mapper ${subclassName}Mapper;
+#end
+    /**
+    * 根据主键删除记录
+    * @return
+    */
+    @Override
+    @Transactional
+    public AjaxResult remove${ClassName}ByTableId(Long ${pkColumn.javaField}) {
+#if($table.formType != 2)
+#if(${table.subTable})
+        LambdaQueryWrapper<${subClassName}> wrapper = Wrappers.lambdaQuery(${subClassName}.class).ge(Objects.nonNull(${pkColumn.javaField}),${subClassName}::get${subTableFkClassName},${pkColumn.javaField});
+        // 查询关联子表信息
+        Integer ${subclassName}Count = ${subclassName}Mapper.selectCount(wrapper);
+        if (${subclassName}Count >0) {
+            return  AjaxResult.error("删除失败，关联子表不为空！！");
+        }
+#end
+        // 删除主表信息
+        this.removeById(${pkColumn.javaField});
+        return  AjaxResult.success("删除成功！！");
+#end
+#if($table.formType == 2)
+        // 判断是否存在子节点，存在子节点无法删除
+        LambdaQueryWrapper<${ClassName}> wrapper = Wrappers.lambdaQuery(${ClassName}.class).ge(Objects.nonNull(${pkColumn.javaField}),${ClassName}::get${TreeParentCode}, ${pkColumn.javaField});
+        int count = this.count(wrapper);
+        if(count>0){
+            return  AjaxResult.error("删除失败，存在子节点！！");
+        } else {
+            this.removeById(${pkColumn.javaField});
+            return  AjaxResult.success("删除成功！！");
+        }
+#end
+    }
+
+#if($table.formType != 2)
+    /**
+    * 根据条件分页查询
+    * @return
+    */
+    @Override
+    public Page<${ClassName}> queyPageByCondition(${ClassName} ${className}, Page<${ClassName}> page) {
+
+        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<>();
+        // 构造复杂查询
+#foreach ($column in $columns)
+#if($column.isQuery == 1)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($column.queryType == "equals")
+        queryWrapper.eq(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#elseif($column.queryType == "greaterOrEqualThan")
+        queryWrapper.ge(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#elseif($column.queryType == "lessOrEqualThan")
+        queryWrapper.le(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#elseif($column.queryType == "contains")
+        queryWrapper.like(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#end
+
+#end
+#end
+#if($BetweenDONum >0)
+            // between 单独处理
+        List<BetweenDO> ${className}FeildsBetween = ${className}.get${ClassName}FeildsBetween();
+        if (${className}FeildsBetween.size() > 0) {
+            for (BetweenDO betweenDO : ${className}FeildsBetween) {
+                String betweenFeild = betweenDO.getBetweenFeild();
+                // between
+                queryWrapper.between(
+                        betweenFeild, betweenDO.getLowerBoundary(), betweenDO.getUpperBoundary());
+            }
+        }
+#end
+        return ${className}Mapper.selectPage(page, queryWrapper);
+    }
+#end
+
+#if($table.formType == 2)
+    /**
+    * 根据条件查询列表
+    * @return
+    */
+    @Override
+    public  List<${ClassName}> quey${ClassName}sList(${ClassName} ${className}) {
+        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<>();
+        // 构造复杂查询
+#foreach ($column in $columns)
+#if($column.isQuery == 1)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($column.queryType == "equals")
+        queryWrapper.eq(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#elseif($column.queryType == "greaterOrEqualThan")
+        queryWrapper.ge(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#elseif($column.queryType == "lessOrEqualThan")
+        queryWrapper.le(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#elseif($column.queryType == "contains")
+        queryWrapper.like(Objects.nonNull(${className}.get${AttrName}()), "${column.columnName}",
+            ${className}.get${AttrName}());
+#end
+#end
+#end
+#if($BetweenDONum >0)
+        // between 单独处理
+        List<BetweenDO> ${className}FeildsBetween = ${className}.get${ClassName}FeildsBetween();
+        if (${className}FeildsBetween.size() > 0) {
+            for (BetweenDO betweenDO : ${className}FeildsBetween) {
+                String betweenFeild = betweenDO.getBetweenFeild();
+                // between
+                queryWrapper.between(
+                        betweenFeild, betweenDO.getLowerBoundary(), betweenDO.getUpperBoundary());
+            }
+        }
+#end
+        return ${className}Mapper.selectList(queryWrapper);
+    }
+
+    /**
+    * 查询树状列表（全部）
+    * @return
+    */
+    @Override
+    public List<${ClassName}> treeSelectAll() {
+        // 查询全部列表信息
+        List<${ClassName}> ${className}List = this.list();
+        // 构建树结构
+        return build${ClassName}TreeSelect(${className}List,0L);
+    }
+
+    /**
+    * 根据指定父id的树状列表
+    * @return
+    */
+    @Override
+    public List<${ClassName}> treeSelectByParentId(Long ${treeParentCode}){
+        // 判断是否存在子节点
+        LambdaQueryWrapper<${ClassName}> wrapper = Wrappers.lambdaQuery(${ClassName}.class).ge(Objects.nonNull(${treeParentCode}),${ClassName}::get${TreeParentCode}, ${treeParentCode});
+        int count = this.count(wrapper);
+        // 构建树结构
+        if(count > 0){
+            // 查询全部列表信息
+            List<${ClassName}> ${className}List = this.list();
+            // 构建树结构
+            return build${ClassName}TreeSelect(${className}List,${treeParentCode});
+        }else{
+            return new ArrayList<${ClassName}>();
+        }
+    }
+
+    /**
+    * 根据list构建树
+    * @param ${className}List
+    * @return
+    */
+    public List<${ClassName}> build${ClassName}TreeSelect(List<${ClassName}> ${className}List,Long ${treeParentCode}) {
+        return ${className}List.stream().filter(m -> m.get${TreeParentCode}().equals(${treeParentCode})).map(
+                (m) -> {
+                    m.setChildren(getChildrens(m, ${className}List));
+                    return m;
+                }
+        ).collect(Collectors.toList());
+    }
+
+    /**
+    * 获取子元素
+    * @param all
+    * @return
+    */
+    private static List<${ClassName}> getChildrens(${ClassName} root, List<${ClassName}> all) {
+        List<${ClassName}> children = all.stream().filter(m -> Objects.equals(m.get${TreeParentCode}(), root.get${TreeCode}())).map(
+                (m) -> {
+                    m.setChildren(getChildrens(m, all));
+                    return m;
+                }
+        ).collect(Collectors.toList());
+        return children;
+    }
+
+#end
+}

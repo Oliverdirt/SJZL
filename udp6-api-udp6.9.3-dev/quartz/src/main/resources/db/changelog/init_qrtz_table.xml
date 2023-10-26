@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    <property name="autoIncrement" value="true" dbms="mysql,mssql,h2,postgresql,sybase"/>
+    <property name="intType" value="bigint" dbms="postgresql"/>
+    <property name="intType" value="int(11)" dbms="mysql,mssql,h2,oracle,sybase"/>
+    <property name="bigintType" value="bigint(20)" dbms="mysql,postgresql"/>
+    <property name="blobType" value="blob" dbms="mysql"/>
+    <property name="blobType" value="bytea" dbms="postgresql"/>
+    
+    <!-- Trigger 作为 Blob 类型存储(用于 Quartz 用户用 JDBC 创建他们自己定制的 Trigger 类型，JobStore 并不知道如何存储实例的时候) -->
+    <changeSet id="QUARTZ-20211117-001" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_BLOB_TRIGGERS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_BLOB_TRIGGERS">
+            <column name="sched_name" type="varchar(120)" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_name" type="varchar(200)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="trigger_group" type="varchar(200)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="blob_data" type="blob"  >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_BLOB_TRIGGERS CONVERT TO CHARACTER SET UTF8;</sql>
+        <rollback>
+            <dropTable tableName="QRTZ_BLOB_TRIGGERS"/>
+        </rollback>
+    </changeSet>
+    <!--以 Blob 类型存储存放日历信息， quartz可配置一个日历来指定一个时间范围-->
+    <changeSet id="QUARTZ-20211117-002" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_CALENDARS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="qrtz_calendars">
+            <column name="sched_name" type="varchar(120)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="calendar_name" type="varchar(200)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="calendar" type="blob" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_CALENDARS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <!-- 存储 Cron Trigger，包括 Cron 表达式和时区信息   -->
+    <changeSet id="QUARTZ-20211117-003" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_CRON_TRIGGERS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_CRON_TRIGGERS">
+            <column name="sched_name" type="varchar(120)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="trigger_name" type="varchar(200)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="trigger_group" type="varchar(200)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="cron_expression" type="varchar(200)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="time_zone_id" type="varchar(80)" >
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_CRON_TRIGGERS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <!--存储与已触发的 Trigger 相关的状态信息，以及相联 Job 的执行信息-->
+    <changeSet id="QUARTZ-20211117-004" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_FIRED_TRIGGERS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_FIRED_TRIGGERS">
+            <column name="sched_name" type="varchar(120)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="entry_id" type="varchar(95)" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="trigger_name" type="varchar(200)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="trigger_group" type="varchar(200)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="instance_name" type="varchar(200)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="fired_time" type="number(20)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="sched_time" type="number(20)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type="number" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar(16)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_name" type="varchar(200)" >
+                <constraints nullable="true"/>
+            </column>
+            <column name="job_group" type="varchar(200)" >
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_nonconcurrent" type="varchar(1)" >
+                <constraints nullable="true"/>
+            </column>
+            <column name="requests_recovery" type="varchar(1)" >
+                <constraints nullable="true"/>
+            </column>
+
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_FIRED_TRIGGERS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+
+    <!--存储每一个已配置的 jobDetail 的详细信息-->
+    <changeSet id="QUARTZ-20211117-005" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_JOB_DETAILS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_JOB_DETAILS">
+            <column name="sched_name" type="varchar(120)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_name" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_group" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="description" type="varchar(255)"  >
+                <constraints nullable="true" />
+            </column>
+            <column name="job_class_name" type="varchar(255)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="is_durable" type="varchar(1)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="is_nonconcurrent" type="varchar(1)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="is_update_data" type="varchar(1)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="requests_recovery" type="varchar(1)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="job_data" type="blob"  >
+                <constraints nullable="true" />
+            </column>
+
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_JOB_DETAILS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!-- 存储程序的悲观锁的信息(假如使用了悲观锁)-->
+    <changeSet id="QUARTZ-20211117-006" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_LOCKS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_LOCKS">
+            <column name="sched_name" type="varchar(255)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="lock_name" type="varchar(255)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_LOCKS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!--  存储已暂停的 Trigger 组的信息  -->
+    <changeSet id="QUARTZ-20211117-007" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_PAUSED_TRIGGER_GRPS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_PAUSED_TRIGGER_GRPS">
+            <column name="sched_name" type="varchar(120)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_group" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_PAUSED_TRIGGER_GRPS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!--存储少量的有关 Scheduler 的状态信息，假如是用于集群中，可以看到其他的 Scheduler 实例-->
+    <changeSet id="QUARTZ-20211117-008" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_SCHEDULER_STATE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_SCHEDULER_STATE">
+            <column name="sched_name" type="varchar(120)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="instance_name" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="last_checkin_time" type="number(20)"  >
+                <constraints nullable="false"  />
+            </column>
+            <column name="checkin_interval" type="number(20)"  >
+                <constraints nullable="false"  />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_SCHEDULER_STATE CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!-- 存储简单的 Trigger，包括重复次数，间隔，以及已触发的次数-->
+    <changeSet id="QUARTZ-20211117-009" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_SIMPLE_TRIGGERS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_SIMPLE_TRIGGERS">
+            <column name="sched_name" type="varchar(120)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_name" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_group" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="repeat_count" type="number(20)"  >
+                <constraints nullable="false"  />
+            </column>
+            <column name="repeat_interval" type="number(20)"  >
+                <constraints nullable="false"  />
+            </column>
+            <column name="times_triggered" type="number(20)"  >
+                <constraints nullable="false"  />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_SIMPLE_TRIGGERS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <changeSet id="QUARTZ-20211117-010" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_SIMPROP_TRIGGERS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_SIMPROP_TRIGGERS">
+            <column name="sched_name" type="varchar(120)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_name" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_group" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="str_prop_1" type="varchar(512)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="str_prop_2" type="varchar(512)"  >
+                <constraints nullable="true" />
+            </column>
+            <column name="str_prop_3" type="varchar(512)"  >
+                <constraints nullable="true" />
+            </column>
+            <column name="int_prop_1" type="number"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="int_prop_2" type="number"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="long_prop_1" type="number(20)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="long_prop_2" type="number(20)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="dec_prop_1" type="numeric(13,4)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="dec_prop_2" type="numeric(13,4)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="bool_prop_1" type="varchar(1)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="bool_prop_2" type="varchar(1)"  >
+                <constraints nullable="true"  />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_SIMPROP_TRIGGERS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!--  存储已配置的 Trigger 的信息  -->
+    <changeSet id="QUARTZ-20211117-011" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="QRTZ_TRIGGERS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="QRTZ_TRIGGERS">
+            <column name="sched_name" type="varchar(120)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_name" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="trigger_group" type="varchar(200)"  >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_name" type="varchar(200)"  >
+                <constraints nullable="false"  />
+            </column>
+            <column name="job_group" type="varchar(200)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)"  >
+                <constraints nullable="true" />
+            </column>
+            <column name="next_fire_time" type="number(20)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="prev_fire_time" type="number(20)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="priority" type="number"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="trigger_state" type="varchar(255)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="trigger_type" type="varchar(255)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="start_time" type="number(20)"  >
+                <constraints nullable="false" />
+            </column>
+            <column name="end_time" type="number(20)"  >
+                <constraints nullable="true" />
+            </column>
+            <column name="calendar_name" type="varchar(255)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="misfire_instr" type="varchar(2)"  >
+                <constraints nullable="true"  />
+            </column>
+            <column name="job_data" type="blob"  >
+                <constraints nullable="true"  />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE QRTZ_TRIGGERS CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!-- 定时任务表-->
+    <changeSet id="QUARTZ-20211117-012" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SYS_JOB"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SYS_JOB" remarks="定时任务表">
+            <column name="id" type="number(20)"  remarks="任务ID">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_name" type="varchar(255)"  remarks="任务名称">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_group" type="varchar(255)" remarks="任务组名" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="invoke_target" type="varchar(255)" remarks="调用目标字符串" >
+                <constraints nullable="false"  />
+            </column>
+            <column name="cron_expression" type="varchar(255)"  remarks="cron执行表达式">
+                <constraints nullable="true" />
+            </column>
+            <column name="misfire_policy" type="varchar(255)"  remarks="计划执行错误策略（1立即执行 2执行一次 3放弃执行）">
+                <constraints nullable="true" />
+            </column>
+            <column name="concurrent" type="varchar(1)"  remarks="是否并发执行（0允许 1禁止）">
+                <constraints nullable="true"  />
+            </column>
+            <column name="status" type="varchar(1)"  remarks="状态（0正常 1暂停）">
+                <constraints nullable="true"  />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE SYS_JOB CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!-- 定时任务调度日志表-->
+    <changeSet id="QUARTZ-20220531-001" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SYS_JOB_LOG"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SYS_JOB_LOG" remarks="定时任务日志表">
+            <column name="job_log_id" type="number(20)" remarks="ID" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_name" type="varchar(255)" remarks="任务名称" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_group" type="varchar(255)" remarks="任务组名" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="invoke_target" type="varchar(255)" remarks="调用目标字符串" >
+                <constraints nullable="false"  />
+            </column>
+            <column name="job_message" type="varchar(500)" remarks="日志信息" >
+                <constraints nullable="true" />
+            </column>
+            <column name="status" type="char(1)" remarks="执行状态(0失败 1正常)" >
+                <constraints nullable="true"  />
+            </column>
+            <column name="exception_info" type="varchar(2000)" remarks="执行时间" >
+                <constraints nullable="true" />
+            </column>
+            <column name="execution_time" type="date" remarks="执行时间" >
+                <constraints nullable="true"  />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE SYS_JOB_LOG CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+
+<!--    <changeSet id="QUARTZ-20211117-013" author="jshx">-->
+<!--        <sql>-->
+<!--            /*-->
+<!--            定时任务菜单-->
+<!--            */-->
+<!--            INSERT INTO cscp_menus VALUES ('3000', 'monitor', 'ios-time-outline', '定时任务', '/monitor', '*', 'views/main/main.vue', '0', 'menu1', '', '3000');-->
+<!--            INSERT INTO cscp_menus VALUES ('3001', 'job-list', 'logo-octocat', '任务列表', '/jobList', '*', 'views/monitor/jobList.vue', '3000', 'menu2', '', '3001');-->
+<!--            INSERT INTO cscp_menus VALUES ('3002', 'job-add', 'md-git-compare', '添加任务', '/jobAdd', '*', 'views/monitor/jobAddOrEdit.vue', '3001', 'non-menu', '', '3002');-->
+<!--            INSERT INTO cscp_menus VALUES ('3003', 'job-edit', 'md-git-compare', '编辑任务', '/jobAdd', '*', 'views/monitor/jobAddOrEdit.vue', '3001', 'non-menu', '', '3003');-->
+<!--            INSERT INTO cscp_menus VALUES (1531437862914818050, 'job-log', 'logo-designernews', '调度日志', '/jobLog', '*', 'views/monitor/JobLog/jobLogManager.vue', 3000, 'menu2', '', 3002);-->
+<!--            INSERT INTO cscp_menus VALUES (1531446738708004865, 'job-log-view', 'ios-information', '查看日志', '/jobLogView', '*', 'views/monitor/JobLog/jobLogManager.vue', 1531437862914818050, 'non-menu', '', 1);-->
+
+<!--        </sql>-->
+<!--    </changeSet>-->
+
+
+    <changeSet id="QUARTZ-20220401-001" author="jshx">
+        <sql>
+            /*
+            定时任务表：sys_job
+            */
+            INSERT INTO sys_job (id, job_name, job_group, invoke_target, cron_expression, misfire_policy, concurrent, status) VALUES (1509922997907513346, '组件调用日志上传任务', '1', 'documentServiceImpl.batchAddDoc()', '0 0 15 * * ?', '1', '1', '1');
+            INSERT INTO sys_job (id, job_name, job_group, invoke_target, cron_expression, misfire_policy, concurrent, status) VALUES (1528922200965402626, '系统监控定时任务', '1', 'monitorTask.getMsg()', '0 0/1 * * * ?', '2', '1', '1');
+        </sql>
+    </changeSet>
+
+    <changeSet id="QUARTZ-20220401-002" author="jshx">
+        <sql>
+            /*
+            定时任务表：qrtz_cron_triggers
+            */
+            INSERT INTO qrtz_cron_triggers (sched_name, trigger_name, trigger_group, cron_expression, time_zone_id) VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1509922997907513346', '1', '0 0 15 * * ?', 'Asia/Shanghai');
+            <!--            INSERT INTO qrtz_cron_triggers (sched_name, trigger_name, trigger_group, cron_expression, time_zone_id) VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1528922200965402626', '1', '0 0/1 * * * ?', 'GMT+08:00');-->
+            INSERT INTO qrtz_cron_triggers VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1528922200965402626', '1', '0 0/1 * * * ?', 'Asia/Shanghai');
+        </sql>
+    </changeSet>
+
+    <changeSet id="QUARTZ-20220401-003" author="jshx">
+        <sql>
+            /*
+            定时任务表：qrtz_job_details
+            */
+            <!--            INSERT INTO qrtz_job_details (sched_name, job_name, job_group, description, job_class_name, is_durable, is_nonconcurrent, is_update_data, requests_recovery, job_data) VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1509922997907513346', '1', NULL, 'com.ctsi.ssdc.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F5045525449455373720022636F6D2E637473692E737364632E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000269647400104C6A6176612F6C616E672F4C6F6E673B4C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978707400013174000C302030203135202A202A203F7372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B020000787014F452F778786002740021646F63756D656E7453657276696365496D706C2E6261746368416464446F6328297400013174001EE7BB84E4BBB6E8B083E794A8E697A5E5BF97E4B88AE4BCA0E4BBBBE58AA174000131740001317800);-->
+            <!--            INSERT INTO qrtz_job_details (sched_name, job_name, job_group, description, job_class_name, is_durable, is_nonconcurrent, is_update_data, requests_recovery, job_data) VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1528922200965402626', '1', NULL, 'com.ctsi.ssdc.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0','')-->
+            INSERT INTO qrtz_job_details VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1509922997907513346', '1', NULL, 'com.ctsi.ssdc.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F5045525449455373720023636F6D2E637473692E737364632E71756172747A2E646F6D61696E2E437363704A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000269647400104C6A6176612F6C616E672F4C6F6E673B4C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978707400013174000C302030203135202A202A203F7372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B020000787015400180EF5ED001740021646F63756D656E7453657276696365496D706C2E6261746368416464446F6328297400013174001EE7BB84E4BBB6E8B083E794A8E697A5E5BF97E4B88AE4BCA0E4BBBBE58AA174000130740001317800);
+            INSERT INTO qrtz_job_details VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1528922200965402626', '1', NULL, 'com.ctsi.ssdc.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F5045525449455373720023636F6D2E637473692E737364632E71756172747A2E646F6D61696E2E437363704A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000269647400104C6A6176612F6C616E672F4C6F6E673B4C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978707400013174000D3020302F31202A202A202A203F7372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B0200007870154001A6DF5ED0017400146D6F6E69746F725461736B2E6765744D7367282974000131740018E7B3BBE7BB9FE79B91E68EA7E5AE9AE697B6E4BBBBE58AA174000132740001317800);
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="QUARTZ-20220401-004" author="jshx">
+        <sql>
+            /*
+            定时任务表：qrtz_locks
+            */
+            INSERT INTO qrtz_locks (sched_name, lock_name) VALUES ('BiyiScheduler', 'STATE_ACCESS');
+            INSERT INTO qrtz_locks (sched_name, lock_name) VALUES ('BiyiScheduler', 'TRIGGER_ACCESS');
+        </sql>
+    </changeSet>
+
+    <changeSet id="QUARTZ-20220401-005" author="jshx">
+        <sql>
+            /*
+            定时任务表：qrtz_scheduler_state
+            */
+            INSERT INTO qrtz_scheduler_state (sched_name, instance_name, last_checkin_time, checkin_interval) VALUES ('BiyiScheduler', 'MS-IAUYUNSODUCT1648828475683', 1648829132738, 15000);
+        </sql>
+    </changeSet>
+
+    <changeSet id="QUARTZ-20220401-006" author="jshx">
+        <sql>
+            /*
+            定时任务表：qrtz_triggers
+            */
+            INSERT INTO qrtz_triggers (sched_name, trigger_name, trigger_group, job_name, job_group, description, next_fire_time, prev_fire_time, priority, trigger_state, trigger_type, start_time, end_time, calendar_name, misfire_instr, job_data) VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1509922997907513346', '1', 'TASK_CLASS_NAME1509922997907513346', '1', NULL, 1648882800000, -1, 5, 'WAITING', 'CRON', 1648829066000, 0, NULL, '1', '');
+            <!--            INSERT INTO qrtz_triggers (sched_name, trigger_name, trigger_group, job_name, job_group, description, next_fire_time, prev_fire_time, priority, trigger_state, trigger_type, start_time, end_time, calendar_name, misfire_instr, job_data) VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1528922200965402626', '1', 'TASK_CLASS_NAME1528922200965402626', '1', NULL, 1653440580000, -1, 5, 'WAITING', 'CRON', 1653440580000, 0, NULL, '2', '');-->
+            INSERT INTO qrtz_triggers VALUES ('BiyiScheduler', 'TASK_CLASS_NAME1528922200965402626', '1', 'TASK_CLASS_NAME1528922200965402626', '1', NULL, 1653893520000, 1653893460000, 5, 'WAITING', 'CRON', 1653893379000, 0, NULL, '2', '');
+        </sql>
+    </changeSet>
+
+    <changeSet id="QUARTZ-20211117-016" author="jshx" >
+        <addForeignKeyConstraint baseTableName="QRTZ_TRIGGERS" baseColumnNames="sched_name,job_name,job_group"
+                                 constraintName="qrtz_triggers_ibfk_1" referencedTableName="QRTZ_JOB_DETAILS"
+                                 referencedColumnNames="sched_name,job_name,job_group"/>
+    </changeSet>
+    <changeSet id="QUARTZ-20211117-017" author="jshx" >
+        <addForeignKeyConstraint baseTableName="QRTZ_SIMPLE_TRIGGERS" baseColumnNames="sched_name,trigger_name,trigger_group"
+                                 constraintName="qrtz_simple_triggers_ibfk_1" referencedTableName="QRTZ_TRIGGERS"
+                                 referencedColumnNames="sched_name,trigger_name,trigger_group"/>
+    </changeSet>
+    <changeSet id="QUARTZ-20211117-018" author="jshx" >
+        <addForeignKeyConstraint baseTableName="QRTZ_CRON_TRIGGERS" baseColumnNames="sched_name,trigger_name,trigger_group"
+                                 constraintName="qrtz_cron_triggers_ibfk_1" referencedTableName="QRTZ_TRIGGERS"
+                                 referencedColumnNames="sched_name,trigger_name,trigger_group"/>
+    </changeSet>
+    <changeSet id="QUARTZ-20211117-019" author="jshx" >
+        <addForeignKeyConstraint baseTableName="QRTZ_BLOB_TRIGGERS" baseColumnNames="sched_name,trigger_name,trigger_group"
+                                 constraintName="qrtz_blob_triggers_ibfk_1" referencedTableName="QRTZ_TRIGGERS"
+                                 referencedColumnNames="sched_name,trigger_name,trigger_group"/>
+    </changeSet>
+    <changeSet id="QUARTZ-20211117-020" author="jshx" >
+        <addForeignKeyConstraint baseTableName="QRTZ_SIMPROP_TRIGGERS" baseColumnNames="sched_name,trigger_name,trigger_group"
+                                 constraintName="qrtz_simprop_triggers_ibfk_1" referencedTableName="QRTZ_TRIGGERS"
+                                 referencedColumnNames="sched_name,trigger_name,trigger_group"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,284 @@
+package ${packageName}.web;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import com.ctsi.ssdc.poi.excel.util.ExcelUtil;
+import org.apache.commons.lang.StringUtils;
+import java.lang.Long;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+    #if($table.isFeildValid == 1)
+import org.springframework.validation.annotation.Validated;
+#end
+#if($table.formType == 2)
+import java.util.Map;
+import java.util.HashMap;
+import com.ctsi.ssdc.criteria.LongCriteria;
+#end
+import ${packageName}.service.${ClassName}Service;
+import ${packageName}.domain.${ClassName}Example;
+import ${packageName}.domain.${ClassName};
+
+import com.ctsi.ssdc.model.PageResult;
+import com.ctsi.ssdc.util.HeaderUtil;
+import com.ctsi.ssdc.util.ResponseUtil;
+
+/**
+ * REST controller for managing ${ClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@Api(value = "/api",tags = {"$tableName.replaceAll("_","-")-controller"})
+@RestController
+@RequestMapping("/api")
+public class ${ClassName}Controller {
+
+
+    private final Logger log = LoggerFactory.getLogger(${ClassName}Controller.class);
+
+    private static final String ENTITY_NAME = "${className}";
+
+    private final ${ClassName}Service ${className}Service;
+
+    public ${ClassName}Controller(${ClassName}Service ${className}Service) {
+        this.${className}Service = ${className}Service;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
+    /**
+     * POST  /${className}s : Create a new ${className}.
+     *
+     * @param ${className} the ${className} to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new ${className}, or with status 400 (Bad Request) if the ${className} has already an ${primaryKeyParamNameList}
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(paramType = "body",dataType = "${ClassName}",name = "${className}",value = "the ${className} to create")
+    })
+    @ApiOperation(value = "POST  /${className}s : create a new ${className}.",notes = "POST  /${className}s : create a new ${className}.",httpMethod = "POST")
+    @PostMapping("/${className}s")
+    public ResponseEntity<${ClassName}> create${ClassName}(@RequestBody #if($table.isFeildValid == 1)@Validated#end ${ClassName} ${className}) throws URISyntaxException {
+
+        log.debug("REST request to save ${ClassName} : {}", ${className});
+
+        ${ClassName} result = ${className}Service.insert(${className});
+        return ResponseEntity.created(new URI("/api/${className}s/" + result.get${pkColumn.capJavaField}() ))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.get${pkColumn.capJavaField}().toString()))
+            .body(result);
+    }
+    /**
+     * PUT  /${className}s : Updates an existing ${className}.
+     *
+     * @param ${className} the ${className} to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated ${className},
+     * or with status 400 (Bad Request) if the ${className} is not valid,
+     * or with status 500 (Internal Server Error) if the ${className} couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "body",dataType = "${ClassName}",name = "${className}",value = "the ${className} to update")
+    })
+    @ApiOperation(value = "PUT  /${className}s : updates an existing ${className}.",notes = "PUT  /${className}s : updates an existing ${className}.",httpMethod = "PUT")
+    @PutMapping("/${className}s")
+    public ResponseEntity<${ClassName}> update${ClassName}(@RequestBody #if($table.isFeildValid == 1)@Validated#end ${ClassName} ${className}) throws URISyntaxException {
+
+        log.debug("REST request to update ${ClassName} : {}", ${className});
+
+        if (${className}.get${pkColumn.capJavaField}() == null) {
+            return create${ClassName}(${className});
+        }
+        ${ClassName} result = ${className}Service.update(${className});
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.get${pkColumn.capJavaField}().toString()))
+            .body(result);
+    }
+
+    /**
+     * GET  /${className}s/:${pkColumn.javaField} : get the "${pkColumn.javaField}" ${className}.
+     *
+     * @param ${pkColumn.javaField} the id of the ${className} to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the ${className}, or with status 404 (Not Found)
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",dataType = "Long",name = "${pkColumn.javaField}",value = "the ${pkColumn.javaField} of the ${className} to retrieve")
+    })
+    @ApiOperation(value = "GET  /${className}s/${pkColumn.javaField} : get the ${pkColumn.javaField} ${className}.",notes = "GET  /${className}s/${pkColumn.javaField} : get the ${pkColumn.javaField} ${className}.",httpMethod = "GET")
+    @GetMapping("/${className}s/{${pkColumn.javaField}}")
+    public ResponseEntity<${ClassName}> get${ClassName}(@PathVariable Long ${pkColumn.javaField}) {
+
+        log.debug("REST request to get ${ClassName} : {}", ${pkColumn.javaField});
+
+        ${ClassName} ${className} = ${className}Service.findOne(${pkColumn.javaField});
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(${className}));
+    }
+
+    /**
+     * GET  /${className}s : get the ${className}s .
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of ${className}s in body
+     */
+#if($table.formType != 2)
+    @ApiOperation(value = "GET  /${className}s ")
+    @GetMapping("/${className}s")
+    public PageResult<${ClassName}> get${ClassName}sList(${ClassName}Example ${className}Example,Pageable pageable) {
+
+        log.debug("REST request to get ${ClassName}sList");
+
+        return ${className}Service.findByExample(${className}Example,pageable);
+    }
+#end
+#if($table.formType == 2)
+    @ApiOperation(value = "GET  /${className}s ")
+    @GetMapping("/${className}s")
+    public PageResult<${ClassName}> get${ClassName}sList(${ClassName}Example ${className}Example) {
+
+        log.debug("REST request to get ${ClassName}sList");
+
+        return ${className}Service.findByExample(${className}Example);
+    }
+#end
+#if($table.formType == 2)
+    /**
+     * 获取下拉树列表(全部)
+     */
+    @GetMapping("/${className}s/treeselect")
+    public ResponseEntity<List<${ClassName}>> treeselect() {
+        //查新全部列表信息
+        ${ClassName}Example ${className}Example = new ${ClassName}Example();
+        PageResult<${ClassName}> pageResult = ${className}Service.findByExample(${className}Example);
+        List<${ClassName}> ${className}List = pageResult.getData();
+        // 构建树形结构
+        List<${ClassName}> treeSelects = ${className}Service.build${ClassName}TreeSelect(${className}List,0L);
+        return ResponseEntity.ok().body(treeSelects);
+    }
+
+    /**
+     * 根据父节点id获取下拉树列表
+     */
+    @GetMapping("/${className}s/treeselect/{${treeParentCode}}")
+    public ResponseEntity<List<${ClassName}>> treeselect(@PathVariable Long ${treeParentCode} ) {
+
+        // 查询父节点是否存在
+        ${ClassName}  ${className} = ${className}Service.findOneBy${TreeParentCode}(${treeParentCode});
+        if(null == ${className}){
+            return ResponseEntity.ok().body(null);
+        }
+
+        //查新全部列表信息
+        ${ClassName}Example ${className}Example = new ${ClassName}Example();
+        PageResult<${ClassName}> pageResult = ${className}Service.findByExample(${className}Example);
+        List<${ClassName}> ${className}List = pageResult.getData();
+        // 构建树形结构
+        List<${ClassName}> treeSelects = ${className}Service.build${ClassName}TreeSelect(${className}List,${treeParentCode});
+        return ResponseEntity.ok().body(treeSelects);
+    }
+#end
+
+    /**
+     * DELETE  /${className}s/:${pkColumn.javaField} : delete the "${pkColumn.javaField}" ${className}.
+     *
+     * @param ${pkColumn.javaField} the id of the ${className} to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",dataType = "Long",name = "${pkColumn.javaField}",value = "the ${pkColumn.javaField} of the ${className} to delete")
+    })
+    @ApiOperation(value = "DELETE  /${className}s/${pkColumn.javaField} : delete the ${pkColumn.javaField} ${className}.",notes = "DELETE  /${className}s/${pkColumn.javaField} : delete the ${pkColumn.javaField} ${className}.",httpMethod = "DELETE")
+    @DeleteMapping("/${className}s/{${pkColumn.javaField}}")
+#if($table.formType == 2)
+    public ResponseEntity<Map> delete${ClassName}(@PathVariable Long ${pkColumn.javaField}) {
+#end
+#if($table.formType != 2)
+    public ResponseEntity<Void> delete${ClassName}(@PathVariable Long ${pkColumn.javaField}) {
+#end
+        log.debug("REST request to delete ${ClassName} : {}", ${pkColumn.javaField});
+#if($table.formType == 2)
+    // 判断是否存在子节点
+    Map resMap = new HashMap();
+    ${ClassName}Example ${className}Example = new ${ClassName}Example();
+    ${className}Example.set${TreeParentCode}((LongCriteria) new LongCriteria().setEquals(${pkColumn.javaField}));
+    PageResult<${ClassName}> ${className}s = ${className}Service.findByExample(${className}Example);
+    if(${className}s.getData().size()>0){
+        resMap.put("code",1);
+        resMap.put("msg","存在子节点不能删除！");
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, "存在子节点不能删除！"))
+                .body(resMap);
+    }
+#end
+        ${className}Service.deleteById(${pkColumn.javaField});
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, ${pkColumn.javaField}.toString())).build();
+    }
+
+
+    /**
+     * GET  /${className}s/:${pkColumn.javaField} : get the "${pkColumn.javaField}" ${className}.
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the ${className}, or with status 404 (Not Found)
+     */
+    @ApiOperation(value = "POST  /${className}s/export : export the ${className} to excel",notes = "DELETE  /${className}s/${pkColumn.javaField} : delete the ${pkColumn.javaField} ${className}.",httpMethod = "DELETE")
+    @PostMapping("/${className}s/export")
+    public ResponseEntity<byte[]> export() {
+
+        log.debug("REST request to export ${ClassName}");
+
+        PageResult<${ClassName}> result = ${className}Service.findAll();
+        List<${ClassName}> list = result.getData();
+        ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
+        return util.exportExcel(list, "${className}");
+    }
+
+
+#if($table.formType != 2)
+    /**
+    * DELETE  /${pkColumn.javaField}s : delete the ${className}.", notes = "DELETE  /${pkColumn.javaField}s : delete the ${pkColumn.javaField}s.", httpMethod = "DELETE"
+    *
+    * @return
+    */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", dataType = "Long[]", name = "${pkColumn.javaField}s", value = "the ${pkColumn.javaField}s of the ${className} to delete")
+    })
+    @ApiOperation(value = "DELETE  /${pkColumn.javaField}s : delete the ${className}.", notes = "DELETE  /${pkColumn.javaField}s : delete the ${pkColumn.javaField}s.", httpMethod = "DELETE")
+    @DeleteMapping("/${className}s/delAll")
+    public ResponseEntity<Void> delete${ClassName}(Long[] ${pkColumn.javaField}s) {
+
+        log.debug("REST request to delete ${pkColumn.javaField}s");
+
+        ${className}Service.deleteByIds(${pkColumn.javaField}s);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, StringUtils.join(${pkColumn.javaField}s))).build();
+    }
+#end
+
+}

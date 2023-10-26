@@ -1,0 +1,42 @@
+package ${packageName}.service;
+
+#if( ! $importList )
+#foreach ($import in $importList)
+import ${import};
+#end
+#end
+#if($table.formType == 2)
+import java.util.List;
+#end
+import com.ctsi.ssdc.model.PageResult;
+import org.springframework.data.domain.Pageable;
+
+import ${packageName}.domain.${ClassName};
+import ${packageName}.domain.${ClassName}Example;
+import com.ctsi.ssdc.service.StrengthenBaseService;
+
+/**
+ * Service Interface for managing ${ClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+public interface ${ClassName}Service
+	extends StrengthenBaseService<${ClassName},Long , ${ClassName}Example>{
+
+	/**
+	* 批量删除
+	* @param ${pkColumn.javaField}s
+	*/
+	void deleteByIds(Long[] ${pkColumn.javaField}s);
+
+	void deleteById(Long ${pkColumn.javaField});
+
+#if($table.formType == 2)
+	List<${ClassName}> build${ClassName}TreeSelect(List<${ClassName}> ${className}List,Long ${treeParentCode});
+
+	${ClassName} findOneBy${TreeParentCode}(Long ${treeParentCode});
+#end
+}

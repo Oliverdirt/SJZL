@@ -1,0 +1,25 @@
+export const imgArray = [
+  { name: 'a-bangzhuwendang3x', path: require('@/assets/modelimg/a-bangzhuwendang3x.png') },
+  { name: 'a-bocidan3x', path: require('@/assets/modelimg/a-bocidan3x.png') },
+  { name: 'a-caigoudaohuo3x', path: require('@/assets/modelimg/a-caigoudaohuo3x.png') },
+  { name: 'a-caigoudingdan3x', path: require('@/assets/modelimg/a-caigoudingdan3x.png') },
+  { name: 'a-chanpinchuku3x', path: require('@/assets/modelimg/a-chanpinchuku3x.png') },
+  { name: 'a-chanpinruku3x', path: require('@/assets/modelimg/a-chanpinruku3x.png') },
+  { name: 'a-chanpinzhuangtaichakan3x', path: require('@/assets/modelimg/a-chanpinzhuangtaichakan3x.png') },
+  { name: 'a-huowuchuku3x', path: require('@/assets/modelimg/a-huowuchuku3x.png') },
+  { name: 'a-lingliaodan3x', path: require('@/assets/modelimg/a-lingliaodan3x.png') },
+  { name: 'a-pandian3x', path: require('@/assets/modelimg/a-pandian3x.png') },
+  { name: 'a-pintuo3x', path: require('@/assets/modelimg/a-pintuo3x.png') },
+  { name: 'a-saomiaotiaoma3x', path: require('@/assets/modelimg/a-saomiaotiaoma3x.png') },
+  { name: 'a-shanchutiaoma3x', path: require('@/assets/modelimg/a-shanchutiaoma3x.png') },
+  { name: 'a-shengchanruku3x', path: require('@/assets/modelimg/a-shengchanruku3x.png') },
+  { name: 'a-tiaoboruku3x', path: require('@/assets/modelimg/a-tiaoboruku3x.png') },
+  { name: 'a-tuihuo3x', path: require('@/assets/modelimg/a-tuihuo3x.png') },
+  { name: 'a-tuiliaodan3x', path: require('@/assets/modelimg/a-tuiliaodan3x.png') },
+  { name: 'a-xiajia3x', path: require('@/assets/modelimg/a-xiajia3x.png') },
+  { name: 'a-xiaoshoutuihuo3x', path: require('@/assets/modelimg/a-xiaoshoutuihuo3x.png') },
+  { name: 'a-xiaoxi3x', path: require('@/assets/modelimg/a-xiaoxi3x.png') },
+  { name: 'a-xitongrizhi3x', path: require('@/assets/modelimg/a-xitongrizhi3x.png') },
+  { name: 'a-yiku3x', path: require('@/assets/modelimg/a-yiku3x.png') }
+]
+

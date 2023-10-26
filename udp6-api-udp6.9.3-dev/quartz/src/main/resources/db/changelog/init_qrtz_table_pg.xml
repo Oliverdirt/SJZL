@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    <property name="autoIncrement" value="true" dbms="mysql,mssql,h2,postgresql,sybase"/>
+    <property name="intType" value="bigint" dbms="postgresql"/>
+    <property name="intType" value="int(11)" dbms="mysql,mssql,h2,oracle,sybase"/>
+    <property name="bigintType" value="bigint(20)" dbms="mysql,postgresql"/>
+    <property name="blobType" value="blob" dbms="mysql"/>
+    <property name="blobType" value="bytea" dbms="postgresql"/>
+    <!-- 定时任务表-->
+    <changeSet id="QUARTZ-20211117-012" author="jshx" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SYS_JOB"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SYS_JOB" remarks="定时任务表">
+            <column name="id" type="number(20)"  remarks="任务ID">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_name" type="varchar(255)"  remarks="任务名称">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_group" type="varchar(255)" remarks="任务组名" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="invoke_target" type="varchar(255)" remarks="调用目标字符串" >
+                <constraints nullable="false"  />
+            </column>
+            <column name="cron_expression" type="varchar(255)"  remarks="cron执行表达式">
+                <constraints nullable="true" />
+            </column>
+            <column name="misfire_policy" type="varchar(255)"  remarks="计划执行错误策略（1立即执行 2执行一次 3放弃执行）">
+                <constraints nullable="true" />
+            </column>
+            <column name="concurrent" type="varchar(1)"  remarks="是否并发执行（0允许 1禁止）">
+                <constraints nullable="true"  />
+            </column>
+            <column name="status" type="varchar(1)"  remarks="状态（0正常 1暂停）">
+                <constraints nullable="true"  />
+            </column>
+        </createTable>
+    </changeSet>
+    <!-- 定时任务调度日志表-->
+    <changeSet id="QUARTZ-20220531-001" author="jshx" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SYS_JOB_LOG"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SYS_JOB_LOG" remarks="定时任务日志表">
+            <column name="job_log_id" type="number(20)" remarks="ID" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_name" type="varchar(255)" remarks="任务名称" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="job_group" type="varchar(255)" remarks="任务组名" >
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="invoke_target" type="varchar(255)" remarks="调用目标字符串" >
+                <constraints nullable="false"  />
+            </column>
+            <column name="job_message" type="varchar(500)" remarks="日志信息" >
+                <constraints nullable="true" />
+            </column>
+            <column name="status" type="varchar(1)" remarks="执行状态(0失败 1正常)" >
+                <constraints nullable="true"  />
+            </column>
+            <column name="exception_info" type="varchar(2000)" remarks="执行时间" >
+                <constraints nullable="true" />
+            </column>
+            <column name="execution_time" type="date" remarks="执行时间" >
+                <constraints nullable="true"  />
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="QUARTZ-20211117-013" author="jshx">
+        <sql dbms="mysql,postgresql">
+            /*
+            定时任务菜单
+            */
+            INSERT INTO cscp_menus VALUES ('3000', 'monitor', 'ios-time-outline', '定时任务', '/monitor', '*', 'views/main/main.vue', '0', 'menu1', '', '3000');
+            INSERT INTO cscp_menus VALUES ('3001', 'job-list', 'logo-octocat', '任务列表', '/jobList', '*', 'views/monitor/jobList.vue', '3000', 'menu2', '', '3001');
+            INSERT INTO cscp_menus VALUES ('3002', 'job-add', 'md-git-compare', '添加任务', '/jobAdd', '*', 'views/monitor/jobAddOrEdit.vue', '3001', 'non-menu', '', '3002');
+            INSERT INTO cscp_menus VALUES ('3003', 'job-edit', 'md-git-compare', '编辑任务', '/jobAdd', '*', 'views/monitor/jobAddOrEdit.vue', '3001', 'non-menu', '', '3003');
+            INSERT INTO cscp_menus VALUES (1531437862914818050, 'job-log', 'logo-designernews', '调度日志', '/jobLog', '*', 'views/monitor/JobLog/jobLogManager.vue', 3000, 'menu2', '', 3002);
+            INSERT INTO cscp_menus VALUES (1531446738708004865, 'job-log-view', 'ios-information', '查看日志', '/jobLogView', '*', 'views/monitor/JobLog/jobLogManager.vue', 1531437862914818050, 'non-menu', '', 1);
+        </sql>
+    </changeSet>
+
+    <!--pg定时任务初始化-->
+    <!-- Trigger 作为 Blob 类型存储(用于 Quartz 用户用 JDBC 创建他们自己定制的 Trigger 类型，JobStore 并不知道如何存储实例的时候)-->
+   <changeSet author="udp6hx" id="1662015445258-1"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_blob_triggers">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="blob_data" type="BLOB"/>
+       </createTable>
+   </changeSet>
+    <!--以 Blob 类型存储存放日历信息， quartz可配置一个日历来指定一个时间范围-->
+   <changeSet author="udp6hx" id="1662015445258-2"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_calendars">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="calendar_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="calendar" type="BLOB">
+               <constraints nullable="false"/>
+           </column>
+       </createTable>
+   </changeSet>
+    <!-- 存储 Cron Trigger，包括 Cron 表达式和时区信息   -->
+   <changeSet author="udp6hx" id="1662015445258-3"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_cron_triggers">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="cron_expression" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="time_zone_id" type="VARCHAR(80)"/>
+       </createTable>
+   </changeSet>
+    <!--存储与已触发的 Trigger 相关的状态信息，以及相联 Job 的执行信息-->
+   <changeSet author="udp6hx" id="1662015445258-4"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_fired_triggers">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="entry_id" type="VARCHAR(95)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="instance_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="fired_time" type="BIGINT">
+               <constraints nullable="false"/>
+           </column>
+           <column name="sched_time" type="BIGINT">
+               <constraints nullable="false"/>
+           </column>
+           <column name="priority" type="INT">
+               <constraints nullable="false"/>
+           </column>
+           <column name="state" type="VARCHAR(16)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="job_name" type="VARCHAR(200)"/>
+           <column name="job_group" type="VARCHAR(200)"/>
+           <column name="is_nonconcurrent" type="BOOL"/>
+           <column name="requests_recovery" type="BOOL"/>
+       </createTable>
+   </changeSet>
+    <!--存储每一个已配置的 jobDetail 的详细信息-->
+   <changeSet author="udp6hx" id="1662015445258-5"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_job_details">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="job_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="job_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="description" type="VARCHAR(250)"/>
+           <column name="job_class_name" type="VARCHAR(250)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="is_durable" type="BOOL">
+               <constraints nullable="false"/>
+           </column>
+           <column name="is_nonconcurrent" type="BOOL">
+               <constraints nullable="false"/>
+           </column>
+           <column name="is_update_data" type="BOOL">
+               <constraints nullable="false"/>
+           </column>
+           <column name="requests_recovery" type="BOOL">
+               <constraints nullable="false"/>
+           </column>
+           <column name="job_data" type="BLOB"/>
+       </createTable>
+   </changeSet>
+    <!-- 存储程序的悲观锁的信息(假如使用了悲观锁)-->
+   <changeSet author="udp6hx" id="1662015445258-6"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_locks">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="lock_name" type="VARCHAR(40)">
+               <constraints nullable="false"/>
+           </column>
+       </createTable>
+   </changeSet>
+    <!--  存储已暂停的 Trigger 组的信息  -->
+   <changeSet author="udp6hx" id="1662015445258-7"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_paused_trigger_grps">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+       </createTable>
+   </changeSet>
+    <!--存储少量的有关 Scheduler 的状态信息，假如是用于集群中，可以看到其他的 Scheduler 实例-->
+   <changeSet author="udp6hx" id="1662015445258-8"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_scheduler_state">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="instance_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="last_checkin_time" type="BIGINT">
+               <constraints nullable="false"/>
+           </column>
+           <column name="checkin_interval" type="BIGINT">
+               <constraints nullable="false"/>
+           </column>
+       </createTable>
+   </changeSet>
+    <!-- 存储简单的 Trigger，包括重复次数，间隔，以及已触发的次数-->
+   <changeSet author="udp6hx" id="1662015445258-9"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_simple_triggers">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="repeat_count" type="BIGINT">
+               <constraints nullable="false"/>
+           </column>
+           <column name="repeat_interval" type="BIGINT">
+               <constraints nullable="false"/>
+           </column>
+           <column name="times_triggered" type="BIGINT">
+               <constraints nullable="false"/>
+           </column>
+       </createTable>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-10"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_simprop_triggers">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="str_prop_1" type="VARCHAR(512)"/>
+           <column name="str_prop_2" type="VARCHAR(512)"/>
+           <column name="str_prop_3" type="VARCHAR(512)"/>
+           <column name="int_prop_1" type="number"/>
+           <column name="int_prop_2" type="number"/>
+           <column name="long_prop_1" type="number"/>
+           <column name="long_prop_2" type="number"/>
+           <column name="dec_prop_1" type="number(13, 4)"/>
+           <column name="dec_prop_2" type="number(13, 4)"/>
+           <column name="bool_prop_1" type="BOOL"/>
+           <column name="bool_prop_2" type="BOOL"/>
+       </createTable>
+   </changeSet>
+    <!--  存储已配置的 Trigger 的信息  -->
+   <changeSet author="udp6hx" id="1662015445258-11"  dbms="postgresql" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+       <createTable tableName="qrtz_triggers">
+           <column name="sched_name" type="VARCHAR(120)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="job_name" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="job_group" type="VARCHAR(200)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="description" type="VARCHAR(250)"/>
+           <column name="next_fire_time" type="number"/>
+           <column name="prev_fire_time" type="number"/>
+           <column name="priority" type="number"/>
+           <column name="trigger_state" type="VARCHAR(16)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="trigger_type" type="VARCHAR(8)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="start_time" type="number">
+               <constraints nullable="false"/>
+           </column>
+           <column name="end_time" type="number"/>
+           <column name="calendar_name" type="VARCHAR(200)"/>
+           <column name="misfire_instr" type="number"/>
+           <column name="job_data" type="BLOB"/>
+       </createTable>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-12" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_blob_triggers_pkey" tableName="qrtz_blob_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-13" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, calendar_name" constraintName="qrtz_calendars_pkey" tableName="qrtz_calendars"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-14" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_cron_triggers_pkey" tableName="qrtz_cron_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-15" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, entry_id" constraintName="qrtz_fired_triggers_pkey" tableName="qrtz_fired_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-16" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, job_name, job_group" constraintName="qrtz_job_details_pkey" tableName="qrtz_job_details"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-17" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, lock_name" constraintName="qrtz_locks_pkey" tableName="qrtz_locks"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-18" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, trigger_group" constraintName="qrtz_paused_trigger_grps_pkey" tableName="qrtz_paused_trigger_grps"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-19" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, instance_name" constraintName="qrtz_scheduler_state_pkey" tableName="qrtz_scheduler_state"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-20" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_simple_triggers_pkey" tableName="qrtz_simple_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-21" objectQuotingStrategy="QUOTE_ALL_OBJECTS"  dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_simprop_triggers_pkey" tableName="qrtz_simprop_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-22" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_triggers_pkey" tableName="qrtz_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-23" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_ft_inst_job_req_rcvry" tableName="qrtz_fired_triggers">
+           <column name="sched_name"/>
+           <column name="instance_name"/>
+           <column name="requests_recovery"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-24" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_ft_j_g" tableName="qrtz_fired_triggers">
+           <column name="sched_name"/>
+           <column name="job_name"/>
+           <column name="job_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-25" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_ft_jg" tableName="qrtz_fired_triggers">
+           <column name="sched_name"/>
+           <column name="job_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-26" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_ft_t_g" tableName="qrtz_fired_triggers">
+           <column name="sched_name"/>
+           <column name="trigger_name"/>
+           <column name="trigger_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-27" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_ft_tg" tableName="qrtz_fired_triggers">
+           <column name="sched_name"/>
+           <column name="trigger_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-28" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_ft_trig_inst_name" tableName="qrtz_fired_triggers">
+           <column name="sched_name"/>
+           <column name="instance_name"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-29" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_j_grp" tableName="qrtz_job_details">
+           <column name="sched_name"/>
+           <column name="job_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-30" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_j_req_recovery" tableName="qrtz_job_details">
+           <column name="sched_name"/>
+           <column name="requests_recovery"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-31" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_c" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="calendar_name"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-32" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_g" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="trigger_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-33" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_j" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="job_name"/>
+           <column name="job_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-34" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_jg" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="job_group"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-35" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_n_g_state" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="trigger_group"/>
+           <column name="trigger_state"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-36" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_n_state" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="trigger_name"/>
+           <column name="trigger_group"/>
+           <column name="trigger_state"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-37" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_next_fire_time" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="next_fire_time"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-38" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_nft_misfire" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="misfire_instr"/>
+           <column name="next_fire_time"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-39" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_nft_st" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="trigger_state"/>
+           <column name="next_fire_time"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-40" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_nft_st_misfire" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="misfire_instr"/>
+           <column name="next_fire_time"/>
+           <column name="trigger_state"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-41" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_nft_st_misfire_grp" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="misfire_instr"/>
+           <column name="next_fire_time"/>
+           <column name="trigger_group"/>
+           <column name="trigger_state"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-42" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <createIndex indexName="idx_qrtz_t_state" tableName="qrtz_triggers">
+           <column name="sched_name"/>
+           <column name="trigger_state"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-43" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addForeignKeyConstraint baseColumnNames="sched_name,trigger_name,trigger_group" baseTableName="qrtz_blob_triggers" constraintName="qrtz_blob_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name,trigger_name,trigger_group" referencedTableName="qrtz_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-44" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addForeignKeyConstraint baseColumnNames="sched_name,trigger_name,trigger_group" baseTableName="qrtz_cron_triggers" constraintName="qrtz_cron_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name,trigger_name,trigger_group" referencedTableName="qrtz_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-45" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addForeignKeyConstraint baseColumnNames="sched_name,trigger_name,trigger_group" baseTableName="qrtz_simple_triggers" constraintName="qrtz_simple_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name,trigger_name,trigger_group" referencedTableName="qrtz_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-46" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addForeignKeyConstraint baseColumnNames="sched_name,trigger_name,trigger_group" baseTableName="qrtz_simprop_triggers" constraintName="qrtz_simprop_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name,trigger_name,trigger_group" referencedTableName="qrtz_triggers"/>
+   </changeSet>
+   <changeSet author="udp6hx" id="1662015445258-47" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+       <addForeignKeyConstraint baseColumnNames="sched_name,job_name,job_group" baseTableName="qrtz_triggers" constraintName="qrtz_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name,job_name,job_group" referencedTableName="qrtz_job_details"/>
+   </changeSet>
+    <!--pg定时任务初始化-->
+    <!--  插入定时任务数据  -->
+    <changeSet id="QUARTZ-20220401-002" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS" dbms="postgresql">
+        <insert tableName="qrtz_locks">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="lock_name" value="STATE_ACCESS"/>
+        </insert>
+        <insert tableName="qrtz_locks">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="lock_name" value="TRIGGER_ACCESS"/>
+        </insert>
+        <insert tableName="qrtz_scheduler_state">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="instance_name" value="CHENXINGQUAN1662084387091"/>
+            <column name="last_checkin_time" valueNumeric="1662084779881"/>
+            <column name="checkin_interval" valueNumeric="5000"/>
+        </insert>
+        <insert tableName="qrtz_job_details">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="job_name" value="TASK_CLASS_NAME1565522541940068353"/>
+            <column name="job_group" value="1"/>
+            <column name="description"/>
+            <column name="job_class_name" value="com.ctsi.ssdc.quartz.util.QuartzDisallowConcurrentExecution"/>
+            <column name="is_durable" valueBoolean="false"/>
+            <column name="is_nonconcurrent" valueBoolean="true"/>
+            <column name="is_update_data" valueBoolean="false"/>
+            <column name="requests_recovery" valueBoolean="false"/>
+            <column name="job_data" value="\254\355\000\005sr\000\025org.quartz.JobDataMap\237\260\203\350\277\251\260\313\002\000\000xr\000&amp;org.quartz.utils.StringKeyDirtyFlagMap\202\010\350\303\373\305](\002\000\001Z\000\023allowsTransientDataxr\000\035org.quartz.utils.DirtyFlagMap\023\346.\255(v\012\316\002\000\002Z\000\005dirtyL\000\003mapt\000\017Ljava/util/Map;xp\001sr\000\021java.util.HashMap\005\007\332\301\303\026`\321\003\000\002F\000\012loadFactorI\000\011thresholdxp?@\000\000\000\000\000\014w\010\000\000\000\020\000\000\000\001t\000\017TASK_PROPERTIESsr\000#com.ctsi.ssdc.quartz.domain.CscpJob\000\000\000\000\000\000\000\001\002\000\010L\000\012concurrentt\000\022Ljava/lang/String;L\000\016cronExpressionq\000~\000\011L\000\002idt\000\020Ljava/lang/Long;L\000\014invokeTargetq\000~\000\011L\000\010jobGroupq\000~\000\011L\000\007jobNameq\000~\000\011L\000\015misfirePolicyq\000~\000\011L\000\006statusq\000~\000\011xpt\000\0011t\000\0140 0 15 * * ?sr\000\016java.lang.Long;\213\344\220\314\217#\337\002\000\001J\000\005valuexr\000\020java.lang.Number\206\254\225\035\013\224\340\213\002\000\000xp\025\271\332u\0304P\001t\000!documentServiceImpl.batchAddDoc()t\000\0011t\000\036\347\273\204\344\273\266\350\260\203\347\224\250\346\227\245\345\277\227\344\270\212\344\274\240\344\273\273\345\212\241t\000\0011t\000\0011x\000"/>
+        </insert>
+        <insert tableName="qrtz_job_details">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="job_name" value="TASK_CLASS_NAME1565522831946829825"/>
+            <column name="job_group" value="1"/>
+            <column name="description"/>
+            <column name="job_class_name" value="com.ctsi.ssdc.quartz.util.QuartzDisallowConcurrentExecution"/>
+            <column name="is_durable" valueBoolean="false"/>
+            <column name="is_nonconcurrent" valueBoolean="true"/>
+            <column name="is_update_data" valueBoolean="false"/>
+            <column name="requests_recovery" valueBoolean="false"/>
+            <column name="job_data" value="\254\355\000\005sr\000\025org.quartz.JobDataMap\237\260\203\350\277\251\260\313\002\000\000xr\000&amp;org.quartz.utils.StringKeyDirtyFlagMap\202\010\350\303\373\305](\002\000\001Z\000\023allowsTransientDataxr\000\035org.quartz.utils.DirtyFlagMap\023\346.\255(v\012\316\002\000\002Z\000\005dirtyL\000\003mapt\000\017Ljava/util/Map;xp\001sr\000\021java.util.HashMap\005\007\332\301\303\026`\321\003\000\002F\000\012loadFactorI\000\011thresholdxp?@\000\000\000\000\000\014w\010\000\000\000\020\000\000\000\001t\000\017TASK_PROPERTIESsr\000#com.ctsi.ssdc.quartz.domain.CscpJob\000\000\000\000\000\000\000\001\002\000\010L\000\012concurrentt\000\022Ljava/lang/String;L\000\016cronExpressionq\000~\000\011L\000\002idt\000\020Ljava/lang/Long;L\000\014invokeTargetq\000~\000\011L\000\010jobGroupq\000~\000\011L\000\007jobNameq\000~\000\011L\000\015misfirePolicyq\000~\000\011L\000\006statusq\000~\000\011xpt\000\0011t\000\0150 0/1 * * * ?sr\000\016java.lang.Long;\213\344\220\314\217#\337\002\000\001J\000\005valuexr\000\020java.lang.Number\206\254\225\035\013\224\340\213\002\000\000xp\025\271\332\270\235\364P\001t\000\024monitorTask.getMsg()t\000\0011t\000\030\347\263\273\347\273\237\347\233\221\346\216\247\345\256\232\346\227\266\344\273\273\345\212\241t\000\0012t\000\0011x\000"/>
+        </insert>
+        <insert tableName="qrtz_triggers">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="trigger_name" value="TASK_CLASS_NAME1565522541940068353"/>
+            <column name="trigger_group" value="1"/>
+            <column name="job_name" value="TASK_CLASS_NAME1565522541940068353"/>
+            <column name="job_group" value="1"/>
+            <column name="description"/>
+            <column name="next_fire_time" valueNumeric="1662102000000"/>
+            <column name="prev_fire_time" valueNumeric="-1"/>
+            <column name="priority" valueNumeric="5"/>
+            <column name="trigger_state" value="WAITING"/>
+            <column name="trigger_type" value="CRON"/>
+            <column name="start_time" valueNumeric="1662084634000"/>
+            <column name="end_time" valueNumeric="0"/>
+            <column name="calendar_name"/>
+            <column name="misfire_instr" valueNumeric="1"/>
+            <column name="job_data" value="\x"/>
+        </insert>
+        <insert tableName="qrtz_triggers">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="trigger_name" value="TASK_CLASS_NAME1565522831946829825"/>
+            <column name="trigger_group" value="1"/>
+            <column name="job_name" value="TASK_CLASS_NAME1565522831946829825"/>
+            <column name="job_group" value="1"/>
+            <column name="description"/>
+            <column name="next_fire_time" valueNumeric="1662084840000"/>
+            <column name="prev_fire_time" valueNumeric="1662084780000"/>
+            <column name="priority" valueNumeric="5"/>
+            <column name="trigger_state" value="WAITING"/>
+            <column name="trigger_type" value="CRON"/>
+            <column name="start_time" valueNumeric="1662084703000"/>
+            <column name="end_time" valueNumeric="0"/>
+            <column name="calendar_name"/>
+            <column name="misfire_instr" valueNumeric="2"/>
+            <column name="job_data" value="\x"/>
+        </insert>
+        <insert tableName="qrtz_cron_triggers">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="trigger_name" value="TASK_CLASS_NAME1565522541940068353"/>
+            <column name="trigger_group" value="1"/>
+            <column name="cron_expression" value="0 0 15 * * ?"/>
+            <column name="time_zone_id" value="Asia/Shanghai"/>
+        </insert>
+        <insert tableName="qrtz_cron_triggers">
+            <column name="sched_name" value="BiyiScheduler"/>
+            <column name="trigger_name" value="TASK_CLASS_NAME1565522831946829825"/>
+            <column name="trigger_group" value="1"/>
+            <column name="cron_expression" value="0 0/1 * * * ?"/>
+            <column name="time_zone_id" value="Asia/Shanghai"/>
+        </insert>
+
+        <insert tableName="sys_job">
+            <column name="id" valueNumeric="1565522541940068353"/>
+            <column name="job_name" value="组件调用日志上传任务"/>
+            <column name="job_group" value="1"/>
+            <column name="invoke_target" value="documentServiceImpl.batchAddDoc()"/>
+            <column name="cron_expression" value="0 0 15 * * ?"/>
+            <column name="misfire_policy" value="1"/>
+            <column name="concurrent" value="1"/>
+            <column name="status" value="1"/>
+        </insert>
+        <insert tableName="sys_job">
+            <column name="id" valueNumeric="1565522831946829825"/>
+            <column name="job_name" value="系统监控定时任务"/>
+            <column name="job_group" value="1"/>
+            <column name="invoke_target" value="monitorTask.getMsg()"/>
+            <column name="cron_expression" value="0 0/1 * * * ?"/>
+            <column name="misfire_policy" value="2"/>
+            <column name="concurrent" value="1"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <!--  插入定时任务数据  -->
+
+
+</databaseChangeLog>

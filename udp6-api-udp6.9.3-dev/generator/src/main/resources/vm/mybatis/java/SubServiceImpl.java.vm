@@ -1,0 +1,65 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($subpkColumn = $table.subTable.pkColumn)
+#set($subPkColumnName = $pkColumn.javaField.substring(0,1).toUpperCase() + $pkColumn.javaField.substring(1))
+package ${packageName}.service.impl;
+
+#if( ! $subImportList )
+    #foreach ($import in $subImportList)
+    import ${import};
+    #end
+#end
+import org.springframework.stereotype.Service;
+import org.apache.commons.collections.CollectionUtils;
+import ${packageName}.domain.${subClassName};
+import ${packageName}.domain.${subClassName}Example;
+import ${packageName}.service.${subClassName}Service;
+import ${packageName}.repository.${subClassName}Repository;
+import org.apache.commons.lang3.StringUtils;
+import java.util.List;
+import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import com.ctsi.ssdc.service.impl.StrengthenBaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.ctsi.ssdc.model.PageResult;
+import org.springframework.data.domain.Pageable;
+import com.github.pagehelper.PageHelper;
+import org.springframework.transaction.annotation.Transactional;
+/**
+ * Service Implementation for managing ${subClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@Service
+public class ${subClassName}ServiceImpl
+	extends StrengthenBaseServiceImpl<${subClassName}Repository, ${subClassName}, Long, ${subClassName}Example>
+	implements ${subClassName}Service {
+
+    @Autowired
+    ${subClassName}Repository ${subclassName}Repository;
+
+    /**
+     * 批量删除
+     * @param ${subpkColumn.javaField}s
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBy${subPkColumnName}s(Long[] ${subpkColumn.javaField}s) {
+        List<Long> delList = new ArrayList<>(Arrays.asList(${subpkColumn.javaField}s));
+        ${subclassName}Repository.deleteBy${subPkColumnName}s(delList);
+    }
+
+    /**
+     * 根据${subTableFkclassName} 查询${subClassName}列表
+     * @param ${subTableFkclassName}
+     */
+    @Override
+    public List<${subClassName}> selectBy${subTableFkClassName}(Long ${subTableFkclassName}) {
+        return ${subclassName}Repository.selectBy${subTableFkClassName}(${subTableFkclassName});
+    }
+}

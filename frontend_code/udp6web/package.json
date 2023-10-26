@@ -1,0 +1,129 @@
+{
+  "name": "udp_web",
+  "version": "6.10.0",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@riophae/vue-treeselect": "0.4.0",
+    "@wangeditor/editor": "^5.0.1",
+    "@wangeditor/editor-for-vue": "^1.0.1",
+    "axios": "^0.19.0",
+    "biyi-captcha": "3.1.0",
+    "biyi-store": "1.0.0",
+    "bpmn-js-sketchy": "^0.5.3",
+    "bpmn-js-task-resize": "^1.2.0",
+    "bpmn-js-token-simulation": "^0.10.0",
+    "clean": "^4.0.2",
+    "clipboard": "2.0.8",
+    "core-js": "^3.22.8",
+    "cropperjs": "^1.5.4",
+    "crypto-js": "^4.1.1",
+    "diagram-js-minimap": "^2.0.4",
+    "echarts": "^5.3.2",
+    "element-ui": "^2.13.1",
+    "file-saver": "2.0.5",
+    "highlight.js": "^10.5.0",
+    "js-beautify": "^1.14.3",
+    "lodash": "4.17.15",
+    "min-dash": "^3.5.2",
+    "moment": "^2.29.1",
+    "net": "^1.0.2",
+    "qs": "^6.10.3",
+    "sockjs-client": "^1.6.1",
+    "stomp": "^0.1.1",
+    "stompjs": "^2.3.3",
+    "uuid": "^8.3.2",
+    "view-design": "4.5.0",
+    "vue": "^2.6.10",
+    "vue-cropper": "^0.5.8",
+    "vue-quill-editor": "^3.0.6",
+    "vue-router": "~3.1.3",
+    "vue2-editor": "^2.10.2",
+    "vuedraggable": "^2.24.3",
+    "vuex": "^3.0.1",
+    "vxe-table": "^3.6.1",
+    "x2js": "^3.4.2",
+    "xe-utils": "^3.5.6",
+    "xml-js": "^1.6.11",
+    "xml-loader": "^1.2.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.3",
+    "@vue/cli-plugin-eslint": "^5.0.3",
+    "@vue/cli-service": "^5.0.3",
+    "@vue/compiler-sfc": "^3.0.1",
+    "@vue/eslint-config-prettier": "^5.0.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "ace-builds": "^1.4.12",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-component": "^1.1.1",
+    "babel-polyfill": "^6.26.0",
+    "biyi-ms-config-plugin": "1.0.0",
+    "bpmn-js": "^8.8.3",
+    "bpmn-js-properties-panel": "^0.37.2",
+    "camunda-bpmn-moddle": "^4.4.1",
+    "classlist-polyfill": "^1.2.0",
+    "compression-webpack-plugin": "^3.0.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "fs-extra": "^8.1.0",
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
+    "mvdir": "^1.0.21",
+    "sass": "1.32.13",
+    "sass-loader": "10.1.1",
+    "script-ext-html-webpack-plugin": "^2.1.5",
+    "svg-sprite-loader": "^5.2.1",
+    "terser-webpack-plugin": "^4.2.3",
+    "vue-i18n": "^8.12.0",
+    "vue-template-compiler": "^2.6.10",
+    "webpack-bundle-analyzer": "^3.9.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended",
+      "@vue/prettier"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {
+      "no-use-before-define": "off",
+      "no-unused-vars": "off",
+      "prettier/prettier": [
+        "warn",
+        {
+          "useTabs": false,
+          "singleQuote": false,
+          "printWidth": 160,
+          "semi": true,
+          "trailingComma": "none",
+          "bracketSpacing": true,
+          "jsxBracketSameLine": true,
+          "arrowParens": "avoid",
+          "requirePragma": false,
+          "proseWrap": "preserve"
+        }
+      ]
+    }
+  },
+  "license": "Apache",
+  "description": "**比翼鸿信6.8.3版本**",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "http://10.1.160.67/udp/udp6-hx/udp6web.git"
+  },
+  "keywords": [],
+  "author": ""
+}

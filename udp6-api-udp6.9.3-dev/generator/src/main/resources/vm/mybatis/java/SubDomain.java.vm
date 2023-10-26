@@ -1,0 +1,106 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+package ${packageName}.domain;
+
+import java.io.Serializable;
+import com.ctsi.ssdc.util.LongtoStringSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModel;
+import com.ctsi.ssdc.annocation.AutoId;
+#if($table.subTable.isFeildValid == 1)
+import javax.validation.constraints.Pattern;
+#end
+#foreach ($import in $subImportList)
+import ${import};
+#end
+/**
+ *  ${subClassName} 实体类
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@ApiModel(description = "${subClassName}")
+public class ${subClassName}  implements Serializable{
+#foreach ($column in $table.subTable.columns)
+    /**
+     * ${column.columnComment}
+     *
+     */
+#if($column.isPk == 1)
+    @AutoId(primaryKey = "${column.columnName}")
+#end
+#if($column.javaType == 'Long')
+    @JsonSerialize(using = LongtoStringSerialize.class)
+#end
+#if($column.javaType == 'Date')
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+#elseif($column.javaType == 'ZonedDateTime')
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+#end
+#if($column.validateRule != "")
+    @Pattern(regexp = "${column.obtainRulevalue()}",message = "${column.obtainRuleinfo()}")
+#end
+    private $column.javaType $column.javaField;
+#end
+
+#foreach ($column in $table.subTable.columns)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+    public void set${AttrName}($column.javaType $column.javaField){
+        this.$column.javaField = $column.javaField;
+    }
+    public $column.javaType get${AttrName}(){
+        return $column.javaField;
+    }
+#end
+
+    @Override
+    public boolean equals(Object that){
+        if(this==that){
+            return true;
+        }
+        if(that==null){
+            return false;
+        }
+        if(getClass()!=that.getClass()){
+            return false;
+        }
+        ${subClassName} other=(${subClassName})that;
+#foreach ($column in $table.subTable.columns)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($velocityCount == 1)
+        return (this.get${AttrName}() ==null?this.get${AttrName}() !=null:this.get${AttrName}().equals(other.get${AttrName}()))#if($velocityCount == $columns.size());#end
+#else
+        && (this.get${AttrName}() ==null?this.get${AttrName}() !=null:this.get${AttrName}().equals(other.get${AttrName}()))#if($velocityCount == $columns.size());#end
+#end
+
+#end
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+#foreach ($column in $table.subTable.columns)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($velocityCount == 1)
+#end
+        result = prime * result + ((get${AttrName}() == null) ? 0 : get${AttrName}().hashCode());
+#end
+        return result;
+    }
+}

@@ -1,0 +1,61 @@
+.formCard-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  .formCard:nth-child(2) {
+    margin-top: 16px;
+    flex: 1 auto;
+  }
+
+  .formCard {
+    width: 100%;
+    opacity: 1;
+    padding: 0 16px;
+    position: relative;
+
+    .searchArea {
+      .ivu-form-item {
+        width: 100%;
+      }
+    }
+
+    .tableBtn {
+      width: 100%;
+      text-align: right;
+      padding: 0 0 16px;
+    }
+
+    .ivu-page {
+      flex: 1 auto;
+      align-self: flex-end;
+      display: flex;
+      align-items: flex-end;
+      bottom: 16px;
+      right: 32px;
+    }
+
+    ::v-deep .ivu-card-body {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    ::v-deep .ivu-form-item {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.ivu-btn {
+  border-radius: 3px;
+
+}
+
+.ivu-btn-text:focus {
+   box-shadow: 0 0!important
+}
+/*.ivu-btn-primary{
+  background: #0056B5;
+}*/

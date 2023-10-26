@@ -1,0 +1,68 @@
+##定义$http,$Message,$refs,$Modal,$delete
+#set($http="$http")
+#set($Message="$Message")
+#set($refs="$refs")
+#set($Modal="$Modal")
+#set($delete="$delete")
+#set($moment="$moment")
+#set($event="$event")
+#set($subClassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($SubClassName = $table.subTable.className)
+#set($subTableName = $table.subTable.tableName)
+#set($subColumns = $table.subTable.columns)
+#set($subTableContent = $table.subTable.tableContent)
+#set($pkSubColumn = $table.subTable.pkColumn)
+#set($formCount = 0)
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isList == 1)
+#set($formCount = $formCount + 1)
+#set($cssPaths="@")
+#end
+#end
+
+import Util from '${cssPaths}/libs/util'
+
+export function ${subClassName}Del (${pkSubColumn.javaField}){
+    return Util.http({
+        url: `/api/${subClassName}s/${${pkSubColumn.javaField}}`,
+        method: 'delete'
+    })
+}
+
+export function ${subClassName}Update (data){
+    return Util.http({
+        url: `/api/${subClassName}s`,
+        method: 'put',
+        data: data
+    })
+}
+
+export function ${subClassName}Create (data){
+    return Util.http({
+        url: `/api/${subClassName}s`,
+        method: 'post',
+        data: data
+    })
+}
+
+export function ${subClassName}Show (${pkSubColumn.javaField}){
+    return Util.http({
+        url: `/api/${subClassName}s/${${pkSubColumn.javaField}}`,
+        method: 'get'
+    })
+}
+
+export function ${subClassName}Params(params){
+    return Util.http({
+        url: `/api/${subClassName}s`,
+        method: 'get',
+        params
+    })
+}
+
+export function ${subClassName}DelAll(${pkSubColumn.javaField}s){
+    return Util.http({
+        url: `/api/${subClassName}s/delAll?${pkSubColumn.javaField}s=${${pkSubColumn.javaField}s}`,
+        method: 'delete'
+    })
+}

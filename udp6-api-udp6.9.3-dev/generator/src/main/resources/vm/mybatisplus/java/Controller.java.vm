@@ -1,0 +1,167 @@
+package ${packageName}.web;
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#if($table.formType != 2)
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+import com.ctsi.ssdc.model.AjaxResult;
+import ${packageName}.domain.${ClassName};
+import ${packageName}.service.${ClassName}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import io.swagger.annotations.Api;
+#if($table.isFeildValid == 1)
+import org.springframework.validation.annotation.Validated;
+#end
+#if(${table.subTable})
+import ${packageName}.service.${subClassName}Service;
+#end
+#if($table.formType == 2)
+import java.util.List;
+#end
+#if($table.formType != 2)
+import java.util.Arrays;
+#end
+
+
+/**
+ * 前端控制器
+ *
+ * @author ${author}
+ * @since ${datetime}
+ */
+@Api(value = "/api",tags = {"$tableName.replaceAll("_","-")-controller"})
+@RestController
+@RequestMapping("/api/${className}s")
+public class ${ClassName}Controller {
+
+    @Autowired
+    ${ClassName}Service ${className}Service;
+
+#if(${table.subTable})
+    @Autowired
+    ${subClassName}Service ${subclassName}Service;
+#end
+    /**
+     * 新增/更新数据
+     *
+     * @param ${className}
+     * @return
+     */
+    @PostMapping("/saveOrUpdate${ClassName}")
+    public AjaxResult saveOrUpdate${ClassName}(@RequestBody #if($table.isFeildValid == 1)@Validated#end ${ClassName} ${className}) {
+        boolean res = ${className}Service.saveOrUpdate(${className});
+        return AjaxResult.success("操作成功", res);
+    }
+
+#if($table.formType != 2)
+    /**
+     * 条件分页条件查询
+     *
+     * @param
+     * @param page
+     * @return
+     */
+    @PostMapping("/queyPage${ClassName}ByCondition")
+    public AjaxResult queyPage${ClassName}ByCondition(@RequestBody ${ClassName} ${className},@RequestBody Page<${ClassName}> page) {
+
+        Page<${ClassName}> ${className}Page = ${className}Service.queyPageByCondition(${className}, page);
+
+        return AjaxResult.success("查询成功", ${className}Page);
+    }
+#end
+#if($table.formType == 2)
+    /**
+     * 条件查询
+     *
+     * @param
+     * @param
+     * @return
+     */
+    @GetMapping("/quey${ClassName}sList")
+    public AjaxResult quey${ClassName}sList(${ClassName} ${className}) {
+
+        List<${ClassName}> ${className}List = ${className}Service.quey${ClassName}sList(${className});
+
+        return AjaxResult.success("查询成功", ${className}List);
+    }
+#end
+
+#if($table.formType == 2)
+    /**
+    * 获取下拉树列表(全部)
+    */
+    @GetMapping("/treeSelectAll")
+    public AjaxResult treeSelectAll() {
+        List<${ClassName}> treeSelects = ${className}Service.treeSelectAll();
+        return AjaxResult.success("查询成功", treeSelects);
+    }
+
+    /**
+     * 根据父节点id获取下拉树列表
+     */
+    @GetMapping("/treeSelectByParentId/{${treeParentCode}}")
+    public AjaxResult treeSelectByParentId(@PathVariable Long ${treeParentCode}) {
+        List<${ClassName}> treeSelects = ${className}Service.treeSelectByParentId(${treeParentCode});
+       return treeSelects.size()>0? AjaxResult.success("查询成功", treeSelects):AjaxResult.error("查询失败", null);
+    }
+
+#end
+    /**
+     * 根据主键id查询详情
+     *
+     * @param ${pkColumn.javaField}
+     * @return
+     */
+    @GetMapping("/quey${ClassName}ByTableId/{${pkColumn.javaField}}")
+    public AjaxResult quey${ClassName}ByTableId(@PathVariable("${pkColumn.javaField}")Long ${pkColumn.javaField}) {
+        ${ClassName} ${className} =${className}Service.getById(${pkColumn.javaField});
+        return AjaxResult.success("查询成功", ${className});
+    }
+
+    /**
+     * 根据主键id 删除
+     *
+     * @param ${pkColumn.javaField}
+     * @return
+     */
+    @DeleteMapping("/remove${ClassName}ByTableId/{${pkColumn.javaField}}")
+    public AjaxResult remove${ClassName}ByTableId(@PathVariable("${pkColumn.javaField}")Long ${pkColumn.javaField}) {
+        return ${className}Service.remove${ClassName}ByTableId(${pkColumn.javaField});
+    }
+
+
+#if($table.formType != 2)
+
+    /**
+     * 批量删除
+     *
+     * @param ${pkColumn.javaField}s
+     * @return
+     */
+    @DeleteMapping("/delAll")
+    public AjaxResult remove${ClassName}ByTableIds(Long[] ${pkColumn.javaField}s) {
+
+        // 判空
+        if(${pkColumn.javaField}s.length <0){
+            return AjaxResult.error("子表删除失败,列表为空！！");
+        }
+
+#if(${table.subTable})
+        // 查询子表信息
+        boolean ${subClassName}Flag =  ${subclassName}Service.SelectByParentIds(${pkColumn.javaField}s);
+        if(${subClassName}Flag){
+            return AjaxResult.error("子表删除失败,请清空关联子表信息！！");
+        }
+#end
+        // 清理主表信息
+        boolean remove${ClassName}Flag = ${className}Service.removeByIds(Arrays.asList(${pkColumn.javaField}s));
+        if(!remove${ClassName}Flag){
+            return AjaxResult.error("主表删除失败", remove${ClassName}Flag);
+        }
+        return AjaxResult.success("删除成功", remove${ClassName}Flag);
+    }
+#end
+
+}
+

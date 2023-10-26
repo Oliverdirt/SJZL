@@ -1,0 +1,728 @@
+##定义$http,$Message,$refs,$Modal,$delete
+#set($http="$http")
+#set($Message="$Message")
+#set($refs="$refs")
+#set($Modal="$Modal")
+#set($delete="$delete")
+#set($moment="$moment")
+#set($event="$event")
+#set($subClassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($SubClassName = $table.subTable.className)
+#set($subTableName = $table.subTable.tableName)
+#set($subColumns = $table.subTable.columns)
+#set($subTableContent = $table.subTable.tableContent)
+#set($pkSubColumn = $table.subTable.pkColumn)
+#set($cssPaths="@")
+#set($formCount = 0)
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isList == 1)
+#set($formCount = $formCount + 1)
+#end
+#end
+<template>
+  <div style="height: 100%;position: absolute"  >
+      <!-- 抽屉 -->
+      <Drawer
+        title="${subTableContent}列表"
+        v-model="visible"
+        width="1000"
+        :closable="false"
+      >
+        <div class="dataArea">
+          <Form ref="itemQuery" :model="itemQuery" :label-width="90" >
+            <Row :gutter="40">
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isQuery == 1)
+              <Col span="8" style="margin-bottom: 12px">
+                <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}" style="width: 100%">
+#if($subColumn.htmlType == 'input')
+                  <Input  type="text" :maxlength="100" v-model.trim="itemQuery.${subColumn.javaField}" placeholder="请输入${subColumn.columnComment}" style="width: 100%"></Input>
+#elseif($subColumn.htmlType == "select" || $subColumn.htmlType == "radio")
+#if($subColumn.dicCode)
+                  <Select v-model="itemQuery.${subColumn.javaField}" placeholder="请选择" style="text-align: left">
+                    <Option v-for="item in ${subColumn.javaField}DicGroups" :value="item.itemCode.toLocaleString()"
+                            :key="item.itemCode.toLocaleString()">{{ item.itemValue }}
+                    </Option>
+                  </Select>
+#else
+                  <Select v-model="itemQuery.${subColumn.javaField}" placeholder="请选择" style="text-align: left">
+                    <Option value="1" >value1</Option>
+                    <Option value="0" >value2</Option>
+                  </Select>
+#end
+#elseif($subColumn.htmlType == "checkbox")
+#if($subColumn.dicCode)
+                 <Select v-model="itemQuery.${subColumn.javaField}" placeholder="请选择" multiple style="text-align: left">
+                    <Option v-for="item in ${subColumn.javaField}DicGroups" :value="item.itemCode.toLocaleString()"
+                            :key="item.itemCode.toLocaleString()">{{ item.itemValue }}
+                    </Option>
+                 </Select>
+#else
+                 <Select v-model="itemQuery.${subColumn.javaField}" placeholder="请选择" multiple style="text-align: left">
+                    <Option value="1" >香蕉</Option>
+                    <Option value="2" >苹果</Option>
+                    <Option value="3" >西瓜</Option>
+                 </Select>
+#end
+#elseif($subColumn.htmlType == "date")
+#if($subColumn.queryType != "between")
+#set($dateType = 'date')
+#else
+#set($dateType = 'daterange')
+#end
+                  <DatePicker type="${dateType}" placement="bottom-end" v-model.trim="itemQuery.${subColumn.javaField}"
+                    placeholder="请选择日期" style="width: 100%" format="yyyy-MM-dd"></DatePicker>
+#elseif($subColumn.htmlType == "datetime")
+#if($subColumn.queryType != "between")
+#set($dateType = 'datetime')
+#else
+#set($dateType = 'datetimerange')
+#end
+                  <DatePicker type="${dateType}" placement="bottom-end" v-model.trim="itemQuery.${subColumn.javaField}"
+                    placeholder="请选择日期" style="width: 100%" format="yyyy-MM-dd HH:mm:ss"></DatePicker>
+#else
+                  <Input  type="text" :maxlength="100" v-model.trim="itemQuery.${subColumn.javaField}" placeholder="请输入${subColumn.columnComment}" style="width: 100%"></Input>
+#end
+                </FormItem>
+            </Col>
+#end
+#end
+           <Col span="24" style="text-align: right">
+                <FormItem :label-width="0">
+                  <Button type="primary" @click="queryList()" style="margin-right: 8px">查询</Button>
+                  <Button type="default"  @click="handleReset('itemQuery')">重置</Button>
+                </FormItem>
+           </Col>
+          </Row>
+        </Form>
+       <div class="operateBtn">
+          <Button  icon="md-add"  type="primary"  @click="handleAdd()">新增</Button>
+          <Button  icon="ios-trash-outline" type="error"   @click="handleDeleteMultiple()" style="margin-left: 20px">删除</Button>
+       </div>
+       <Table  :columns="columns" :data="itemData" @on-selection-change="rowSelected($event)" style="">
+          <template slot-scope="{ row, index }" slot="action">
+            <Button type="text" size="small"  style="margin-right: 5px;color: #0056B5" @click="handleEdit(row)">编辑</Button>
+            <Button type="text" size="small" style="margin-right: 5px;color: #0056B5" @click="remove(row, index)">删除</Button>
+          </template>
+       </Table>
+       <Page :total="pageData.total" :page-size="pageData.size" :current="pageData.page" show-elevator show-sizer show-total @on-page-size-change="changePage($event, 'size')" @on-change="changePage($event, 'page')" style="margin-top: 20px;"/>
+       </div>
+    </Drawer>
+    <Modal
+      v-model="itemModal"
+      :title="title"
+      ref="modal"
+      @on-cancel="close"
+      :width="620"
+    >
+      <Form  ref="itemDetail" :model="itemDetail" :label-width="100" :rules="ruleValidate" style="margin-top: 20px">
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isForm == 1)
+#if($subColumn.htmlType == "input")
+#if($pkSubColumn.javaField==${subColumn.javaField})
+        <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+            <Input type="text" :maxlength="100" v-model.trim="itemDetail.${subColumn.javaField}" placeholder="请输入${subColumn.columnComment}" :disabled="${subColumn.javaField}Flag" ></Input>
+        </FormItem>
+#else
+        <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+            <Input type="text" :maxlength="100" v-model.trim="itemDetail.${subColumn.javaField}" placeholder="请输入${subColumn.columnComment}" ></Input>
+        </FormItem>
+#end
+#elseif($subColumn.htmlType == "select" )
+#if($subColumn.dicCode)
+        <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+            <Select v-model="itemDetail.${subColumn.javaField}" placeholder="请选择${subColumn.columnComment}" clearable >
+              <Option v-for="item in ${subColumn.javaField}DicGroups" :value="item.itemCode.toLocaleString()"
+                    :key="item.itemCode.toLocaleString()">{{ item.itemValue }}
+              </Option>
+            </Select>
+        </FormItem>
+#else
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+            <Select v-model="itemDetail.${subColumn.javaField}" placeholder="请选择">
+              <Option value="1" >value1</Option>
+              <Option value="0" >value2</Option>
+            </Select>
+       </FormItem>
+#end
+
+#elseif($subColumn.htmlType == "checkbox" )
+#if($subColumn.dicCode)
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+          <CheckboxGroup v-model="itemDetail.${subColumn.javaField}">
+            <Checkbox v-for="item in ${subColumn.javaField}DicGroups" :label="item.itemCode">{{item.itemValue}}</Checkbox>
+          </CheckboxGroup>
+       </FormItem>
+#else
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+          <CheckboxGroup v-model="itemDetail.${subColumn.javaField}">
+            <Checkbox label="1">香蕉</Checkbox>
+            <Checkbox label="2">苹果</Checkbox>
+            <Checkbox label="3">西瓜</Checkbox>
+          </CheckboxGroup>
+       </FormItem>
+#end
+#elseif($subColumn.htmlType == "radio")
+#if($subColumn.dicCode)
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+          <RadioGroup v-model="itemDetail.${subColumn.javaField}">
+             <Radio v-for="item in ${subColumn.javaField}DicGroups" :label="item.itemCode.toLocaleString()" :key="item.itemCode.toLocaleString()">
+                 <span>{{item.itemValue}}</span>
+             </Radio>
+          </RadioGroup>
+       </FormItem>
+#else
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+          <RadioGroup v-model="itemDetail.${subColumn.javaField}">
+              <Radio label="0">选择1</Radio>
+              <Radio label="1">选择2</Radio>
+          </RadioGroup>
+       </FormItem>
+#end
+#elseif($subColumn.htmlType == "date")
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+            <DatePicker v-model="itemDetail.${subColumn.javaField}" type="date" placeholder=""   format="yyyy-MM-dd" style="width: 100%"></DatePicker>
+       </FormItem>
+#elseif($subColumn.htmlType == "datetime")
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+            <DatePicker v-model="itemDetail.${subColumn.javaField}" type="datetime" placeholder=""   format="yyyy-MM-dd HH:mm:ss" style="width: 100%"></DatePicker>
+       </FormItem>
+#elseif($subColumn.htmlType == "textarea")
+       <FormItem label="${subColumn.columnComment}"  prop="${subColumn.javaField}">
+            <Input type="textarea" :maxlength="100" v-model.trim="itemDetail.${subColumn.javaField}" placeholder="" ></Input>
+       </FormItem>
+#end
+#end
+#end
+      </Form>
+      <div slot="footer">
+        <Button type="primary"  @click="ok(okFlag)"  style="width: 80px">确定</Button>
+        <Button type="default"  @click="close()"  style="width: 80px">取消</Button>
+      </div>
+    </Modal>
+  </div>
+</template>
+
+<script>
+import {
+    ${subClassName}Del,
+    ${subClassName}Update,
+    ${subClassName}Create,
+    ${subClassName}Show,
+    queyPage${SubClassName}ByCondition,
+    ${subClassName}DelAll
+} from '${cssPaths}/api/${className}/${subClassName.toLowerCase()}-item'
+#foreach ($column in $subColumns)
+#if($column.dicCode)
+import {
+    getCscpBasicHxItemCode
+} from '${cssPaths}/api/dic/listdic'
+#break
+#end
+#end
+export default {
+  name: '${subClassName}Item',
+  data () {
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isForm == 1)
+#if($subColumn.validateRule != "")
+    const validate${subColumn.javaField} = (rule, value, callback) => {
+#if($subColumn.isNull == 0)
+#if($subColumn.htmlType != "checkbox")
+      if (!value) {
+        callback(new Error('请输入${subColumn.columnComment}！'))
+        return
+      }
+#end
+#end
+#if($subColumn.validateRule != "")
+      let pattern = new RegExp('${subColumn.rulevalue}')
+      if (!pattern.test(value)) {
+          callback(new Error('${subColumn.ruleinfo}'))
+          return
+      }
+#end
+      callback()
+    }
+#else
+#if($subColumn.htmlType != "checkbox")
+#if($subColumn.isNull == 0)
+   const validate${subColumn.javaField} = (rule, value, callback) => {
+        if (!value) {
+            callback(new Error('请输入${subColumn.columnComment}！'))
+            return
+        }
+       callback()
+   }
+#end
+#end
+#end
+#end
+#end
+    return {
+      itemModal: false,
+      title: '新增',
+      visible: false,
+      okFlag: '',
+      itemQuery: {},
+      itemData: [],
+      itemDetail: {},
+      selectedArr: [],
+      pageData: {
+        total: 0,
+        size: 10,
+        page: 1
+      },
+#foreach ($subColumn in $subColumns)
+#if($subColumn.dicCode)
+      ${subColumn.javaField}DicGroups: [],
+#end
+#if($subColumn.isForm == 1)
+#if($pkSubColumn.javaField==${subColumn.javaField})
+      ${subColumn.javaField}Flag: false,
+#end
+#end
+#end
+      ${subTableFkclassName}: null,
+      columns: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center',
+          fixed: 'left'
+        },
+        {
+          type: 'index',
+          align: 'center',
+          title: '序号',
+          width: 80,
+          fixed: 'left'
+        },
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isList == 1)
+#if($subColumn.dicCode)
+        {
+          title: '${subColumn.columnComment}',
+          key: '${subColumn.javaField}',
+#if(${subColumn.controlLength})
+          width: ${subColumn.controlLength},
+#else
+#if($formCount >5)
+          width: 160,
+#end
+#end
+          render: (h, params) => {
+            return h('span', this.${subColumn.javaField}Translate(params.row))
+          }
+        },
+#elseif(${subColumn.htmlType} == 'checkbox')
+        {
+            title: '${subColumn.columnComment}',
+#if(${subColumn.controlLength})
+            width: ${subColumn.controlLength},
+#else
+#if($formCount >5)
+            width: 160,
+#end
+#end
+            key: '${subColumn.javaField}',
+            render: (h, params) => {
+                let ${subColumn.javaField}values = params.row.${subColumn.javaField}.split(',')
+                let ${subColumn.javaField}labels = []
+                    ${subColumn.javaField}values.forEach(item => {
+                    if (item == 1) {
+                            ${subColumn.javaField}labels.push('香蕉')
+                    } else if (item == 2) {
+                            ${subColumn.javaField}labels.push('苹果')
+                    } else if (item == 3) {
+                            ${subColumn.javaField}labels.push('西瓜')
+                    }
+                })
+                if (${subColumn.javaField}labels) {
+                    return h('span', ${subColumn.javaField}labels.join(','))
+                }else{
+                    return h('span', '')
+                }
+            }
+        },
+#elseif(${subColumn.htmlType} == 'radio' || ${subColumn.htmlType} == 'select')
+        {
+            title: '${subColumn.columnComment}',
+#if(${subColumn.controlLength})
+            width: ${subColumn.controlLength},
+#else
+#if($formCount >5)
+            width: 160,
+#end
+#end
+            key: '${subColumn.javaField}',
+            render: (h, params) => {
+                if(params.row.${subColumn.javaField} == 1){
+                    return h('span', 'value1')
+                }else if(params.row.${subColumn.javaField} == 0){
+                    return h('span', 'value2')
+                }
+            }
+        },
+#else
+        {
+          title: '${subColumn.columnComment}',
+#if(${subColumn.controlLength})
+          width: ${subColumn.controlLength},
+#else
+#if($formCount >5)
+          width: 160,
+#end
+#end
+          key: '${subColumn.javaField}'
+        },
+#end
+#end
+#end
+        {
+          title: '操作',
+          slot: 'action',
+          width: 180,
+          align: 'center',
+          fixed: 'right'
+        }
+      ],
+      ruleValidate: {
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isForm == 1)
+#if($subColumn.validateRule != "")
+       '$subColumn.javaField': [
+#if($subColumn.isNull == 0)
+#if($subColumn.htmlType == "checkbox")
+          { required: true,  message: '请输入${subColumn.columnComment}！', type: 'array', trigger: 'change' },
+#end
+#if($subColumn.validateRule != "")
+          { required: true, validator: validate${subColumn.javaField}, trigger: 'blur' }
+      ],
+#else
+      ],
+#end
+#else
+          { required: true, validator: validate${subColumn.javaField}, trigger: 'blur' }
+      ],
+#end
+#end
+#end
+#end
+      }
+    }
+  },
+  mounted () {
+#foreach ($subColumn in $subColumns)
+#if($subColumn.dicCode)
+    this.${subColumn.javaField}GetDicGroups('${subColumn.dicCode}')
+#end
+#end
+  },
+  methods: {
+#foreach ($subColumn in $subColumns)
+#if($subColumn.dicCode)
+        ${subColumn.javaField}GetDicGroups(${subColumn.dicCode}){
+        getCscpBasicHxItemCode({
+            'dicCode' : '${subColumn.dicCode}'
+        })
+         .then(response => {
+            this.${subColumn.javaField}DicGroups = response.data.data
+         })
+    },
+    ${subColumn.javaField}Translate(row) {
+      if(!row.${subColumn.javaField}){
+        return row.${subColumn.javaField}
+      }
+#if($subColumn.htmlType == "checkbox")
+      let realGroupNames =[]
+      let arr = row.${subColumn.javaField}.split(',')
+      arr.forEach(item => {
+          for (let i = 0; i < this.${subColumn.javaField}DicGroups.length; i++) {
+              if (item.toLocaleString() === this.${subColumn.javaField}DicGroups[i].itemCode.toLocaleString()) {
+                  realGroupNames.push(this.${subColumn.javaField}DicGroups[i].itemValue.toLocaleString())
+              }
+          }
+      })
+      if (realGroupNames) {
+        return realGroupNames.join(',')
+      } else {
+        return row.${subColumn.javaField}
+      }
+#else
+      let realGroupName
+      for (let i = 0; i < this.${subColumn.javaField}DicGroups.length; i++) {
+        if (row.${subColumn.javaField}.toLocaleString() === this.${subColumn.javaField}DicGroups[i].itemCode.toLocaleString()) {
+            realGroupName = this.${subColumn.javaField}DicGroups[i].itemValue.toLocaleString()
+        }
+      }
+      if(realGroupName){
+        return realGroupName
+      }else{
+        return row.${subColumn.javaField}
+      }
+#end
+    },
+#end
+#end
+    edit (fkId) {
+      this.visible = true
+      this.${subTableFkclassName} = fkId
+      this.queryList()
+    },
+    changePage (e, type) {
+      if (type === 'size') {
+        this.pageData.size = e
+      } else if (type === 'page') {
+        this.pageData.page = e
+      }
+      this.queryList()
+    },
+    close () {
+      this.itemModal = false
+      this.${refs}['itemDetail'].resetFields()
+    },
+    remove (row, index) {
+      this.${Modal}.confirm({
+         title: '警告',
+         content: '<p>确定删除这条数据？</p>',
+         onOk: () => {
+            ${subClassName}Del(row.${pkSubColumn.javaField}).then(res => {
+                if (res.data.code !== 200) {
+                    this.${Message}.error(res.data.msg)
+                    return
+                } else this.${Message}.success('删除成功')
+                this.queryList()
+            }).catch(() => {
+                this.${Message}.error('删除失败')
+            })
+         },
+        onCancel: () => {}
+      })
+    },
+    ok (type) {
+      this.${delete}(this.itemDetail, '')
+      this.${delete}(this.itemDetail, '_rowKey')
+      this.itemDetail.${subTableFkclassName} = this.${subTableFkclassName}
+      let copyDetail = JSON.parse(JSON.stringify(this.itemDetail))
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isForm == 1 && $subColumn.htmlType == "date" )
+      if(this.itemDetail.${subColumn.javaField}){
+        copyDetail.${subColumn.javaField} = this.${moment}(new Date(this.itemDetail.${subColumn.javaField})).format('yyyy-MM-DD')
+      }
+#end
+#if($subColumn.isForm == 1 && $subColumn.htmlType == "datetime")
+      if(this.itemDetail.${subColumn.javaField}){
+        copyDetail.${subColumn.javaField} = this.${moment}(new Date(this.itemDetail.${subColumn.javaField})).format('yyyy-MM-DD HH:mm:ss')
+      }
+#end
+#if($subColumn.isForm == 1 && $subColumn.htmlType == "checkbox")
+      if (this.itemDetail.${subColumn.javaField}) {
+#if($subColumn.dicCode)
+        let ${subColumn.javaField}DicGroupsArr = this.${subColumn.javaField}DicGroups.map((item) => {
+          return item.itemCode
+        })
+#else
+        let ${subColumn.javaField}DicGroupsArr = ['1','2','3']
+#end
+        let ${subColumn.javaField}Arr = [...this.itemDetail.${subColumn.javaField}]
+        ${subColumn.javaField}Arr.sort((a, b) => {
+          return ${subColumn.javaField}DicGroupsArr.indexOf(a) - ${subColumn.javaField}DicGroupsArr.indexOf(b)
+        })
+        copyDetail.${subColumn.javaField} = ${subColumn.javaField}Arr.join(',')
+      }
+##      if(this.itemDetail.${subColumn.javaField}){
+##        copyDetail.${subColumn.javaField} =  this.itemDetail.${subColumn.javaField}.join(',')
+##      }
+#end
+#end
+      this.${refs}['itemDetail'].validate((valid) => {
+        if (valid) {
+            if (type === 'update') {
+            ${subClassName}Update(copyDetail).then(res => {
+                this.${Message}.success('修改成功')
+                this.itemModal = false
+                this.queryList()
+                this.${refs}['itemDetail'].resetFields()
+            }).catch(() => {
+                this.${Message}.error('修改失败')
+            })
+            } else if (type === 'add') {
+                ${subClassName}Create(copyDetail).then(res => {
+                    this.${Message}.success('新增成功')
+                    this.itemModal = false
+                    this.queryList()
+                    this.${refs}['itemDetail'].resetFields()
+                }).catch(() => {
+                    this.${Message}.error('新增失败')
+                })
+            }
+        } else {
+            this.itemModal = true
+        }
+      })
+    },
+    handleAdd (row, type) {
+      this.itemDetail = {}
+      this.itemModal = true
+      this.okFlag = 'add'
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isForm == 1)
+#if($pkSubColumn.javaField==${subColumn.javaField})
+      this.${subColumn.javaField}Flag = false
+#end
+#end
+#end
+    },
+    handleEdit (row) {
+      this.title = '修改'
+      this.itemModal = true
+      this.okFlag = 'update'
+      ${subClassName}Show(row.${pkSubColumn.javaField}).then(res => {
+        this.itemDetail = res.data.data
+#foreach ($subColumn in $subColumns)
+#if($subColumn.dicCode)
+#if($subColumn.htmlType == "checkbox" )
+        if(res.data.data.${subColumn.javaField}){
+          this.itemDetail.${subColumn.javaField} = res.data.data.${subColumn.javaField}.split(',')
+        }else{
+          res.data.data.${subColumn.javaField} = []
+        }
+#else
+        if(res.data.data.${subColumn.javaField}){
+          this.itemDetail.${subColumn.javaField} = res.data.data.${subColumn.javaField}.toLocaleString()
+        }
+#end
+#else
+#if($subColumn.htmlType == "checkbox" )
+        if(res.data.data.${subColumn.javaField}){
+            this.itemDetail.${subColumn.javaField} = res.data.data.${subColumn.javaField}.split(',')
+        }else{
+            res.data.data.${subColumn.javaField} = []
+        }
+#end
+#end
+#if($subColumn.isForm == 1)
+#if($pkSubColumn.javaField==${subColumn.javaField})
+      this.${subColumn.javaField}Flag = true
+#end
+#end
+#end
+      }).catch(() => {
+        this.${Message}.error('行数据查询失败')
+      })
+    },
+    handleReset (name) {
+      this.${refs}[name].resetFields()
+      this.selectedArr= []
+      this.queryList()
+    },
+    rowSelected (e) {
+      this.selectedArr = e
+    },
+    queryList () {
+      let obj = {}
+      let ${subClassName}FeildsBetween = []
+#foreach ($subColumn in $subColumns)
+#if($subColumn.isQuery == 1)
+#if($subColumn.htmlType == "date")
+#set($dateformat = "yyyy-MM-DD")
+#elseif($subColumn.htmlType == "datetime")
+#set($dateformat = "yyyy-MM-DD HH:mm:ss")
+#end
+#if($subColumn.htmlType == "date" || $subColumn.htmlType == "datetime")
+#if($column.queryType != "between")
+      obj['${column.javaField}'] = this.queryForm['${column.javaField}']  ?   this.$moment(new Date(this.queryForm['${column.javaField}'])).format('${dateformat}') : null
+#else
+      if(this.queryForm['${column.javaField}'][0] !='' && this.queryForm['${column.javaField}'][0] != ''){
+         let tempObj = {
+          'betweenFeild' : '${column.columnName}',
+          'lowerBoundary' : this.queryForm['${column.javaField}'][0]  ?  this.$moment(new Date(this.queryForm['${column.javaField}'][0])).format('${dateformat}') : null,
+          'upperBoundary' : this.queryForm['${column.javaField}'][1]  ?  this.$moment(new Date(this.queryForm['${column.javaField}'][1])).format('${dateformat}'): null
+         }
+         ${subClassName}FeildsBetween.push(tempObj)
+      }
+      obj['${subClassName}FeildsBetween'] = ${subClassName}FeildsBetween
+#end
+#else
+#if($subColumn.htmlType == "checkbox")
+     if (this.itemQuery['${subColumn.javaField}']) {
+#if($subColumn.dicCode)
+        let ${subColumn.javaField}DicGroupsArr = this.${subColumn.javaField}DicGroups.map((item) => {
+          return item.itemCode
+        })
+#else
+        let ${subColumn.javaField}DicGroupsArr = ['1','2','3']
+#end
+        let ${subColumn.javaField}Arr = [...this.itemQuery['${subColumn.javaField}']]
+        ${subColumn.javaField}Arr.sort((a, b) => {
+          return ${subColumn.javaField}DicGroupsArr.indexOf(a) - ${subColumn.javaField}DicGroupsArr.indexOf(b)
+        })
+        obj['${subColumn.javaField}'] = ${subColumn.javaField}Arr.join(',')
+      }
+##     obj['${subColumn.javaField}'] = this.itemQuery['${subColumn.javaField}']  ?  this.itemQuery['${subColumn.javaField}'].join(','): null
+     if(obj['${subColumn.javaField}'] == '') {
+         obj['${subColumn.javaField}'] = null
+     }
+#else
+     obj['${subColumn.javaField}'] = this.itemQuery['${subColumn.javaField}']  ?  this.itemQuery['${subColumn.javaField}']: null
+#end
+#end
+#end
+#end
+      let queryData = Object.assign(obj, {
+        current: this.pageData.page - 1,
+        size: this.pageData.size,
+      })
+      queyPage${SubClassName}ByCondition(queryData)
+      .then(res => {
+        this.itemData = res.data.data.records
+        this.pageData.total = res.data.data.total
+      }).catch(() => {
+            this.${Message}.error('列表查询失败')
+      })
+    },
+    handleDeleteMultiple () {
+      let arr = this.selectedArr.map(item => item.${pkSubColumn.javaField})
+      if (arr.length < 1) {
+        return this.${Message}.error('删除失败,当前选择列表为空！')
+      }
+      this.${Modal}.confirm({
+        title: '警告',
+        content: '<p>确定删除勾选的数据？</p>',
+        onOk: () => {
+            ${subClassName}DelAll(arr).then(res => {
+                if (res.data.code !== 200) {
+                  this.${Message}.error(res.data.msg)
+                  return
+                }
+                this.${Message}.success('删除成功')
+                this.queryList()
+            }).catch(error => {
+                if (error.response) {
+                this.${Message}.error(error.response.data.title ? error.response.data.title : '删除失败！')
+                }
+            })
+        },
+      onCancel: () => {}
+      })
+    }
+   }
+}
+</script>
+<style lang="less" scoped>
+  .dataArea{
+    width: 100%;
+    left: 0;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    text-align: right;
+    background: #fff;
+    border: 1px solid #e9e9e9
+  } ;
+  .operateBtn{
+    width: 100%;
+    text-align: left;
+    padding: 0 0 16px;
+  }
+</style>

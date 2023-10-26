@@ -1,0 +1,1392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    <property name="autoIncrement" value="true" dbms="mysql,mssql,h2,postgresql,sybase"/>
+    <property name="intType" value="bigint" dbms="postgresql"/>
+    <property name="intType" value="int(11)" dbms="mysql,mssql,h2,oracle,sybase"/>
+    <property name="bigintType" value="bigint" dbms="mysql,postgresql"/>
+    <property name="longType" value="bigint" dbms="mysql,postgresql"/>
+    <property name="longType" value="bigint" dbms="mssql,h2,oracle,sybase,maridb"/>
+
+    <changeSet id="DIC-20220303-001" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_hx_dic"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_hx_dic" remarks="字典表">
+            <column name="dic_id" type="bigint" remarks="唯一标识">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dic_name" type="varchar(100)"  remarks="字典名称">
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_code" type="varchar(100)"  remarks="字典编码">
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_sort" type="bigint" remarks="字典排序" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_attr" type="varchar(32)" remarks="字典属性（基础字典、自定义字典、sql字典）" >
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)" remarks="字典描述" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE `cscp_hx_dic` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <changeSet id="DIC-20220303-002" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_hx_dic_custom"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_hx_dic_custom" remarks="自定义字典表">
+            <column name="dic_id" type="bigint" remarks="唯一标识">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dic_name" type="varchar(100)"  remarks="字典名称">
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_code" type="varchar(100)"  remarks="字典编码">
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_sort" type="bigint" remarks="字典排序" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_method" type="varchar(255)" remarks="方法名" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_class" type="varchar(255)" remarks="类名" >
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)" remarks="字典描述" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE `cscp_hx_dic_custom` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <changeSet id="DIC-20220303-003" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_hx_dic_item"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_hx_dic_item" remarks="字典项表">
+            <column name="item_id" type="bigint" remarks="唯一标识">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dic_id" type="bigint"  remarks="字典id">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_code" type="varchar(100)"  remarks="字典项编码">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_value" type="varchar(100)" remarks="字典项值" >
+                <constraints nullable="true" />
+            </column>
+            <column name="item_sort" type="bigint" remarks="字典排序" >
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)" remarks="描述" >
+                <constraints nullable="true" />
+            </column>
+            <column name="item_parent_id" type="bigint" remarks="父级节点" >
+                <constraints nullable="true" />
+            </column>
+            <column name="ancestors" type="varchar(5000)" remarks="祖级列表" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE `cscp_hx_dic_item` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <changeSet id="DIC-20220303-004" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_hx_sqldic_baseinfo"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_hx_sqldic_baseinfo" remarks="sql字典表">
+            <column name="id" type="bigint" remarks="唯一标识">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dic_select_sql" type="varchar(1000)"  remarks="查询SQL">
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_name" type="varchar(100)"  remarks="字典名">
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_code" type="varchar(100)" remarks="字典编码" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_notes" type="varchar(100)" remarks="字典备注" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_item_code_column" type="varchar(100)" remarks="字典项编码列名" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_item_value_column" type="varchar(100)" remarks="字典项值列名" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_item_value_notes" type="varchar(100)" remarks="字典项备注列名" >
+                <constraints nullable="true" />
+            </column>
+            <column name="create_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column name="create_user" type="bigint" remarks="创建人" >
+                <constraints nullable="true" />
+            </column>
+            <column name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column name="update_user" type="bigint" remarks="更新人" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE `cscp_hx_sqldic_baseinfo` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <changeSet id="DIC-20220303-005" author="jshx">
+        <sql>
+            /*
+            字典菜单
+            */
+            INSERT INTO cscp_menus VALUES ('1491234591367032833', 'dicManager', 'md-battery-full', '字典管理', '/dicManager', '*', 'views/main/main.vue', '0', 'menu1', '', '3001');
+            INSERT INTO cscp_menus VALUES ('1491696456738725890', 'baseDic', 'ios-contrast', '基础字典', '/baseDic', '*', 'views/dic/list/dicManager.vue', '1491234591367032833', 'menu2', '', '2');
+            INSERT INTO cscp_menus VALUES ('1491234993403654145', 'dicTree', 'md-bonfire', '树型字典', '/dicTree', '*', 'views/dic/tree/dicTreeManager.vue', '1491234591367032833', 'menu2', '', '3');
+            INSERT INTO cscp_menus VALUES ('1492373004007313409', 'dicCustom', 'logo-freebsd-devil', '自定义字典', '/dicCustom', '*', 'views/dic/custom/customDicManager.vue', '1491234591367032833', 'menu2', '', '4');
+            INSERT INTO cscp_menus VALUES ('1493134061026766849', 'cscp_hx_sqldic_baseinfo', 'logo-youtube', 'SQL字典', '/cscp_hx_sqldic_baseinfo', '*', 'views/dic/sql/sqlDicManager.vue', '1491234591367032833', 'menu2', '', '5');
+            INSERT INTO cscp_menus VALUES ('1493135296635170818', 'cscp_hx_sqldic_preview', 'md-aperture', '执行结果预览', '/cscp_hx_sqldic_preview', '*', 'views/dic/sql/PreviewDicList.vue', '1493134061026766849', 'non-menu', '', '6');
+        </sql>
+    </changeSet>
+
+    <changeSet id="DIC-20220303-006" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+<!--        <sql dbms="mysql,postgresql">-->
+<!--            /*-->
+<!--            字典数据-->
+<!--            */-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493047675417075713, '判断', 'judge', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493050320965935105, '单选框', 'radio', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493050388548755457, '组件名称', 'componentName', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051033179725825, '性别', 'sex', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051080248205313, '级别', 'rank', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051135977922562, '开发流程', 'devProcess', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051186578006018, '大小', 'maxmin', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051238201499650, '状态', 'status', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051309479501826, '任务组名', 'taskName', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051372075294721, '角色', 'role', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051568159006721, '拉取策略', 'pullPolicy', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051651931840513, 'MySQL版本', 'mysqlVersion', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493051683615612930, 'k8s相关', 'k8s', 1, 'list', NULL);-->
+<!--            INSERT INTO `cscp_hx_dic`(`dic_id`, `dic_name`, `dic_code`, `dic_sort`, `dic_attr`, `description`) VALUES (1493062766988378114, '中国省市县地区代码', 'areaCode', 1, 'tree', NULL);-->
+<!--        </sql>-->
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493047675417075713"/>
+            <column name="dic_name" value="判断"/>
+            <column name="dic_code" value="judge"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493050320965935105"/>
+            <column name="dic_name" value="单选框"/>
+            <column name="dic_code" value="radio"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="dic_name" value="组件名称"/>
+            <column name="dic_code" value="componentName"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051033179725825"/>
+            <column name="dic_name" value="性别"/>
+            <column name="dic_code" value="sex"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051080248205313"/>
+            <column name="dic_name" value="级别"/>
+            <column name="dic_code" value="rank"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="dic_name" value="开发流程"/>
+            <column name="dic_code" value="devProcess"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051186578006018"/>
+            <column name="dic_name" value="大小"/>
+            <column name="dic_code" value="maxmin"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051238201499650"/>
+            <column name="dic_name" value="状态"/>
+            <column name="dic_code" value="status"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051309479501826"/>
+            <column name="dic_name" value="任务组名"/>
+            <column name="dic_code" value="taskName"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051372075294721"/>
+            <column name="dic_name" value="角色"/>
+            <column name="dic_code" value="role"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051568159006721"/>
+            <column name="dic_name" value="拉取策略"/>
+            <column name="dic_code" value="pullPolicy"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051651931840513"/>
+            <column name="dic_name" value="MySQL版本"/>
+            <column name="dic_code" value="mysqlVersion"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493051683615612930"/>
+            <column name="dic_name" value="k8s相关"/>
+            <column name="dic_code" value="k8s"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="list"/>
+            <column name="description"/>
+        </insert>
+        <insert tableName="cscp_hx_dic">
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="dic_name" value="中国省市县地区代码"/>
+            <column name="dic_code" value="areaCode"/>
+            <column name="dic_sort" valueNumeric="1"/>
+            <column name="dic_attr" value="tree"/>
+            <column name="description"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="DIC-20220303-007" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+<!--        <sql dbms="mysql,postgresql">-->
+<!--            /*-->
+<!--            字典项数据-->
+<!--            */-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493047789435035649, 1493047675417075713, '1', '是', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493047835052285954, 1493047675417075713, '2', '否', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493051892768776193, 1493050320965935105, '1', '多选', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493051915824865282, 1493050320965935105, '2', '单选', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052025182953473, 1493050388548755457, '1', '文本框', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052045504356354, 1493050388548755457, '2', '下拉框', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052067314737154, 1493050388548755457, '3', '日期选择', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052112617414658, 1493050388548755457, '4', '日期范围选择', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052158024949762, 1493050388548755457, '5', '打分（星形）', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052185359228929, 1493050388548755457, '6', '下拉多选', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052211703652353, 1493050388548755457, '7', '勾选多选', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052461336043522, 1493050388548755457, '8', '勾选单选', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052504281522178, 1493050388548755457, '9', '单选toggle', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052533088002049, 1493050388548755457, '10', '大文本框', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052569821716482, 1493050388548755457, '11', '时间选择', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052601933307906, 1493050388548755457, '12', '文件上传', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052631071137793, 1493050388548755457, '13', '打分（奖杯）', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493052680903663617, 1493050388548755457, '14', 'Email', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059112256421890, 1493050388548755457, '15', '数字-整数', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059480684085249, 1493050388548755457, '16', '数字-小数', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059509993881602, 1493050388548755457, '17', '电话', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059538687115266, 1493050388548755457, '18', '时间选择-圆形', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059564096208897, 1493050388548755457, '19', '数字-spinner', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059600918003713, 1493050388548755457, '20', '数字-Knob', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059639434297346, 1493050388548755457, '21', 'Phone-mask', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059687316471809, 1493050388548755457, '22', '信用卡-mask', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059708799696898, 1493050388548755457, '23', 'Tax-mask', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059736658264065, 1493050388548755457, '24', 'SN-mask', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059762289655809, 1493050388548755457, '25', 'Silder', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493059787430313985, 1493050388548755457, '26', 'Silder-vertical', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060253866278913, 1493051033179725825, '1', '男', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060273558536193, 1493051033179725825, '2', '女', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060349165060098, 1493051080248205313, '1', '高', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060373315862529, 1493051080248205313, '2', '中', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060439342596098, 1493051080248205313, '3', '低', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060525195804673, 1493051135977922562, '1', '收集需求', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060551858995202, 1493051135977922562, '2', '需求分析', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060575556812801, 1493051135977922562, '3', '纳入需求管理', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060599892164610, 1493051135977922562, '4', '进入开发', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060622553989122, 1493051135977922562, '5', '测试完成', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060660927676418, 1493051135977922562, '6', '上线', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060696419876866, 1493051135977922562, '7', '已经回复', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060723045318657, 1493051135977922562, '8', '更新解释', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060860656238593, 1493051186578006018, '1', '大', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060879023095810, 1493051186578006018, '2', '小', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493060987705901057, 1493051238201499650, '1', '正常', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061024297009153, 1493051238201499650, '2', '暂停', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061095033946113, 1493051309479501826, '1', '默认', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061118589157378, 1493051309479501826, '2', '系统', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061246335074305, 1493051372075294721, '100001', '平台管理员', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061426107138049, 1493051372075294721, '100002', '平台操作员', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061564208791553, 1493051372075294721, '100003', '平台其他人员', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061742865170434, 1493051372075294721, '200001', '外部企业信息填报人员', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493061789686185985, 1493051372075294721, '200002', '外部企业其他人员', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493062026219765762, 1493051568159006721, '1', 'Always', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493062049246494721, 1493051568159006721, '2', 'IfNotPresent', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493062096331751425, 1493051568159006721, '3', 'Never', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493062163037962241, 1493051651931840513, '1', '5.7.14', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493062182675693570, 1493051651931840513, '2', '5.7.15', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493062242557771777, 1493051683615612930, '1', 'ceph-rbd', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493063505978605570, 1493062766988378114, '32', '江苏', 1, NULL, NULL, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493063599566110722, 1493062766988378114, '3201', '南京市', 1, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493063664657514497, 1493062766988378114, '3202', '无锡市', 2, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493063766365192194, 1493062766988378114, '3203', '徐州', 3, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493063876482449410, 1493062766988378114, '3204', '常州市', 4, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493063932522545153, 1493062766988378114, '3205', '苏州市', 5, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493063983743385602, 1493062766988378114, '3206', '南通市', 6, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064036235100161, 1493062766988378114, '3207', '连云港市', 7, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064117243887618, 1493062766988378114, '3208', '淮安市', 8, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064155533688833, 1493062766988378114, '3209', '盐城市', 9, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064236286623746, 1493062766988378114, '3210', '扬州市', 10, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064334827601922, 1493062766988378114, '3211', '镇江市', 11, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064402448171009, 1493062766988378114, '3212', '泰州市', 12, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064471855513601, 1493062766988378114, '3213', '宿迁市', 13, NULL, 1493063505978605570, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493064757026242561, 1493062766988378114, '320101', '市辖区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102098105253890, 1493062766988378114, '320102', '玄武区', 2, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102189855653889, 1493062766988378114, '320103', '白下区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102277235589122, 1493062766988378114, '320104', '秦淮区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102361889226754, 1493062766988378114, '320105', '建邺区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102459595538433, 1493062766988378114, '320106', '鼓楼区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102518835888130, 1493062766988378114, '320107', '下关区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102637102678018, 1493062766988378114, '320111', '浦口区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102876589047810, 1493062766988378114, '320113', '栖霞区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493102953290285057, 1493062766988378114, '320114', '雨花区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493103014422265857, 1493062766988378114, '320115', '江宁区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493103122656280577, 1493062766988378114, '320116', '六合区', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493103205774802946, 1493062766988378114, '320124', '溧水县', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493103286334799873, 1493062766988378114, '320125', '高淳县', 1, NULL, 1493063599566110722, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107310509432833, 1493062766988378114, '320201', '市辖区', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107395167264770, 1493062766988378114, '320202', '崇安区', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107454248230914, 1493062766988378114, '320203', '南长区', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107532459417601, 1493062766988378114, '320204', '北塘区', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107582073839618, 1493062766988378114, '320205', '锡山区', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107636801118210, 1493062766988378114, '320206', '惠山区', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107693327753218, 1493062766988378114, '320211', '滨湖区', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107750894575618, 1493062766988378114, '320281', '江阴市', 1, NULL, 1493063664657514497, NULL);-->
+<!--            INSERT INTO `cscp_hx_dic_item`(`item_id`, `dic_id`, `item_code`, `item_value`, `item_sort`, `description`, `item_parent_id`, `ancestors`) VALUES (1493107807450570754, 1493062766988378114, '320282', '宜兴市', 1, NULL, 1493063664657514497, NULL);-->
+
+<!--        </sql>-->
+
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493047789435035649"/>
+            <column name="dic_id" valueNumeric="1493047675417075713"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="是"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493047835052285954"/>
+            <column name="dic_id" valueNumeric="1493047675417075713"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="否"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493051892768776193"/>
+            <column name="dic_id" valueNumeric="1493050320965935105"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="多选"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493051915824865282"/>
+            <column name="dic_id" valueNumeric="1493050320965935105"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="单选"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052025182953473"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="文本框"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052045504356354"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="下拉框"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052067314737154"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="3"/>
+            <column name="item_value" value="日期选择"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052112617414658"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="4"/>
+            <column name="item_value" value="日期范围选择"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052158024949762"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="5"/>
+            <column name="item_value" value="打分（星形）"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052185359228929"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="6"/>
+            <column name="item_value" value="下拉多�??"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052211703652353"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="7"/>
+            <column name="item_value" value="勾选多选"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052461336043522"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="8"/>
+            <column name="item_value" value="勾选单选"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052504281522178"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="9"/>
+            <column name="item_value" value="单选toggle"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052533088002049"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="10"/>
+            <column name="item_value" value="大文本框"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052569821716482"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="11"/>
+            <column name="item_value" value="时间选择"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052601933307906"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="12"/>
+            <column name="item_value" value="文件上传"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052631071137793"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="13"/>
+            <column name="item_value" value="打分（奖杯）"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493052680903663617"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="14"/>
+            <column name="item_value" value="Email"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059112256421890"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="15"/>
+            <column name="item_value" value="数字-整数"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059480684085249"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="16"/>
+            <column name="item_value" value="数字-小数"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059509993881602"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="17"/>
+            <column name="item_value" value="电话"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059538687115266"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="18"/>
+            <column name="item_value" value="时间选择-圆形"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059564096208897"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="19"/>
+            <column name="item_value" value="数字-spinner"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059600918003713"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="20"/>
+            <column name="item_value" value="数字-Knob"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059639434297346"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="21"/>
+            <column name="item_value" value="Phone-mask"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059687316471809"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="22"/>
+            <column name="item_value" value="信用�?-mask"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059708799696898"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="23"/>
+            <column name="item_value" value="Tax-mask"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059736658264065"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="24"/>
+            <column name="item_value" value="SN-mask"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059762289655809"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="25"/>
+            <column name="item_value" value="Silder"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493059787430313985"/>
+            <column name="dic_id" valueNumeric="1493050388548755457"/>
+            <column name="item_code" value="26"/>
+            <column name="item_value" value="Silder-vertical"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060253866278913"/>
+            <column name="dic_id" valueNumeric="1493051033179725825"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="男"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060273558536193"/>
+            <column name="dic_id" valueNumeric="1493051033179725825"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="女"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060349165060098"/>
+            <column name="dic_id" valueNumeric="1493051080248205313"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="低"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060373315862529"/>
+            <column name="dic_id" valueNumeric="1493051080248205313"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="中"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060439342596098"/>
+            <column name="dic_id" valueNumeric="1493051080248205313"/>
+            <column name="item_code" value="3"/>
+            <column name="item_value" value="低"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060525195804673"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="收集需求"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060551858995202"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="需求分析"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060575556812801"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="3"/>
+            <column name="item_value" value="纳入需求管理"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060599892164610"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="4"/>
+            <column name="item_value" value="进入开发"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060622553989122"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="5"/>
+            <column name="item_value" value="测试完成"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060660927676418"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="6"/>
+            <column name="item_value" value="上线"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060696419876866"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="7"/>
+            <column name="item_value" value="已经回复"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060723045318657"/>
+            <column name="dic_id" valueNumeric="1493051135977922562"/>
+            <column name="item_code" value="8"/>
+            <column name="item_value" value="更新解释"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060860656238593"/>
+            <column name="dic_id" valueNumeric="1493051186578006018"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="大"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060879023095810"/>
+            <column name="dic_id" valueNumeric="1493051186578006018"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="小"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493060987705901057"/>
+            <column name="dic_id" valueNumeric="1493051238201499650"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="正常"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061024297009153"/>
+            <column name="dic_id" valueNumeric="1493051238201499650"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="暂停"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061095033946113"/>
+            <column name="dic_id" valueNumeric="1493051309479501826"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="默认"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061118589157378"/>
+            <column name="dic_id" valueNumeric="1493051309479501826"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="系统"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061246335074305"/>
+            <column name="dic_id" valueNumeric="1493051372075294721"/>
+            <column name="item_code" value="100001"/>
+            <column name="item_value" value="平台管理员"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061426107138049"/>
+            <column name="dic_id" valueNumeric="1493051372075294721"/>
+            <column name="item_code" value="100002"/>
+            <column name="item_value" value="平台操作员"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061564208791553"/>
+            <column name="dic_id" valueNumeric="1493051372075294721"/>
+            <column name="item_code" value="100003"/>
+            <column name="item_value" value="平台其他人员"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061742865170434"/>
+            <column name="dic_id" valueNumeric="1493051372075294721"/>
+            <column name="item_code" value="200001"/>
+            <column name="item_value" value="外部企业信息填报人员"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493061789686185985"/>
+            <column name="dic_id" valueNumeric="1493051372075294721"/>
+            <column name="item_code" value="200002"/>
+            <column name="item_value" value="外部企业其他人员"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493062026219765762"/>
+            <column name="dic_id" valueNumeric="1493051568159006721"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="Always"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493062049246494721"/>
+            <column name="dic_id" valueNumeric="1493051568159006721"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="IfNotPresent"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493062096331751425"/>
+            <column name="dic_id" valueNumeric="1493051568159006721"/>
+            <column name="item_code" value="3"/>
+            <column name="item_value" value="Never"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493062163037962241"/>
+            <column name="dic_id" valueNumeric="1493051651931840513"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="5.7.14"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493062182675693570"/>
+            <column name="dic_id" valueNumeric="1493051651931840513"/>
+            <column name="item_code" value="2"/>
+            <column name="item_value" value="5.7.15"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493062242557771777"/>
+            <column name="dic_id" valueNumeric="1493051683615612930"/>
+            <column name="item_code" value="1"/>
+            <column name="item_value" value="ceph-rbd"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493063505978605570"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="32"/>
+            <column name="item_value" value="江苏"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493063599566110722"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3201"/>
+            <column name="item_value" value="南京市"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493063664657514497"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3202"/>
+            <column name="item_value" value="无锡市"/>
+            <column name="item_sort" valueNumeric="2"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493063766365192194"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3203"/>
+            <column name="item_value" value="徐州"/>
+            <column name="item_sort" valueNumeric="3"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493063876482449410"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3204"/>
+            <column name="item_value" value="常州市"/>
+            <column name="item_sort" valueNumeric="4"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493063932522545153"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3205"/>
+            <column name="item_value" value="苏州市"/>
+            <column name="item_sort" valueNumeric="5"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493063983743385602"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3206"/>
+            <column name="item_value" value="南通市"/>
+            <column name="item_sort" valueNumeric="6"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064036235100161"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3207"/>
+            <column name="item_value" value="连云港市"/>
+            <column name="item_sort" valueNumeric="7"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064117243887618"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3208"/>
+            <column name="item_value" value="淮安市"/>
+            <column name="item_sort" valueNumeric="8"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064155533688833"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3209"/>
+            <column name="item_value" value="盐城市"/>
+            <column name="item_sort" valueNumeric="9"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064236286623746"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3210"/>
+            <column name="item_value" value="扬州市"/>
+            <column name="item_sort" valueNumeric="10"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064334827601922"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3211"/>
+            <column name="item_value" value="镇江市"/>
+            <column name="item_sort" valueNumeric="11"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064402448171009"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3212"/>
+            <column name="item_value" value="泰州市"/>
+            <column name="item_sort" valueNumeric="12"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064471855513601"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="3213"/>
+            <column name="item_value" value="宿迁市"/>
+            <column name="item_sort" valueNumeric="13"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063505978605570"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493064757026242561"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320101"/>
+            <column name="item_value" value="市辖区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102098105253890"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320102"/>
+            <column name="item_value" value="玄武区"/>
+            <column name="item_sort" valueNumeric="2"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102189855653889"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320103"/>
+            <column name="item_value" value="白下区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102277235589122"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320104"/>
+            <column name="item_value" value="秦淮区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102361889226754"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320105"/>
+            <column name="item_value" value="建邺区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102459595538433"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320106"/>
+            <column name="item_value" value="鼓楼区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102518835888130"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320107"/>
+            <column name="item_value" value="下关区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102637102678018"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320111"/>
+            <column name="item_value" value="浦口区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102876589047810"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320113"/>
+            <column name="item_value" value="栖霞区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493102953290285057"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320114"/>
+            <column name="item_value" value="雨花区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493103014422265857"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320115"/>
+            <column name="item_value" value="江宁区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493103122656280577"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320116"/>
+            <column name="item_value" value="六合区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493103205774802946"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320124"/>
+            <column name="item_value" value="溧水县"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493103286334799873"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320125"/>
+            <column name="item_value" value="高淳县"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063599566110722"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107310509432833"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320201"/>
+            <column name="item_value" value="市辖区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107395167264770"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320202"/>
+            <column name="item_value" value="崇安区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107454248230914"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320203"/>
+            <column name="item_value" value="南长区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107532459417601"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320204"/>
+            <column name="item_value" value="北塘区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107582073839618"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320205"/>
+            <column name="item_value" value="锡山区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107636801118210"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320206"/>
+            <column name="item_value" value="惠山区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107693327753218"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320211"/>
+            <column name="item_value" value="滨湖区"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107750894575618"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320281"/>
+            <column name="item_value" value="江阴市"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+        <insert tableName="cscp_hx_dic_item">
+            <column name="item_id" valueNumeric="1493107807450570754"/>
+            <column name="dic_id" valueNumeric="1493062766988378114"/>
+            <column name="item_code" value="320282"/>
+            <column name="item_value" value="宜兴市"/>
+            <column name="item_sort" valueNumeric="1"/>
+            <column name="description"/>
+            <column name="item_parent_id" valueNumeric="1493063664657514497"/>
+            <column name="ancestors"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="DIC-20220414-001" author="jshx">
+        <sql dbms="mysql,postgresql">
+            /*
+            字典角色菜单
+            */
+            INSERT INTO cscp_role_menu (id,role_id, menu_id) VALUES (1510104314508070914,'1', '1491234591367032833'), (1510104314545819650,'1', '1491234993403654145'), (1510104314608734209,'1', '1491696456738725890'),
+            (1510104314659065858,'1', '1492373004007313409'), (1510104314692620290,'1', '1493134061026766849'), (1510104314742951938,'1', '1493135296635170818');
+        </sql>
+    </changeSet>
+</databaseChangeLog>
