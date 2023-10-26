@@ -183,7 +183,7 @@ export default {
     this.$el.onselectstart = function () {
       return false
     }
-    console.log(this.defaultImg)
+    //console.log(this.defaultImg)
   },
   methods: {
     init () {
@@ -359,7 +359,7 @@ export default {
         ts: Date.now() // 现在的时间戳
       }
       getCaptchaImg(data).then(res => {
-        console.log('--------->', res, res.repCode)
+        //console.log('--------->', res, res.repCode)
         if (res.data.repCode == '0000') {
           this.backImgBase = res.data.repData.originalImageBase64
           this.blockBackImgBase = res.data.repData.jigsawImageBase64

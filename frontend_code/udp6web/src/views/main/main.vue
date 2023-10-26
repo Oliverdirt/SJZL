@@ -120,8 +120,8 @@ export default {
       this.$store.commit("app/setCurrentPath", currentPathArr);
       // 设置左侧菜单的选中项
       this.$store.commit("app/setCurrentMenuOpenNames", to.matched);
-      console.log(this.pageOpenedList, "1111");
-      console.log(to, index, "2222");
+      //console.log(this.pageOpenedList, "1111");
+      //console.log(to, index, "2222");
     },
   },
   methods: {

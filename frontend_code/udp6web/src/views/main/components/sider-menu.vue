@@ -23,6 +23,7 @@
 
 <template>
   <div class="sider-menu">
+    <!-- accordion使同类标签同时只能展开一个 -->
     <Menu
       :accordion="true"
       theme="dark"
@@ -105,7 +106,11 @@ export default {
   },
   methods: {
     menuSlected (name) {
+      //页面转到路由
       if (!!name && this.$route.name !== name) {
+        //console.log(name)
+        //console.log(this.$route.name)
+        //console.log(this.$route)this.route是刚才的页面，name是新点的页面的名字
         this.$router.push({ name })
       }
     },

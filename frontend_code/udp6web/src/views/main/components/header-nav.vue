@@ -700,7 +700,7 @@ export default {
       id: 'biyi-normal'
     }
     this.clickColorType(configJson)
-    console.log(this.currentColor,'1111')
+    //console.log(this.currentColor,'1111')
     this.init()
     // 检查浏览器是否支持全屏
     this.canFullScreen = document.fullscreenEnabled ||

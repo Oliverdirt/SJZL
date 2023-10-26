@@ -81,7 +81,7 @@ const app = {
         return
       }
       if (typeof params.action === 'number') {
-        console.log(11)
+        //console.log(11)
         state.pageOpenedList.splice(params.action, 1)
       } else {
         state.pageOpenedList = [{

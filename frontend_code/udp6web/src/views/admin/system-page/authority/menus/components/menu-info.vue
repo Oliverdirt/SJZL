@@ -210,7 +210,7 @@ export default {
           addOrUpdateMenuByData(data)
             // this.$http.put(url, data)
             .then(response => {
-              console.log(response.data.id)
+              //console.log(response.data.id)
               msg()
               this.$Message.success(isAppendNode ? '添加菜单成功！' : '更新菜单成功！')
               this.showModal = false

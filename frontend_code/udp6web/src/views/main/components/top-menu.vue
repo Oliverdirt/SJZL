@@ -235,8 +235,8 @@ export default {
     }
   },
   mounted () {
-    console.log('菜单')
-    console.log(this.menuList)
+    //console.log('菜单')
+    //console.log(this.menuList)
   }
 }
 </script>
