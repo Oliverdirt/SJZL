@@ -67,9 +67,21 @@
             <column name="parent_id" value="0"/>
             <column name="type" value="menu1"/>
             <column name="permission_code" value="cscp.authority"/>
+            <column name="orderby" value="2"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
+            <column name="id" value="1714464826189266946"/>
+            <column name="name" value="dataquality"/>
+            <column name="icon" value="md-barcode"/>
+            <column name="title" value="数据质量管理"/>
+            <column name="url" value="/dataquality"/>
+            <column name="http_method" value="*"/>
+            <column name="component" value="views/main/main.vue"/>
+            <column name="parent_id" value="0"/>
+            <column name="type" value="menu1"/>
+            <column name="permission_code" value="cscp.authority"/>
             <column name="orderby" value="1"/>
         </ext:insert>
-
 
         <!--  用户管理    -->
         <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
@@ -317,7 +329,7 @@
             <column name="parent_id" value="0"/>
             <column name="type" value="menu1"/>
             <column name="permission_code" value="cscp.logging"/>
-            <column name="orderby" value="2"/>
+            <column name="orderby" value="3"/>
         </ext:insert>
         <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
             <column name="id" value="1001"/>
