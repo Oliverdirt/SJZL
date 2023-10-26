@@ -1,0 +1,2045 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<changeSet author="hx" id="1601452364977-1">
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="1"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="福音会"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="2"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="中国教徒"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="3"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="统一教"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="4"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="观音法门"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="5"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="清海无上师"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="6"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="盘古"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="7"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="李洪志"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="8"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="志洪李"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="9"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="李宏志"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="10"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="轮功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="11"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="法轮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="12"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="轮法功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="13"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="三去车仑"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="14"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氵去车仑"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="15"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="发论工"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="16"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="法x功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="17"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="法o功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="18"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="法0功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="19"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="法一轮一功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="20"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="轮子功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="21"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="车仑工力"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="22"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="法lun"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="23"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="fa轮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="24"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="法lg"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="25"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="flg"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="26"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="fl功"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="27"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="falungong"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="28"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="大法弟子"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="29"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="大纪元"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="30"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="dajiyuan"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="31"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="明慧网"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="32"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="明慧周报"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="33"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="正见网"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="34"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="新唐人"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="35"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="伪火"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="36"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="退党"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="37"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="tuidang"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="38"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="退dang"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="39"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="超越红墙"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="40"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="自fen"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="41"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="真善忍"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="42"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="九评"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="43"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="9评"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="44"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="9ping"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="45"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="九ping"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="46"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="jiuping"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="47"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="藏字石"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="48"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="集体自杀"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="49"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="自sha"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="50"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="zi杀"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="51"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="suicide"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="52"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="titor"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="53"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="逢8必灾"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="54"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="逢八必灾"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="55"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="逢9必乱"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="56"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="逢九必乱"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="57"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="朱瑟里诺"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="58"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="根达亚文明"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="59"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="诺查丹玛斯"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="60"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="人类灭亡进程表"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="61"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="按照马雅历法"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="62"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="推背图"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="63"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="推bei图"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="64"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="济世灵文"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="65"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="诸世纪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="66"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电狗"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="67"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电话定位器"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:12"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="68"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电话拦截器"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="69"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电话窃听"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="70"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电话监"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="71"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电话交友"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="72"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电话追杀系统"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="73"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电击枪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="74"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电鸡"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="75"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="电警棒"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="76"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪出售"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="77"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪的制"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="78"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪货到"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="79"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪决女犯"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="80"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪模"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="81"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪手"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="82"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪销售"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="83"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪械制"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="84"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="枪子弹"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="85"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售步枪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="86"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售纯度"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="87"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售单管"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="88"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售弹簧刀"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="89"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售防身"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="90"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售狗子"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="91"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售虎头"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="92"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售火药"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="93"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售假币"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="94"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售健卫"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="95"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售军用"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="96"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售猎枪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="97"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售氯胺"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="98"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售麻醉"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="99"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售枪支"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="100"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售热武"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="101"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售三棱"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="102"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售手枪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="103"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售五四"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="104"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售一元硬"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="105"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售子弹"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="106"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="售左轮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="107"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚砷（酸）酐"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="108"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚砷酸钾"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="109"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚砷酸钠"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="110"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚硒酸"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="111"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚硒酸二钠"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="112"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚硒酸镁"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="113"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚硒酸钠"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="114"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚硒酸氢钠"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="115"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚硝酸乙酯"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="116"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="亚硝酰乙氧"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="117"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氧化二丁基锡"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="118"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氧化汞"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:13"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="119"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氧化铊"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="120"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氧化亚铊"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="121"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氧氯化磷"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="122"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="原装弹"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="123"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="原子弹方法"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="124"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="原子弹清单"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="125"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="安眠酮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="126"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="代血浆"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="127"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="普萘洛尔"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="128"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="呋塞米"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="129"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="西布曲明"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="130"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="testosterone"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="131"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="胰岛素样生长因子"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="132"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="促红细胞生成素"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="133"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="地西泮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="134"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="尼可刹米"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="135"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="甲睾酮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="136"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="adrenaline"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="137"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="erythropoietin"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="138"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="地奈德"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="139"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="莫达非尼"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="140"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氯噻嗪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="141"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="苯巴比妥"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="142"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="促性腺激素"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="143"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="泼尼松"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="144"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="麻黄草"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="145"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="雄烯二醇"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="146"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="地塞米松"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="147"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="tamoxifen"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="148"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="strychnine"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="149"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="androst"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="150"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="新型毒品"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="151"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="杜冷丁"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="152"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="兴奋剂"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="153"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="mdma"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="154"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="海洛因"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="155"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="海luo因"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="156"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="heroin"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="157"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="diamorphine"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="158"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="diacetylmorphine"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="159"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="鸦片"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="160"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="阿芙蓉"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="161"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="咖啡因"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="162"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="cocain"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="163"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="三唑仑"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="164"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="美沙酮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="165"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="麻古"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="166"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="k粉"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:14"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="167"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="凯他敏"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="168"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="ketamine"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="169"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="冰毒"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="170"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="苯丙胺"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="171"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="cannabis"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="172"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="大麻"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="173"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="爱他死"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="174"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="氯胺酮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="175"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="benzodiazepines"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="176"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="甲基安非他明"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="177"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="安非他命"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="178"/>
+            <column name="sen_type_id" valueNumeric="1"/>
+            <column name="sen_content" value="吗啡"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="179"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="腐败中国"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="180"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="三个呆婊"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="181"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="你办事我放心"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="182"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="社会主义灭亡"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="183"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒中国"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="184"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒共产党"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="185"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒共产主义"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="186"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒胡锦涛"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="187"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒江泽民"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="188"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒江主席"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="189"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒李鹏"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="190"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒罗干"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="191"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒温家宝"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="192"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒中共"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="193"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="打倒朱镕"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="194"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制共产党"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="195"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制共产主义"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="196"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制胡锦涛"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="197"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制江泽民"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="198"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制江主席"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="199"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制李鹏"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="200"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制罗干"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="201"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制温家宝"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="202"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制中共"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="203"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="抵制朱镕基"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="204"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="灭亡中国"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="205"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="亡党亡国"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="206"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="粉碎四人帮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="207"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="激流中国"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="208"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="特供"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="209"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="特贡"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="210"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="特共"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="211"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="zf大楼"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="212"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="殃视"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="213"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="贪污腐败"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="214"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="强制拆除"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="215"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="形式主义"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="216"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="政治风波"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="217"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="太子党"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="218"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="上海帮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="219"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="北京帮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="220"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="清华帮"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="221"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="红色贵族"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="222"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="权贵集团"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="223"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="河蟹社会"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="224"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="喝血社会"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="225"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="九风"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="226"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="9风"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="227"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="十七大"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="228"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="十7大"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="229"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="17da"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="230"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="九学"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="231"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="9学"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="232"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="四风"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="233"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="4风"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="234"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="双规"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="235"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="南街村"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="236"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="最淫官员"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="237"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="警匪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="238"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="官匪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="239"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="独夫民贼"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="240"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="官商勾结"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="241"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="城管暴力执法"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="242"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="强制捐款"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="243"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="毒豺"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="244"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="一党执政"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="245"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="一党专制"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="246"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="一党专政"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="247"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="专制政权"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="248"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="宪法法院"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="249"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="胡平"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="250"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="苏晓康"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="251"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="贺卫方"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="252"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="谭作人"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="253"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="焦国标"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="254"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="万润南"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="255"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="张志新"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="256"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="辛灝年"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="257"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="高勤荣"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="258"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="王炳章"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="259"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="高智晟"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="260"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="司马璐"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:16"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="261"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="刘晓竹"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="262"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="刘宾雁"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="263"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="魏京生"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="264"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="寻找林昭的灵魂"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="265"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="别梦成灰"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="266"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="谁是新中国"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="267"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="讨伐中宣部"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="268"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="异议人士"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="269"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="民运人士"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="270"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="启蒙派"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="271"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="选国家主席"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="272"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="民一主"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="273"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="min主"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="274"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="民竹"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="275"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="民珠"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="276"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="民猪"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="277"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="chinesedemocracy"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="278"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="大赦国际"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="279"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="国际特赦"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="280"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="da选"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="281"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="投公"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="282"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="公头"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="283"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="宪政"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="284"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="平反"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="285"/>
+            <column name="sen_type_id" valueNumeric="2"/>
+            <column name="sen_content" value="党章"/>
+            <column name="sen_replace" value="*"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word">
+            <column name="id" valueNumeric="286"/>
+            <column name="sen_type_id" valueNumeric="6"/>
+            <column name="sen_content" value="敏感词"/>
+            <column name="sen_replace" value="***"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:17"/>
+        </ext:insert>
+    </changeSet>
+    <changeSet author="hx" id="1601452364977-2">
+        <ext:insert tableName="cscp_sensitive_word_type">
+            <column name="id" valueNumeric="1"/>
+            <column name="sen_type_name" value="暴恐"/>
+            <column name="sen_type_order" valueNumeric="1"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:11"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word_type">
+            <column name="id" valueNumeric="2"/>
+            <column name="sen_type_name" value="反动"/>
+            <column name="sen_type_order" valueNumeric="1"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:15"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word_type">
+            <column name="id" valueNumeric="3"/>
+            <column name="sen_type_name" value="色情"/>
+            <column name="sen_type_order" valueNumeric="1"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:26"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word_type">
+            <column name="id" valueNumeric="4"/>
+            <column name="sen_type_name" value="民生"/>
+            <column name="sen_type_order" valueNumeric="1"/>
+            <column name="update_time" valueDate="2022-09-15T23:30:47"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word_type">
+            <column name="id" valueNumeric="5"/>
+            <column name="sen_type_name" value="贪腐"/>
+            <column name="sen_type_order" valueNumeric="1"/>
+            <column name="update_time" valueDate="2022-09-15T23:31:01"/>
+        </ext:insert>
+        <ext:insert tableName="cscp_sensitive_word_type">
+            <column name="id" valueNumeric="6"/>
+            <column name="sen_type_name" value="其他"/>
+            <column name="sen_type_order" valueNumeric="1"/>
+            <column name="update_time" valueDate="2022-09-15T23:31:07"/>
+        </ext:insert>
+    </changeSet>
+</databaseChangeLog>

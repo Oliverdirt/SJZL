@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    <property name="autoIncrement" value="false" dbms="mysql,mssql,h2,postgresql,sybase"/>
+    <property name="intType" value="bigint" dbms="postgresql"/>
+    <property name="intType" value="int(11)" dbms="mysql,mssql,h2,oracle,sybase,maridb"/>
+    <property name="longType" value="bigint" dbms="mysql,postgresql"/>
+    <property name="longType" value="bigint" dbms="mssql,h2,oracle,sybase,maridb"/>
+
+    <!--  系统监控Cpu表  -->
+    <changeSet id="BASE-20220527-001" author="ctsi" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="monitor_cpu"/>
+            </not>
+        </preConditions>
+        <createTable tableName="monitor_cpu" remarks="系统监控Cpu表">
+            <column name="id" type="BIGINT" remarks="ID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="cpunum" type="number(11)"  remarks="核心数">
+                <constraints nullable="false" />
+            </column>
+            <column name="total" type="number(10,2)"  remarks="CPU总的使用率">
+                <constraints nullable="false" />
+            </column>
+            <column name="sys" type="number(10,2)"  remarks="CPU系统使用率">
+                <constraints nullable="false" />
+            </column>
+            <column name="used" type="number(10,2)"  remarks="CPU用户使用率">
+                <constraints nullable="false" />
+            </column>
+            <column  name="wait" type="number(10,2)" remarks="CPU当前等待率" >
+                <constraints nullable="false" />
+            </column>
+            <column  name="free" type="number(10,2)" remarks="CPU当前空闲率" >
+                <constraints nullable="false" />
+            </column>
+            <column  name="usages" type="number(10,2)" remarks="CPU总使用率" >
+                <constraints nullable="false" />
+            </column>
+            <column  name="time" type="date" remarks="创建时间" >
+                <constraints nullable="false" />
+            </column>
+
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE `monitor_cpu` CONVERT TO CHARACTER SET UTF8;</sql>
+
+        <rollback>
+            <dropTable tableName="monitor_cpu"/>
+        </rollback>
+    </changeSet>
+
+    <!--  系统监控Jvm表  -->
+    <changeSet id="BASE-20220527-002" author="ctsi" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="monitor_jvm"/>
+            </not>
+        </preConditions>
+        <createTable tableName="monitor_jvm" remarks="系统监控Jvm表">
+            <column name="id" type="BIGINT" remarks="ID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="total" type="number(10,2)"  remarks="当前JVM占用的内存总数(M)">
+                <constraints nullable="false" />
+            </column>
+            <column name="max" type="number(10,2)"  remarks="JVM已使用内存(M)">
+                <constraints nullable="false" />
+            </column>
+            <column name="free" type="number(10,2)"  remarks="JVM空闲内存(M)">
+                <constraints nullable="false" />
+            </column>
+            <column name="used" type="number(10,2)"  remarks="已用JVM">
+                <constraints nullable="false" />
+            </column>
+            <column  name="usages" type="number(10,2)" remarks="使用率" >
+                <constraints nullable="false" />
+            </column>
+            <column  name="time" type="datetime" remarks="创建时间" >
+                <constraints nullable="false" />
+            </column>
+
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE `monitor_jvm` CONVERT TO CHARACTER SET UTF8;</sql>
+
+        <rollback>
+            <dropTable tableName="monitor_jvm"/>
+        </rollback>
+    </changeSet>
+
+    <!--  系统监控Mem表  -->
+    <changeSet id="BASE-20220527-003" author="ctsi" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="monitor_mem"/>
+            </not>
+        </preConditions>
+        <createTable tableName="monitor_mem" remarks="系统监控Mem表">
+            <column name="id" type="BIGINT" remarks="ID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="total" type="number(10,2)"  remarks="内存总量">
+                <constraints nullable="false" />
+            </column>
+            <column name="used" type="number(10,2)"  remarks="已用内存">
+                <constraints nullable="false" />
+            </column>
+            <column  name="free" type="number(10,2)" remarks="剩余内存" >
+                <constraints nullable="false" />
+            </column>
+            <column  name="usages" type="number(10,2)" remarks="使用率" >
+                <constraints nullable="false" />
+            </column>
+            <column  name="time" type="datetime" remarks="创建时间" >
+                <constraints nullable="false" />
+            </column>
+
+        </createTable>
+        <sql dbms="mysql" >ALTER TABLE `monitor_mem` CONVERT TO CHARACTER SET UTF8;</sql>
+
+        <rollback>
+            <dropTable tableName="monitor_mem"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="FLOW-202208015-001" author="jshx">
+        <sql>
+            /*
+            系统监控菜单
+            */
+            INSERT INTO cscp_menus VALUES ('1531198491754995713', 'system-monitor', 'md-analytics', '系统监控', '/system-monitor', '*', 'views/main/main.vue', '0', 'menu1', '', '3003');
+            INSERT INTO cscp_menus VALUES ('1531201484713861122', 'serverMonitor', 'ios-chatboxes', '服务监控', '/serverMonitor', '*', 'views/system/serverMonitor.vue', '1531198491754995713', 'menu2', '', '1');
+        </sql>
+    </changeSet>
+
+    <changeSet id="FLOW-20220815-002" author="jshx">
+        <sql>
+            /*
+            系统监控菜单-角色关联
+            */
+            INSERT INTO cscp_role_menu VALUES (1531198491754995714, 1, 1531198491754995713);
+            INSERT INTO cscp_role_menu VALUES (1531198491754995715, 1, 1531201484713861122);
+        </sql>
+    </changeSet>
+
+    <changeSet id="FLOW-20220815-003" author="jshx">
+        <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
+            <column name="id" value="1003"/>
+            <column name="name" value="logging-monitor"/>
+            <column name="icon" value="md-copy"/>
+            <column name="title" value="实时日志"/>
+            <column name="url" value="monitor"/>
+            <column name="http_method" value="*"/>
+            <column name="component" value="views/admin/system-page/logging/cscp_log_monitor.vue"/>
+            <column name="parent_id" value="1000"/>
+            <column name="type" value="menu2"/>
+            <column name="permission_code" value="cscp.logging.monitor"/>
+            <column name="orderby" value="3"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_role_menu">
+            <column name="id" value="78"/>
+            <column name="role_id" value="1"/>
+            <column name="menu_id" value="1003"/>
+        </ext:insert>
+    </changeSet>
+
+</databaseChangeLog>

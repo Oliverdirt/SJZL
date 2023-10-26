@@ -1,0 +1,47 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($subtableName = $table.subTable.tableName)
+#set($subcolumns = $table.subTable.columns)
+#set($subpkColumn = $table.subTable.pkColumn)
+#set($subPkColumnName = $pkColumn.javaField.substring(0,1).toUpperCase() + $pkColumn.javaField.substring(1))
+
+package ${packageName}.service;
+
+#if( ! $subImportList )
+#foreach ($import in $subImportList)
+import ${import};
+#end
+#end
+
+import com.ctsi.ssdc.model.PageResult;
+import org.springframework.data.domain.Pageable;
+
+import ${packageName}.domain.${subClassName};
+import ${packageName}.domain.${subClassName}Example;
+import com.ctsi.ssdc.service.StrengthenBaseService;
+import java.util.List;
+/**
+ * Service Interface for managing ${subClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+public interface ${subClassName}Service
+	extends StrengthenBaseService<${subClassName},Long , ${subClassName}Example>{
+
+	/**
+	* 批量删除
+	* @param ${subpkColumn.javaField}s
+	*/
+	void deleteBy${subPkColumnName}s(Long[] ${subpkColumn.javaField}s);
+
+	/**
+	 * 根据${subTableFkclassName} 查询${subClassName}列表
+	 * @param ${subTableFkclassName}
+	 */
+	List<${subClassName}> selectBy${subTableFkClassName}(Long ${subTableFkclassName});
+
+}

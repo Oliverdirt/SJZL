@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>admin</artifactId>
+    <packaging>jar</packaging>
+    <name>admin</name>
+
+    <parent>
+        <artifactId>udp6-api</artifactId>
+        <groupId>com.ctsi</groupId>
+        <version>6.9.3</version>
+    </parent>
+
+    <dependencies>
+        <!--   通用组件模块     -->
+        <dependency>
+            <groupId>com.ctsi</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ctsi</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <!--验证码-->
+        <dependency>
+            <groupId>com.ctsi</groupId>
+            <artifactId>captcha</artifactId>
+        </dependency>
+        <!--验证码-->
+        <!--   错误码组件模块     -->
+        <dependency>
+            <groupId>com.ctsi</groupId>
+            <artifactId>errorcode</artifactId>
+        </dependency>
+        <!--    组件调用    -->
+        <dependency>
+            <groupId>com.ctsi</groupId>
+            <artifactId>componentcall</artifactId>
+        </dependency>
+        <!--    组件调用    -->
+
+        <!--    数据字典   -->
+        <dependency>
+            <groupId>com.ctsi</groupId>
+            <artifactId>dic</artifactId>
+        </dependency>
+        <!--    数据字典   -->
+
+        <!--  httpclient工具      -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <!--  httpclient工具      -->
+
+        <!--  mybatis generator-->
+        <dependency>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-core</artifactId>
+        </dependency>
+        <!--  mybatis generator-->
+
+        <!--  引入freemarker-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <!--  引入freemarker-->
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.aviator</groupId>
+            <artifactId>aviator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+
+
+        <!--  liquibase数据库初始化脚本    -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core-dm</artifactId>
+        </dependency>
+        <!--  liquibase数据库初始化脚本    -->
+
+        <!-- 实现数据库文档 -->
+        <dependency>
+            <groupId>cn.smallbun.screw</groupId>
+            <artifactId>screw-core</artifactId>
+        </dependency>
+        <!-- 实现数据库文档 -->
+
+        <!-- APM agent -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-logback-1.x</artifactId>
+        </dependency>
+        <!-- APM agent -->
+
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
+
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>swagger</id>
+            <properties>
+                <profile.swagger>,swagger</profile.swagger>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
+

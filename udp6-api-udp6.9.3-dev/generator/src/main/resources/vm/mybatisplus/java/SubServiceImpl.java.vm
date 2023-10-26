@@ -1,0 +1,122 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($subcolumns = $table.subTable.columns)
+#set($BetweenDONum=0)
+#foreach ($column in $subcolumns)
+#if($column.queryType == "between")
+#set($BetweenDONum=$BetweenDONum+1)
+#break
+#end
+#end
+package ${packageName}.service.impl;
+
+#if( ! $subImportList )
+#foreach ($import in $subImportList)
+import ${import};
+#end
+#end
+import org.springframework.stereotype.Service;
+import ${packageName}.domain.${subClassName};
+import ${packageName}.service.${subClassName}Service;
+import ${packageName}.mapper.${subClassName}Mapper;
+#if($BetweenDONum > 0)
+import com.ctsi.ssdc.model.BetweenDO;
+import java.util.List;
+#end
+import java.util.Arrays;
+import javax.annotation.Resource;
+import java.util.Objects;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+/**
+ * Service Implementation for managing ${subClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@Service
+public class ${subClassName}ServiceImpl extends ServiceImpl<${subClassName}Mapper, ${subClassName}> implements ${subClassName}Service {
+
+    @Resource ${subClassName}Mapper ${subclassName}Mapper;
+
+    /**
+     * 根据条件分页查询
+     * @return
+     */
+    @Override
+    public Page<${subClassName}> queyPageByCondition(${subClassName} ${subclassName}, Page<${subClassName}> page) {
+
+        QueryWrapper<${subClassName}> queryWrapper = new QueryWrapper<>();
+        // 构造复杂查询
+#foreach ($column in $subcolumns)
+#if($column.isQuery == 1)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($column.queryType == "equals")
+        queryWrapper.eq(Objects.nonNull(${subclassName}.get${AttrName}()), "${column.columnName}",
+${subclassName}.get${AttrName}());
+#elseif($column.queryType == "greaterOrEqualThan")
+        queryWrapper.ge(Objects.nonNull(${subclassName}.get${AttrName}()), "${column.columnName}",
+${subclassName}.get${AttrName}());
+#elseif($column.queryType == "lessOrEqualThan")
+        queryWrapper.le(Objects.nonNull(${subclassName}.get${AttrName}()), "${column.columnName}",
+${subclassName}.get${AttrName}());
+#elseif($column.queryType == "contains")
+        queryWrapper.like(Objects.nonNull(${subclassName}.get${AttrName}()), "${column.columnName}",
+${subclassName}.get${AttrName}());
+#end
+
+#end
+#end
+#if($BetweenDONum >0)
+        // between 单独处理
+        List<BetweenDO> ${subclassName}FeildsBetween = ${subclassName}.get${subClassName}FeildsBetween();
+        if (${subclassName}FeildsBetween.size() > 0) {
+        for (BetweenDO betweenDO : ${subclassName}FeildsBetween) {
+        String betweenFeild = betweenDO.getBetweenFeild();
+        // between
+        queryWrapper.between(
+                betweenFeild, betweenDO.getLowerBoundary(), betweenDO.getUpperBoundary());
+        }
+}
+#end
+        return ${subclassName}Mapper.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public boolean removeByParentIds(Long[] pids){
+        LambdaQueryWrapper<${subClassName}> wrapper = Wrappers.lambdaQuery(${subClassName}.class);
+        // 构建批量删除条件
+        if(pids.length==0){
+            // 数据为空，直接返回
+            return false;
+        }
+        Arrays.asList(pids).stream().forEach(t->{
+            wrapper.or().ge(Objects.nonNull(t),${subClassName}::get${subTableFkClassName},t);
+        });
+        return ${subclassName}Mapper.delete(wrapper) == 0  ? false : true;
+    }
+
+    /**
+     * 根据父id查询子列表
+     * @param pids
+     * @return
+     */
+    @Override
+    public boolean SelectByParentIds(Long[] pids){
+        LambdaQueryWrapper<${subClassName}> wrapper = Wrappers.lambdaQuery(${subClassName}.class);
+        Arrays.asList(pids).stream().forEach(t->{
+            wrapper.or().ge(Objects.nonNull(t),${subClassName}::get${subTableFkClassName},t);
+        });
+        return  ${subclassName}Mapper.selectCount(wrapper)>0  ? true : false;
+    }
+}

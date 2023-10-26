@@ -1,0 +1,230 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($subtableName = $table.subTable.tableName)
+#set($subcolumns = $table.subTable.columns)
+#set($subpkColumn = $table.subTable.pkColumn)
+#set($subPkColumnName = $pkColumn.javaField.substring(0,1).toUpperCase() + $pkColumn.javaField.substring(1))
+package ${packageName}.web;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import com.ctsi.ssdc.poi.excel.util.ExcelUtil;
+import org.apache.commons.lang.StringUtils;
+import java.lang.Long;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+    #if($table.subTable.isFeildValid == 1)
+import org.springframework.validation.annotation.Validated;
+#end
+import ${packageName}.service.${subClassName}Service;
+import ${packageName}.domain.${subClassName}Example;
+import ${packageName}.domain.${subClassName};
+
+import com.ctsi.ssdc.model.PageResult;
+import com.ctsi.ssdc.util.HeaderUtil;
+import com.ctsi.ssdc.util.ResponseUtil;
+
+/**
+ * REST controller for managing ${subClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@Api(value = "/api",tags = {"$subtableName.replaceAll("_","-")-controller"})
+@RestController
+@RequestMapping("/api")
+public class ${subClassName}Controller {
+
+
+    private final Logger log = LoggerFactory.getLogger(${subClassName}Controller.class);
+
+    private static final String ENTITY_NAME = "${subclassName}";
+
+    private final ${subClassName}Service ${subclassName}Service;
+
+    public ${subClassName}Controller(${subClassName}Service ${subclassName}Service) {
+        this.${subclassName}Service = ${subclassName}Service;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
+    /**
+     * POST  /${subclassName}s : Create a new ${subclassName}.
+     *
+     * @param ${subclassName} the ${subclassName} to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new ${subclassName}, or with status 400 (Bad Request) if the ${subclassName} has already an ${primaryKeyParamNameList}
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(paramType = "body",dataType = "${subClassName}",name = "${subclassName}",value = "the ${subclassName} to create")
+    })
+    @ApiOperation(value = "POST  /${subclassName}s : create a new ${subclassName}.",notes = "POST  /${subclassName}s : create a new ${subclassName}.",httpMethod = "POST")
+    @PostMapping("/${subclassName}s")
+    public ResponseEntity<${subClassName}> create${subClassName}(@RequestBody #if($table.subTable.isFeildValid == 1)@Validated#end ${subClassName} ${subclassName}) throws URISyntaxException {
+
+        log.debug("REST request to save ${subClassName} : {}", ${subclassName});
+
+        ${subClassName} result = ${subclassName}Service.insert(${subclassName});
+        return ResponseEntity.created(new URI("/api/${subclassName}s/" + result.get${subpkColumn.capJavaField}() ))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.get${subpkColumn.capJavaField}().toString()))
+            .body(result);
+    }
+    /**
+     * PUT  /${subclassName}s : Updates an existing ${subclassName}.
+     *
+     * @param ${subclassName} the ${subclassName} to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated ${subclassName},
+     * or with status 400 (Bad Request) if the ${subclassName} is not valid,
+     * or with status 500 (Internal Server Error) if the ${subclassName} couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "body",dataType = "${subClassName}",name = "${subclassName}",value = "the ${subclassName} to update")
+    })
+    @ApiOperation(value = "PUT  /${subclassName}s : updates an existing ${subclassName}.",notes = "PUT  /${subclassName}s : updates an existing ${subclassName}.",httpMethod = "PUT")
+    @PutMapping("/${subclassName}s")
+    public ResponseEntity<${subClassName}> update${subClassName}(@RequestBody #if($table.subTable.isFeildValid == 1)@Validated#end ${subClassName} ${subclassName}) throws URISyntaxException {
+
+        log.debug("REST request to update ${subClassName} : {}", ${subclassName});
+
+        if (${subclassName}.get${subpkColumn.capJavaField}() == null) {
+            return create${subClassName}(${subclassName});
+        }
+        ${subClassName} result = ${subclassName}Service.update(${subclassName});
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.get${subpkColumn.capJavaField}().toString()))
+            .body(result);
+    }
+
+    /**
+     * GET  /${subclassName}s/:${subpkColumn.capJavaField} : get the "${subpkColumn.capJavaField}" ${subclassName}.
+     *
+     * @param ${subpkColumn.capJavaField} the id of the ${subclassName} to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the ${subclassName}, or with status 404 (Not Found)
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",dataType = "Long",name = "${subpkColumn.capJavaField}",value = "the ${subpkColumn.capJavaField} of the ${subclassName} to retrieve")
+    })
+    @ApiOperation(value = "GET  /${subclassName}s/${subpkColumn.capJavaField} : get the ${subpkColumn.capJavaField} ${subclassName}.",notes = "GET  /${subclassName}s/${subpkColumn.capJavaField} : get the ${subpkColumn.capJavaField} ${subclassName}.",httpMethod = "GET")
+    @GetMapping("/${subclassName}s/{${subpkColumn.capJavaField}}")
+    public ResponseEntity<${subClassName}> get${subClassName}(@PathVariable Long ${subpkColumn.capJavaField}) {
+
+        log.debug("REST request to get ${subClassName} : {}", ${subpkColumn.capJavaField});
+
+        ${subClassName} ${subclassName} = ${subclassName}Service.findOne(${subpkColumn.capJavaField});
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(${subclassName}));
+    }
+
+    /**
+     * GET  /${subclassName}s : get the ${subclassName}s.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of ${subclassName}s in body
+     */
+    @ApiOperation(value = "GET  /${subclassName}s ")
+    @GetMapping("/${subclassName}s")
+    public PageResult<${subClassName}> get${subClassName}sList(${subClassName}Example ${subclassName}Example,Pageable pageable) {
+
+        log.debug("REST request to get ${subClassName}sList");
+
+        return ${subclassName}Service.findByExample(${subclassName}Example,pageable);
+    }
+
+
+    /**
+     * DELETE  /${subclassName}s/:${subpkColumn.capJavaField} : delete the "${subpkColumn.capJavaField}" ${subclassName}.
+     *
+     * @param ${subpkColumn.capJavaField} the id of the ${subclassName} to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",dataType = "Long",name = "${subpkColumn.capJavaField}",value = "the ${subpkColumn.capJavaField} of the ${subclassName} to delete")
+    })
+    @ApiOperation(value = "DELETE  /${subclassName}s/${subpkColumn.capJavaField} : delete the ${subpkColumn.capJavaField} ${subclassName}.",notes = "DELETE  /${subclassName}s/${subpkColumn.capJavaField} : delete the ${subpkColumn.capJavaField} ${subclassName}.",httpMethod = "DELETE")
+    @DeleteMapping("/${subclassName}s/{${subpkColumn.capJavaField}}")
+    public ResponseEntity<Void> delete${subClassName}(@PathVariable Long ${subpkColumn.capJavaField}) {
+
+        log.debug("REST request to delete ${subClassName} : {}", ${subpkColumn.capJavaField});
+
+        ${subclassName}Service.delete(${subpkColumn.capJavaField});
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, ${subpkColumn.capJavaField}.toString())).build();
+    }
+
+    /**
+     * GET  /${subclassName}s/query/{$subTableFkclassName}: get the ${subclassName}s by $subTableFkclassName.
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the ${subclassName}, or with status 404 (Not Found)
+     */
+    @GetMapping("/${subclassName}s/query/{${subTableFkclassName}")
+    public ResponseEntity<List<${subClassName}>> getItemBy${subTableFkClassName}(@PathVariable Long ${subTableFkclassName}){
+        List<${subClassName}> ${subclassName}List = ${subclassName}Service.selectBy${subTableFkClassName}(${subTableFkclassName});
+        return ResponseEntity.ok().body(${subclassName}List);
+    }
+
+    /**
+     * GET  /${subclassName}s/:${subpkColumn.capJavaField} : get the "${subpkColumn.capJavaField}" ${subclassName}.
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the ${subclassName}, or with status 404 (Not Found)
+     */
+    @ApiOperation(value = "POST  /${subclassName}s/export : export the ${subclassName} to excel",notes = "DELETE  /${subclassName}s/${subpkColumn.capJavaField} : delete the ${subpkColumn.capJavaField} ${subclassName}.",httpMethod = "DELETE")
+    @PostMapping("/${subclassName}s/export")
+    public ResponseEntity<byte[]> export() {
+
+        log.debug("REST request to export ${subClassName}");
+
+        PageResult<${subClassName}> result = ${subclassName}Service.findAll();
+        List<${subClassName}> list = result.getData();
+        ExcelUtil<${subClassName}> util = new ExcelUtil<${subClassName}>(${subClassName}.class);
+        return util.exportExcel(list, "${subclassName}");
+    }
+
+
+    /**
+    * DELETE  /${subpkColumn.capJavaField}s : delete the ${subclassName}.", notes = "DELETE  /${subpkColumn.capJavaField}s : delete the ${subpkColumn.capJavaField}s.", httpMethod = "DELETE"
+    *
+    * @return
+    */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", dataType = "Long[]", name = "${subpkColumn.capJavaField}s", value = "the ${subpkColumn.capJavaField}s of the ${subclassName} to delete")
+    })
+    @ApiOperation(value = "DELETE  /${subpkColumn.capJavaField}s : delete the ${subclassName}.", notes = "DELETE  /${subpkColumn.capJavaField}s : delete the ${subpkColumn.capJavaField}s.", httpMethod = "DELETE")
+    @DeleteMapping("/${subclassName}s/delAll")
+    public ResponseEntity<Void> delete${subClassName}(Long[] ${subpkColumn.capJavaField}s) {
+
+        log.debug("REST request to delete ${subpkColumn.capJavaField}s");
+
+        ${subclassName}Service.deleteBy${subPkColumnName}s(${subpkColumn.capJavaField}s);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, StringUtils.join(${subpkColumn.capJavaField}s))).build();
+    }
+
+}

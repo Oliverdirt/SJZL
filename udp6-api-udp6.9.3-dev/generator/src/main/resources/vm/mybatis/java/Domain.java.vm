@@ -1,0 +1,139 @@
+package ${packageName}.domain;
+
+import java.io.Serializable;
+import com.ctsi.ssdc.util.LongtoStringSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModel;
+import com.ctsi.ssdc.annocation.AutoId;
+#if($table.isFeildValid == 1)
+import javax.validation.constraints.Pattern;
+#end
+#if($table.formType == 2)
+import java.util.List;
+#end
+#foreach ($import in $importList)
+import ${import};
+#end
+/**
+ *  ${ClassName} 实体类
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@ApiModel(description = "${ClassName}")
+public class ${ClassName}  implements Serializable{
+#foreach ($column in $columns)
+    /**
+    * ${column.columnComment}
+    *
+    */
+#if($column.isPk == 1)
+    @AutoId(primaryKey = "${column.columnName}")
+#end
+#if($column.javaType == 'Long')
+    @JsonSerialize(using = LongtoStringSerialize.class)
+#end
+#if($column.javaType == 'Date')
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+#elseif($column.javaType == 'ZonedDateTime')
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+#end
+
+#if($column.validateRule != "")
+    @Pattern(regexp = "${column.obtainRulevalue()}",message = "${column.obtainRuleinfo()}")
+#end
+    private $column.javaType $column.javaField;
+#end
+
+#if($table.subTable)
+/** $table.subTable.tableContent信息 */
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+    private List<${table.subTable.className}> ${subclassName}List;
+
+#end
+
+#if($table.formType == 2)
+    private List<${ClassName}> children;
+#end
+
+#foreach ($column in $columns)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+    public void set${AttrName}($column.javaType $column.javaField){
+        this.$column.javaField = $column.javaField;
+    }
+    public $column.javaType get${AttrName}(){
+        return $column.javaField;
+    }
+#end
+
+#if($table.subTable)
+    public List<${table.subTable.className}> get${table.subTable.className}List(){
+        return ${subclassName}List;
+    }
+
+    public void set${table.subTable.className}List(List<${table.subTable.className}> ${subclassName}List){
+        this.${subclassName}List = ${subclassName}List;
+    }
+
+#end
+
+#if($table.formType == 2)
+    public List<${ClassName}> getChildren(){
+        return children;
+    }
+
+    public void setChildren(List<${ClassName}> children){
+        this.children = children;
+    }
+#end
+
+    @Override
+    public boolean equals(Object that){
+        if(this==that){
+            return true;
+        }
+        if(that==null){
+            return false;
+        }
+        if(getClass()!=that.getClass()){
+            return false;
+        }
+        ${ClassName} other=(${ClassName})that;
+#foreach ($column in $columns)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($velocityCount == 1)
+        return (this.get${AttrName}() ==null?this.get${AttrName}() !=null:this.get${AttrName}().equals(other.get${AttrName}()))#if($velocityCount == $columns.size());#end
+#else
+                && (this.get${AttrName}() ==null?this.get${AttrName}() !=null:this.get${AttrName}().equals(other.get${AttrName}()))#if($velocityCount == $columns.size());#end
+#end
+
+#end
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+#foreach ($column in $columns)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($velocityCount == 1)
+#end
+        result = prime * result + ((get${AttrName}() == null) ? 0 : get${AttrName}().hashCode());
+#end
+        return result;
+    }
+}

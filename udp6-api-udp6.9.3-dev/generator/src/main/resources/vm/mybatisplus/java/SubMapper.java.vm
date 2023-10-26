@@ -1,0 +1,21 @@
+#set($subClassName = $table.subTable.className)
+package ${packageName}.mapper;
+
+import ${packageName}.domain.${subClassName};
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+/**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${datetime}
+ */
+public interface ${subClassName}Mapper extends BaseMapper<${subClassName}> {
+
+}
+
+
+
+

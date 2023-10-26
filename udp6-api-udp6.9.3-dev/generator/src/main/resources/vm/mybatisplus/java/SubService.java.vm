@@ -1,0 +1,31 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+package ${packageName}.service;
+
+#if( ! $subImportList )
+#foreach ($import in $subImportList)
+import ${import};
+#end
+#end
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+import ${packageName}.domain.${subClassName};
+import java.util.List;
+/**
+ * Service Interface for managing ${subClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+public interface ${subClassName}Service extends IService<${subClassName}> {
+
+	Page<${subClassName}> queyPageByCondition(${subClassName} ${subclassName}, Page<${subClassName}> page);
+
+	boolean removeByParentIds(Long[] pids);
+
+	boolean SelectByParentIds(Long[] pids);
+}

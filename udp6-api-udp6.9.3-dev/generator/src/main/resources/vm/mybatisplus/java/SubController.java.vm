@@ -1,0 +1,104 @@
+##设置全局变量
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($subtableName = $table.subTable.tableName)
+#set($subcolumns = $table.subTable.columns)
+#set($subpkColumn = $table.subTable.pkColumn)
+#set($subPkColumnName = $pkColumn.javaField.substring(0,1).toUpperCase() + $pkColumn.javaField.substring(1))
+package ${packageName}.web;
+import com.ctsi.ssdc.model.AjaxResult;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import io.swagger.annotations.Api;
+#if($table.subTable.isFeildValid == 1)
+import org.springframework.validation.annotation.Validated;
+#end
+import java.util.Arrays;
+import ${packageName}.service.${subClassName}Service;
+import ${packageName}.domain.${subClassName};
+
+/**
+ * REST controller for managing ${subClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@Api(value = "/api",tags = {"$subtableName.replaceAll("_","-")-controller"})
+@RestController
+@RequestMapping("/api/${subclassName}s")
+public class ${subClassName}Controller {
+
+
+    @Autowired
+    ${subClassName}Service ${subclassName}Service;
+
+    /**
+     * 新增/更新数据
+     *
+     * @param ${subclassName}
+     * @return
+     */
+    @PostMapping("/saveOrUpdate${subClassName}")
+    public AjaxResult saveOrUpdate${subClassName}(@RequestBody #if($table.subTable.isFeildValid == 1)@Validated#end ${subClassName} ${subclassName}) {
+        boolean res = ${subclassName}Service.saveOrUpdate(${subclassName});
+        return AjaxResult.success("操作成功", res);
+    }
+
+    /**
+     * 条件分页条件查询
+     *
+     * @param
+     * @param page
+     * @return
+     */
+    @PostMapping("/queyPage${subClassName}ByCondition")
+    public AjaxResult queyPage${subClassName}ByCondition(@RequestBody ${subClassName} ${subclassName}, Page<${subClassName}> page) {
+
+        Page<${subClassName}> ${subclassName}Page = ${subclassName}Service.queyPageByCondition(${subclassName}, page);
+
+        return AjaxResult.success("查询成功", ${subclassName}Page);
+    }
+
+    /**
+     * 根据主键id查询详情
+     *
+     * @param ${subpkColumn.javaField}
+     * @return
+     */
+    @GetMapping("/quey${subClassName}ByTableId/{${subpkColumn.javaField}}")
+    public AjaxResult quey${subClassName}ByTableId(@PathVariable("${subpkColumn.javaField}")Long ${subpkColumn.javaField}) {
+
+        ${subClassName} ${subclassName} =${subclassName}Service.getById(${subpkColumn.javaField});
+        return AjaxResult.success("查询成功", ${subclassName});
+    }
+
+    /**
+     * 根据主键id 删除
+     *
+     * @param ${subpkColumn.javaField}
+     * @return
+     */
+    @DeleteMapping("/remove${subClassName}ByTableId/{${subpkColumn.javaField}}")
+    public AjaxResult remove${subClassName}ByTableId(@PathVariable("${subpkColumn.javaField}")Long ${subpkColumn.javaField}) {
+
+        boolean res = ${subclassName}Service.removeById(${subpkColumn.javaField});
+        return AjaxResult.success("删除成功", res);
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param ${subpkColumn.javaField}s
+     * @return
+     */
+    @DeleteMapping("/delAll")
+    public AjaxResult remove${subClassName}ByTableIds(Long[] ${subpkColumn.javaField}s) {
+
+        boolean res = ${subclassName}Service.removeByIds(Arrays.asList(${subpkColumn.javaField}s));
+        return AjaxResult.success("删除成功", res);
+    }
+
+}

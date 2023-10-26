@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    <property name="autoIncrement" value="true" dbms="mysql,mssql,h2,postgresql,sybase"/>
+    <property name="intType" value="bigint" dbms="postgresql"/>
+    <property name="intType" value="int(11)" dbms="mysql,mssql,h2,oracle,sybase"/>
+    <property name="bigintType" value="bigint(20)" dbms="mysql,postgresql"/>
+
+    <changeSet id="BI-20211029-007" author="jshx">
+        <sql>
+            /*
+            工作流菜单
+            */
+            INSERT INTO cscp_menus VALUES ('1527535556648112130', 'Bibbp', 'md-analytics', 'BI报表管理', '/bibbp', '*', 'views/main/main.vue', '0', 'menu1', null, '3003');
+            INSERT INTO cscp_menus VALUES ('1527536340404146177', 'Bibb', 'ios-analytics-outline', 'BI报表', '/bibb', '*', 'views/bichart/Bichart.vue', '1527535556648112130', 'menu2', null, '2001');
+        </sql>
+    </changeSet>
+    <changeSet id="BI-20211029-008" author="jshx">
+        <sql>
+            /*
+            工作流菜单权限
+            */
+            INSERT INTO cscp_role_menu (id,role_id, menu_id) VALUES ('1532244860175966216','1', '1527535556648112130'), ('1532244860175966217','1', '1527536340404146177');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

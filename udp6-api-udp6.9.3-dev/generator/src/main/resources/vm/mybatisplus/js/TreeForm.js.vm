@@ -1,0 +1,65 @@
+##定义$http,$Message,$refs,$Modal,$delete
+#set($http="$http")
+#set($Message="$Message")
+#set($refs="$refs")
+#set($Modal="$Modal")
+#set($delete="$delete")
+#set($moment="$moment")
+#set($event="$event")
+#set($cssPaths="@")
+
+import Util from '${cssPaths}/libs/util'
+
+export function ${className}Show (${pkColumn.javaField}){
+    return Util.http({
+        url: `/api/${className}s/quey${ClassName}ByTableId/${${pkColumn.javaField}}`,
+        method: 'get'
+    })
+}
+
+export function ${className}Del (${pkColumn.javaField}){
+    return Util.http({
+        url: `/api/${className}s/remove${ClassName}ByTableId/${${pkColumn.javaField}}`,
+        method: 'delete'
+    })
+}
+
+export function ${className}Update (data){
+    return Util.http({
+        url: `/api/${className}s/saveOrUpdate${ClassName}`,
+        method: 'post',
+        data: data
+    })
+}
+
+export function ${className}Create (data){
+    return Util.http({
+        url: `/api/${className}s/saveOrUpdate${ClassName}`,
+        method: 'post',
+        data: data
+    })
+}
+
+export function ${className}ShowChildren (){
+    return Util.http({
+        url: `/api/${className}s/treeSelectAll`,
+        method: 'get'
+    })
+}
+
+export function ${className}TreeSelect (){
+    return Util.http({
+        url: `/api/${className}s/quey${ClassName}sList`,
+        method: 'get'
+    })
+}
+
+export function ${className}List (params){
+    return Util.http({
+        url: `/api/${className}s/quey${ClassName}sList`,
+        method: 'get',
+        params
+    })
+}
+
+

@@ -1,0 +1,87 @@
+package ${packageName}.domain;
+
+#set($BetweenDONum=0)
+#foreach ($column in $columns)
+#if($column.queryType == "between")
+#set($BetweenDONum=$BetweenDONum+1)
+#break
+#end
+#end
+import com.ctsi.ssdc.util.LongtoStringSerialize;
+import lombok.Data;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import com.ctsi.ssdc.annocation.AutoId;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableField;
+#if($table.isFeildValid == 1)
+import javax.validation.constraints.Pattern;
+#end
+#if($BetweenDONum > 0)
+import com.ctsi.ssdc.model.BetweenDO;
+#end
+#if($table.formType != 3)
+#if(($table.formType == 2 || $BetweenDONum > 0))
+import java.util.List;
+#end
+#end
+#foreach ($import in $importList)
+import ${import};
+#end
+
+/**
+ *  ${ClassName} 实体类
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+@Data
+@ApiModel(description = "${ClassName}")
+public class ${ClassName}  implements Serializable{
+
+    private static final long serialVersionUID=1L;
+#foreach ($column in $columns)
+
+    /**
+     * ${column.columnComment}
+     */
+    @ApiModelProperty("${column.columnComment}")
+    @TableField(value = "${column.columnName}")
+#if($column.isPk == 1)
+    @AutoId(primaryKey = "${column.columnName}")
+    @TableId
+#end
+#if($column.javaType == 'Long')
+    @JsonSerialize(using = LongtoStringSerialize.class)
+#end
+#if($column.javaType == 'Date')
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+#elseif($column.javaType == 'ZonedDateTime')
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+#end
+#if($column.validateRule != "")
+    @Pattern(regexp = "${column.obtainRulevalue()}", message = "${column.obtainRuleinfo()}")
+#end
+    private $column.javaType $column.javaField;
+#end
+
+#if($BetweenDONum > 0)
+    @TableField(exist = false)
+    private List<BetweenDO> ${className}FeildsBetween;
+#end
+
+#if($table.subTable)
+/** $table.subTable.tableContent信息 */
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+    @TableField(exist = false)
+    private List<${table.subTable.className}> ${subclassName}List;
+#end
+#if($table.formType == 2)
+    @TableField(exist = false)
+    private List<${ClassName}> children;
+#end
+
+}

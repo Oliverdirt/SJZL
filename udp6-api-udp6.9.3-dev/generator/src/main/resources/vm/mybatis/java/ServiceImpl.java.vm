@@ -1,0 +1,114 @@
+#set($subClassName = $table.subTable.className)
+#set($subclassName = $table.subTable.className.substring(0,1).toLowerCase() + $table.subTable.className.substring(1))
+#set($pkColumnName = $pkColumn.javaField.substring(0,1).toUpperCase() + $pkColumn.javaField.substring(1))
+package ${packageName}.service.impl;
+
+#if( ! $importList )
+    #foreach ($import in $importList)
+    import ${import};
+    #end
+#end
+import org.springframework.stereotype.Service;
+import org.apache.commons.collections.CollectionUtils;
+import ${packageName}.domain.${ClassName};
+import ${packageName}.domain.${ClassName}Example;
+import ${packageName}.service.${ClassName}Service;
+import ${packageName}.repository.${ClassName}Repository;
+#if(${table.subTable})
+import ${packageName}.repository.${subClassName}Repository;
+#end
+
+#if($table.formType == 2)
+import java.util.stream.Collectors;
+#end
+import org.apache.commons.lang3.StringUtils;
+import java.util.List;
+import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import com.ctsi.ssdc.service.impl.StrengthenBaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.ctsi.ssdc.model.PageResult;
+import org.springframework.data.domain.Pageable;
+import com.github.pagehelper.PageHelper;
+import org.springframework.transaction.annotation.Transactional;
+/**
+ * Service Implementation for managing ${ClassName}.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ *
+ */
+
+@Service
+public class ${ClassName}ServiceImpl
+	extends StrengthenBaseServiceImpl<${ClassName}Repository, ${ClassName}, Long, ${ClassName}Example>
+	implements ${ClassName}Service {
+
+    @Autowired
+    private ${ClassName}Repository ${className}Repository;
+
+#if(${table.subTable})
+    @Autowired
+    private ${subClassName}Repository ${subclassName}Repository;
+
+#end
+
+    /**
+     * 批量删除
+     * @param ${pkColumn.javaField}s
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByIds(Long[] ${pkColumn.javaField}s) {
+        List<Long> delList = new ArrayList<>(Arrays.asList(${pkColumn.javaField}s));
+#if(${table.subTable})
+        ${subclassName}Repository.deleteBy${subTableFkClassName}s(delList);
+#end
+        // 批量删除
+        ${className}Repository.deleteByIds(delList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteById(Long ${pkColumn.javaField}) {
+#if(${table.subTable})
+        ${subclassName}Repository.deleteBy${subTableFkClassName}(${pkColumn.javaField});
+#end
+        ${className}Repository.deleteByPrimaryKey(${pkColumn.javaField});
+    }
+
+
+#if($table.formType == 2)
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<${ClassName}> build${ClassName}TreeSelect(List<${ClassName}> ${className}List,Long ${treeParentCode}) {
+        return ${className}List.stream().filter(m -> m.get${TreeParentCode}().equals(${treeParentCode})).map(
+                (m) -> {
+                    m.setChildren(getChildrens(m, ${className}List));
+                    return m;
+                }
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public ${ClassName} findOneBy${TreeParentCode}(Long ${treeParentCode}) {
+        return ${className}Repository.findOneBy${TreeParentCode}(${treeParentCode});
+    }
+
+    // 获取子元素
+    private static List<${ClassName}> getChildrens(${ClassName} root, List<${ClassName}> all) {
+        List<${ClassName}> children = all.stream().filter(m -> {
+            return Objects.equals(m.get${TreeParentCode}(), root.get${TreeCode}());
+        }).map(
+                (m) -> {
+                    m.setChildren(getChildrens(m, all));
+                    return m;
+                }
+        ).collect(Collectors.toList());
+        return children;
+    }
+
+#end
+
+}

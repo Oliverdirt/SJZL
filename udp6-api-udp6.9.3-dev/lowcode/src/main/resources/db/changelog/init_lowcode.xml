@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    <property name="autoIncrement" value="true" dbms="mysql,mssql,h2,postgresql,sybase"/>
+    <property name="intType" value="bigint" dbms="postgresql"/>
+    <property name="intType" value="int(11)" dbms="mysql,mssql,h2,oracle,sybase"/>
+    <property name="bigintType" value="bigint(20)" dbms="mysql,postgresql"/>
+
+    <!--  定制化表单表 -->
+    <changeSet id="LOWCODE-20220613-001" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_customize_vform"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_customize_vform" remarks="低代码表单表">
+            <column name="form_id" type="bigint" remarks="表单id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="form_name" type="varchar(255)" remarks="表单名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="form_database" type="varchar(255)" remarks="表单数据库" >
+                <constraints nullable="true" />
+            </column>
+            <column name="form_table" type="varchar(255)" remarks="表单数据表" >
+                <constraints nullable="true" />
+            </column>
+            <column name="form_json" type="text" remarks="表单json" >
+                <constraints nullable="true" />
+            </column>
+            <column name="form_option" type="text" remarks="表单选项" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_by" type="bigint" remarks="创建者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_by" type="bigint" remarks="更新者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="tenant_id" type="bigint" remarks="租户id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="del_flag" type="varchar(1)" remarks="是否删除" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="status" type="varchar(1)" remarks="状态值" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="form_type" type="varchar(1)" remarks="表类型：0代表单表 1代表主表 2代表子表" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="main_form_id" type="bigint" remarks="关联主表的form_id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="sort_num" type="bigint(2)" remarks="排序" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="sub_form_fk" type="varchar(255)" remarks="关联主表的外键" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="table_desc" type="varchar(255)" remarks="数据库表名" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="form_url" type="varchar(255)" remarks="路由表单地址" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql>ALTER TABLE `cscp_customize_vform` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!--  定制化表单字段表 -->
+    <changeSet id="LOWCODE-20220613-002" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_customize_vfield"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_customize_vfield" remarks="低代码字段表">
+            <column name="field_id" type="bigint" remarks="字段id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="form_id" type="bigint" remarks="表单id" >
+                <constraints nullable="false" />
+            </column>
+            <column name="field_name" type="varchar(255)" remarks="字段名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_comment" type="varchar(255)" remarks="字段备注" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_type" type="bigint(4)" remarks="字段类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_query" type="varchar(1)" remarks="是否查询展示" >
+                <constraints nullable="true" />
+            </column>
+            <column name="query_type" type="varchar(1)" remarks="查询类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="control_type" type="varchar(1)" remarks="控件类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_list" type="varchar(1)"  remarks="是否列表展示">
+                <constraints nullable="true" />
+            </column>
+            <column name="field_width" type="bigint(10,2)"  remarks="字段宽度">
+                <constraints nullable="true" />
+            </column>
+            <column name="field_order" type="bigint" remarks="字段排序" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_dic" type="varchar(255)"  remarks="字段字典">
+                <constraints nullable="true" />
+            </column>
+            <column name="field_options" type="varchar(512)" remarks="选项" >
+                <constraints nullable="true" />
+            </column>
+            <column name="is_form" type="varchar(1)" remarks="是否表单字段（1是）" >
+                <constraints nullable="true" />
+            </column>
+            <column name="component_type" type="char(2)" remarks="组件类型" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_by" type="bigint" remarks="创建者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_by" type="bigint" remarks="更新者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="tenant_id" type="bigint" remarks="租户id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="del_flag" type="varchar(1)" remarks="是否删除" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="status" type="varchar(1)" remarks="状态值" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_customize_vfield` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <!-- 菜单配置   -->
+    <changeSet id="LOWCODE-20220613-003" author="jshx">
+        <sql>
+            INSERT INTO cscp_menus VALUES ('1531825660240404481', 'lowcode', 'md-browsers', '低代码', '/lowcode', '*', 'views/main/main.vue', '0', 'menu1', null , '100000');
+<!--            INSERT INTO cscp_menus VALUES ('1541944780528390145', 'form-designer', 'ios-car', '表单设计器', '/form-designer', '*', 'views/lowcode/formDesigner/index.vue', '1531825660240404481', 'menu2', null, '1');-->
+<!--            INSERT INTO cscp_menus VALUES ('1547757159401709569', 'db-manager', 'ios-paper', '数据表管理', '/db-manager', '*', 'views/lowcode/customize/components/db/dbManager.vue', '1531825660240404481', 'menu2', null, '2');-->
+<!--            INSERT INTO cscp_menus VALUES ('1531826724696039426', 'lowcode-programming', 'ios-train', '低代码编程', '/lowcode-programming', '*', 'views/lowcode/customize/customizeVformManager.vue', '1531825660240404481', 'menu2', null, '3');-->
+<!--            INSERT INTO cscp_menus VALUES ('1541944780528390300', 'sub-lowcode-programming', 'ios-car', '低代码子表', '/sub-lowcode-programming', '*', 'views/lowcode/customize/components/subVformManager.vue', '1531826724696039426', 'non-menu', null, '1');-->
+            INSERT INTO cscp_menus VALUES (1572474154192031746, 'tableDesigner', 'ios-alarm-outline', '低代码开发流程', '/tableDesigner', NULL, 'views/lowcode/tableDesigner', 1531825660240404481, 'menu2', NULL, 14);
+            INSERT INTO cscp_menus VALUES (1572474658892632065, 'pageManage', 'md-alarm', '页面管理', '/pageManage', NULL, 'views/lowcode/tableDesigner/pageManage', 1572474154192031746, 'menu2', NULL, 3);
+            INSERT INTO cscp_menus VALUES (1572474905198940161, 'dataModelMng', 'ios-alert', '数据模型管理', '/dataModelMng', NULL, 'views/lowcode/tableDesigner/dataModelMng', 1572474154192031746, 'menu2', NULL, 2);
+            INSERT INTO cscp_menus VALUES (1572475362357104641, 'tableDesigner', 'ios-albums', '模块管理', '/tableDesigner', NULL, 'views/lowcode/tableDesigner', 1572474154192031746, 'menu2', NULL, 1);
+        </sql>
+    </changeSet>
+    <!-- 角色菜单关系配置  -->
+    <changeSet id="LOWCODE-20220613-004" author="jshx">
+        <sql>
+<!--            INSERT INTO cscp_role_menu (id,role_id, menu_id) VALUES-->
+<!--                                       ('1531825660752109569','1', '1531825660240404481'),-->
+<!--                                       ('1531826724956086273','1', '1531826724696039426'),-->
+<!--                                       ('1541944780528390145','1', '1541944780528390145'),-->
+<!--                                       ('1547390521305260033','1','1547757159401709569'),-->
+<!--                                       ('1541944780528390300','1','1541944780528390300');-->
+            INSERT INTO cscp_role_menu (id,role_id, menu_id) VALUES
+            ('1531825660752109569','1', '1531825660240404481');
+<!--            ('1531826724956086273','1', '1531826724696039426'),-->
+<!--            ('1547390521305260033','1','1547757159401709569'),-->
+<!--            ('1541944780528390300','1','1541944780528390300');-->
+            INSERT INTO cscp_role_menu (id, role_id, menu_id) VALUES (1572474154213003265, 1, 1572474154192031746);
+            INSERT INTO cscp_role_menu (id, role_id, menu_id) VALUES (1572474658909409282, 1, 1572474658892632065);
+            INSERT INTO cscp_role_menu (id, role_id, menu_id) VALUES (1572474905211523074, 1, 1572474905198940161);
+            INSERT INTO cscp_role_menu (id, role_id, menu_id) VALUES (1572475362382270466, 1, 1572475362357104641);
+        </sql>
+    </changeSet>
+
+    <!--  定制化表页面 -->
+    <changeSet id="LOWCODE-20220901-001" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_customize_vpage"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_customize_vpage" remarks="低代码页面表">
+            <column name="page_id" type="bigint" remarks="页面id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="module_id" type="bigint" remarks="所属模块id" >
+                <constraints nullable="false" />
+            </column>
+            <column name="page_name" type="varchar(255)" remarks="页面名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="page_type" type="varchar(2)" remarks="页面类型 0 表单 1 列表" >
+                <constraints nullable="true" />
+            </column>
+            <column name="page_database" type="varchar(255)" remarks="页面数据源" >
+                <constraints nullable="true" />
+            </column>
+            <column name="page_table" type="varchar(255)" remarks="页面数据表" >
+                <constraints nullable="true" />
+            </column>
+            <column name="page_json" type="text" remarks="页面json" >
+                <constraints nullable="true" />
+            </column>
+            <column name="page_option" type="text" remarks="表单选项" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_by" type="bigint" remarks="创建者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_by" type="bigint" remarks="更新者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="tenant_id" type="bigint" remarks="租户id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="del_flag" type="varchar(1)" remarks="是否删除" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="status" type="varchar(1)" remarks="状态值" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="table_type" type="varchar(1)" remarks="页面表类型：0代表单表 1代表主表 2代表子表" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="main_page_id" type="bigint" remarks="关联主表的page_id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="sort_num" type="bigint(2)" remarks="排序" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="sub_page_fk" type="varchar(255)" remarks="关联主表的外键" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="table_desc" type="varchar(255)" remarks="数据库表名" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="is_main_page" type="varchar(1)" remarks="是否为主页面 0 主页面 1 子页面" >
+                <constraints nullable="true" />
+            </column>
+            <column name="model_id" type="bigint" remarks="数据模型id" >
+                <constraints nullable="false" />
+            </column>
+            <column name="model_name" type="varchar(255)" remarks="数据模型名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="module_name" type="varchar(255)" remarks="所属模块名称" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_customize_vpage` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <!--  定制化数据模型 -->
+    <changeSet id="LOWCODE-20220913-001" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_customize_model"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_customize_model" remarks="低代码数据模型表">
+            <column name="model_id" type="bigint" remarks="数据模型id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="model_type" type="varchar(255)" remarks="数据模型类型" >
+                <constraints nullable="false" />
+            </column>
+            <column name="model_name" type="varchar(255)" remarks="数据模型名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="model_identify" type="varchar(255)" remarks="数据模型标识" >
+                <constraints nullable="true" />
+            </column>
+            <column name="table_name" type="varchar(255)" remarks="数据库表名" >
+                <constraints nullable="true" />
+            </column>
+            <column name="table_id" type="bigint" remarks="数据库表id" >
+                <constraints nullable="true" />
+            </column>
+            <column name="table_description" type="varchar(255)" remarks="数据库表注释" >
+                <constraints nullable="true" />
+            </column>
+            <column name="module_name" type="varchar(255)" remarks="模块名称" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="module_id" type="bigint" remarks="模块id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_by" type="bigint" remarks="创建者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="create_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_by" type="bigint" remarks="更新者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="tenant_id" type="bigint" remarks="租户id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="create_mode" type="char(2)" remarks="创建方式 0 新建 1 通过已有表创建" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_customize_model` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <!--  定制化数据模块 -->
+    <changeSet id="LOWCODE-20220913-002" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_customize_module"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_customize_module" remarks="低代码数据模块表">
+            <column name="module_id" type="bigint" remarks="模块id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="module_name" type="varchar(255)" remarks="模块名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="module_identify" type="varchar(255)" remarks="模块标识" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_by" type="bigint" remarks="创建者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="create_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_by" type="bigint" remarks="更新者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="tenant_id" type="bigint" remarks="租户id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="menu_id" type="varchar(20)" remarks="模块菜单id" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_customize_module` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <!--  定制化数据模型类型 -->
+    <changeSet id="LOWCODE-20220913-003" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_customize_model_type"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_customize_model_type" remarks="低代码数据模型类型表">
+            <column name="model_type_id" type="bigint" remarks="模型类型id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="model_type" type="varchar(255)" remarks="模型类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="model_name" type="varchar(255)" remarks="模型类型名称" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_by" type="bigint" remarks="创建者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="create_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_by" type="bigint" remarks="更新者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="tenant_id" type="bigint" remarks="租户id" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_customize_model_type` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+    <!-- 数据模型初始类型  -->
+    <changeSet id="LOWCODE-20220919-001" author="jshx">
+        <sql>
+            INSERT INTO cscp_customize_model_type (model_type_id,model_type, model_name) VALUES ('1','1', '单表'), ('2','2', '主子表');
+        </sql>
+    </changeSet>
+
+    <changeSet id="LOWCODE-20220921-001" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_customize_vfield_page"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_customize_vfield_page" remarks="低代码字段表">
+            <column name="field_id" type="bigint" remarks="字段id">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="page_id" type="bigint" remarks="页面id" >
+                <constraints nullable="false" />
+            </column>
+            <column name="field_name" type="varchar(255)" remarks="字段名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_comment" type="varchar(255)" remarks="字段备注" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_type" type="bigint(4)" remarks="字段类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_query" type="varchar(1)" remarks="是否查询展示" >
+                <constraints nullable="true" />
+            </column>
+            <column name="query_type" type="varchar(1)" remarks="查询类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="control_type" type="varchar(1)" remarks="控件类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_list" type="varchar(1)"  remarks="是否列表展示">
+                <constraints nullable="true" />
+            </column>
+            <column name="field_width" type="bigint(10,2)"  remarks="字段宽度">
+                <constraints nullable="true" />
+            </column>
+            <column name="field_order" type="bigint" remarks="字段排序" >
+                <constraints nullable="true" />
+            </column>
+            <column name="field_dic" type="varchar(255)"  remarks="字段字典">
+                <constraints nullable="true" />
+            </column>
+            <column name="field_options" type="varchar(512)" remarks="选项" >
+                <constraints nullable="true" />
+            </column>
+            <column name="is_form" type="varchar(1)" remarks="是否表单字段（1是）" >
+                <constraints nullable="true" />
+            </column>
+            <column name="component_type" type="char(2)" remarks="组件类型" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_by" type="bigint" remarks="创建者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="created_time" type="date" remarks="创建时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_by" type="bigint" remarks="更新者ID" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="update_time" type="date" remarks="更新时间" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="tenant_id" type="bigint" remarks="租户id" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="del_flag" type="varchar(1)" remarks="是否删除" >
+                <constraints nullable="true" />
+            </column>
+            <column  name="status" type="varchar(1)" remarks="状态值" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_customize_vfield` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+    <changeSet id="GEN-20220302-001" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_hx_dform_table"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_hx_dform_table" remarks="代码生成数据库表">
+            <column name="table_id" type="bigint" remarks="唯一标识" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="table_name" type="varchar(100)" remarks="表名称"  >
+                <constraints nullable="true" />
+            </column>
+            <column name="table_content" type="varchar(500)"  remarks="表描述" >
+                <constraints nullable="true" />
+            </column>
+            <column name="db_type" type="bigint" remarks="数据库类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="persistence_type" type="bigint"  remarks="持久化类型">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_db_synch" type="bigint" remarks="是否同步数据库" >
+                <constraints nullable="true" />
+            </column>
+            <column name="form_type" type="bigint"  remarks="表单类型（单表，主子表、树表）">
+                <constraints nullable="true" />
+            </column>
+            <column name="sub_table_name" type="varchar(64)"  remarks="关联子表的表名">
+                <constraints nullable="true" />
+            </column>
+            <column name="sub_table_fk_name" type="varchar(64)"  remarks="子表关联的外键名">
+                <constraints nullable="true" />
+            </column>
+            <column name="package_name" type="varchar(100)"  remarks="生成包路径">
+                <constraints nullable="true" />
+            </column>
+            <column name="gen_type" type="bigint" remarks="生成代码方式（0zip压缩包 1自定义路径）" >
+                <constraints nullable="true" />
+            </column>
+            <column name="gen_path" type="varchar(200)"  remarks="生成路径（不填默认项目路径）">
+                <constraints nullable="true" />
+            </column>
+            <column name="options" type="varchar(3000)"  remarks="其它生成选项">
+                <constraints nullable="true" />
+            </column>
+            <column name="remark" type="varchar(500)"  remarks="备注">
+                <constraints nullable="true" />
+            </column>
+            <column name="form_suite" type="bigint"  remarks="模板类型">
+                <constraints nullable="true" />
+            </column>
+            <column name="main_table_id" type="bigint"  remarks="关联主表table_id">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_hx_form_table` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+
+    <changeSet id="GEN-20220302-002" author="jshx">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cscp_hx_dform_column"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cscp_hx_dform_column" remarks="代码生成列表">
+            <column name="column_id" type="bigint" remarks="唯一标识">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="table_id" type="bigint"  remarks="数据库表ID">
+                <constraints nullable="true" />
+            </column>
+            <column name="column_name" type="varchar(100)"  remarks="列名称">
+                <constraints nullable="true" />
+            </column>
+            <column name="column_name_old" type="varchar(100)" remarks="列旧名称" >
+                <constraints nullable="true" />
+            </column>
+            <column name="column_comment" type="varchar(500)" remarks="列描述" >
+                <constraints nullable="true" />
+            </column>
+            <column name="column_type" type="bigint" remarks="列类型" >
+                <constraints nullable="true" />
+            </column>
+            <column name="column_length" type="bigint"  remarks="列长度">
+                <constraints nullable="true" />
+            </column>
+            <column name="point_length" type="bigint" remarks="小数点" >
+                <constraints nullable="true" />
+            </column>
+            <column name="is_pk" type="bigint"  remarks="是否主键（1是）">
+                <constraints nullable="true" />
+            </column>
+            <column name="default_value" type="varchar(100)"  remarks="默认值">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_null" type="bigint"  remarks="是否为空（1是）">
+                <constraints nullable="true" />
+            </column>
+            <column name="order_num" type="bigint"  remarks="排序">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_form" type="bigint" remarks="是否表单字段（1是）" >
+                <constraints nullable="true" />
+            </column>
+            <column name="is_list" type="bigint"  remarks="是否列表字段（1是）">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_query" type="bigint" remarks="是否查询字段（1是）" >
+                <constraints nullable="true" />
+            </column>
+            <column name="show_type" type="bigint"  remarks="显示类型">
+                <constraints nullable="true" />
+            </column>
+            <column name="query_type" type="bigint" remarks="查询方式（等于、不等于、大于、小于、范围）" >
+                <constraints nullable="true" />
+            </column>
+            <column name="control_length" type="bigint" remarks="控件长度" >
+                <constraints nullable="true" />
+            </column>
+            <column name="dic_code" type="varchar(32)" remarks="字典编码" >
+                <constraints nullable="true" />
+            </column>
+            <column name="validate_rule" type="varchar(32)" remarks="列校验" >
+                <constraints nullable="true" />
+            </column>
+            <column name="is_fk" type="varchar(1)" remarks="是否外键(1是)" >
+                <constraints nullable="true" />
+            </column>
+            <column name="column_relation" type="varchar(100)" remarks="与主表关联字段" >
+                <constraints nullable="true" />
+            </column>
+            <column name="is_bk" type="varchar(1)" remarks="是否为业务主键" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <sql dbms="mysql">ALTER TABLE `cscp_hx_form_column` CONVERT TO CHARACTER SET UTF8;</sql>
+    </changeSet>
+
+        <!--  magic_api_file -->
+        <changeSet id="LOWCODE-20221201-001" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <tableExists tableName="magic_api_file"/>
+                </not>
+            </preConditions>
+            <createTable tableName="magic_api_file" remarks="magic-api数据库存储接口资源表">
+                <column name="id" type="bigint" remarks="id">
+                    <constraints nullable="false" primaryKey="true"/>
+                </column>
+                <column name="file_path" type="varchar(255)" remarks="文件路径" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="file_content" type="text" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+            </createTable>
+            <sql dbms="mysql">ALTER TABLE `magic_api_file` CONVERT TO CHARACTER SET UTF8;</sql>
+        </changeSet>
+
+        <!--  pms_brand -->
+        <changeSet id="LOWCODE-20221201-002" author="jshx" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <tableExists tableName="pms_brand"/>
+                </not>
+            </preConditions>
+            <createTable tableName="pms_brand" remarks="magic-api">
+                <column name="id" type="bigint" remarks="id">
+                    <constraints nullable="false" primaryKey="true"/>
+                </column>
+                <column name="big_pic" type="varchar(255)" remarks="大图片" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="brand_story" type="varchar(255)" remarks="" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="factory_status" type="bigint(1)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="first_letter" type="varchar(255)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="logo" type="varchar(255)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="name" type="varchar(255)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="product_comment_count" type="bigint(11)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="product_count" type="bigint(11)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="show_status" type="bigint(1)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+                <column name="sort" type="bigint(11)" remarks="文件描述" >
+                    <constraints nullable="true" />
+                </column>
+            </createTable>
+            <sql dbms="mysql">ALTER TABLE `pms_brand` CONVERT TO CHARACTER SET UTF8;</sql>
+        </changeSet>
+</databaseChangeLog>
