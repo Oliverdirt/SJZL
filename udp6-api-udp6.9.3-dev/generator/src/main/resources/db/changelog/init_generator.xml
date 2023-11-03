@@ -321,7 +321,7 @@
             /*
             代码生成
             */
-            INSERT INTO cscp_menus VALUES ('1498915004994580482', 'genManager', 'md-bookmarks', '代码生成', '/genManager', '*', 'views/main/main.vue', '1531825660240404481', 'menu1', '', '10');
+            INSERT INTO cscp_menus VALUES ('1498915004994580482', 'genManager', 'md-bookmarks', '代码生成', '/genManager', '*', 'views/main/main.vue', '1531825660240404481', 'menu1', '', '4');
             INSERT INTO cscp_menus VALUES ('1498915389868109825', 'formList', 'md-wine', '表单管理', '/formList', '*', 'views/generator/FormList.vue', '1498915004994580482', 'menu2', '', '1');
         </sql>
     </changeSet>

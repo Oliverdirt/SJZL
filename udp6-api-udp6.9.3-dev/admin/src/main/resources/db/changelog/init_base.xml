@@ -57,6 +57,32 @@
         <sql dbms="mysql" >ALTER TABLE `cscp_menus` CONVERT TO CHARACTER SET UTF8;</sql>
 
         <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
+            <column name="id" value="1714464826189266946"/>
+            <column name="name" value="dataquality"/>
+            <column name="icon" value="md-barcode"/>
+            <column name="title" value="数据质量管理"/>
+            <column name="url" value="/dataquality"/>
+            <column name="http_method" value="*"/>
+            <column name="component" value="views/main/main.vue"/>
+            <column name="parent_id" value="0"/>
+            <column name="type" value="menu1"/>
+            <column name="permission_code" value="cscp.authority"/>
+            <column name="orderby" value="1"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
+            <column name="id" value="1714464826189266947"/>
+            <column name="name" value="datamodel"/>
+            <column name="icon" value="md-barcode"/>
+            <column name="title" value="数据模型管理"/>
+            <column name="url" value="/datamodel"/>
+            <column name="http_method" value="*"/>
+            <column name="component" value="views/admin/system-page/dataquality/datamodel.vue"/>
+            <column name="parent_id" value="1714464826189266946"/>
+            <column name="type" value="menu2"/>
+            <column name="permission_code" value="cscp.authority"/>
+            <column name="orderby" value="1"/>
+        </ext:insert>
+        <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
             <column name="id" value="1"/>
             <column name="name" value="authority"/>
             <column name="icon" value="md-key"/>
@@ -67,7 +93,7 @@
             <column name="parent_id" value="0"/>
             <column name="type" value="menu1"/>
             <column name="permission_code" value="cscp.authority"/>
-            <column name="orderby" value="1"/>
+            <column name="orderby" value="2"/>
         </ext:insert>
 
 
@@ -317,7 +343,7 @@
             <column name="parent_id" value="0"/>
             <column name="type" value="menu1"/>
             <column name="permission_code" value="cscp.logging"/>
-            <column name="orderby" value="2"/>
+            <column name="orderby" value="3"/>
         </ext:insert>
         <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
             <column name="id" value="1001"/>

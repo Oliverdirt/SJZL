@@ -68,7 +68,7 @@
     </changeSet>
     <changeSet id="KAFKA-20210118-011" author="jshx">
         <sql>
-            INSERT INTO cscp_menus VALUES ('1478986495147581441', 'kafka', 'ios-notifications-outline', '消息队列管理', '/kafka', '*', 'views/main/main.vue', '0', 'menu1', '', '10');
+            INSERT INTO cscp_menus VALUES ('1478986495147581441', 'kafka', 'ios-notifications-outline', '消息队列管理', '/kafka', '*', 'views/main/main.vue', '0', 'menu1', '', '3');
             INSERT INTO cscp_menus VALUES ('1478987867838423041', 'kafka-manage', 'md-color-wand', 'kafka管理', '/kafka-manage', '*', '', '1478986495147581441', 'menu2-sp', '', '1');
             INSERT INTO cscp_menus VALUES ('1478989107066511361', 'kafka-topic', 'ios-list-box', 'topic管理', '/kafka-topic', '*', 'views/kafka/kafka-topic/kafka-topic.vue', '1478987867838423041', 'menu2', '', '1');
             INSERT INTO cscp_menus VALUES ('1478989520276758530', 'kafka-colony', 'ios-add-circle', '集群管理', '/kafka-colony', '*', 'views/kafka/kafka-colony/kafka-colony.vue', '1478987867838423041', 'menu2', '', '2');
