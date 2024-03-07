@@ -30,7 +30,7 @@
             <artifactId>captcha</artifactId>
         </dependency>
         <!--验证码-->
-        <!--   错误码组件模块     -->
+        <!--   错误码组件模块  -->
         <dependency>
             <groupId>com.ctsi</groupId>
             <artifactId>errorcode</artifactId>

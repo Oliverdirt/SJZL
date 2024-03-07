@@ -56,32 +56,7 @@
         </createTable>
         <sql dbms="mysql" >ALTER TABLE `cscp_menus` CONVERT TO CHARACTER SET UTF8;</sql>
 
-        <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
-            <column name="id" value="1714464826189266946"/>
-            <column name="name" value="dataquality"/>
-            <column name="icon" value="md-barcode"/>
-            <column name="title" value="数据质量管理"/>
-            <column name="url" value="/dataquality"/>
-            <column name="http_method" value="*"/>
-            <column name="component" value="views/main/main.vue"/>
-            <column name="parent_id" value="0"/>
-            <column name="type" value="menu1"/>
-            <column name="permission_code" value="cscp.authority"/>
-            <column name="orderby" value="1"/>
-        </ext:insert>
-        <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
-            <column name="id" value="1714464826189266947"/>
-            <column name="name" value="datamodel"/>
-            <column name="icon" value="md-barcode"/>
-            <column name="title" value="数据模型管理"/>
-            <column name="url" value="/datamodel"/>
-            <column name="http_method" value="*"/>
-            <column name="component" value="views/admin/system-page/dataquality/datamodel.vue"/>
-            <column name="parent_id" value="1714464826189266946"/>
-            <column name="type" value="menu2"/>
-            <column name="permission_code" value="cscp.authority"/>
-            <column name="orderby" value="1"/>
-        </ext:insert>
+
         <ext:insert identityInsertEnabled="true" tableName="cscp_menus">
             <column name="id" value="1"/>
             <column name="name" value="authority"/>
@@ -1052,4 +1027,124 @@
         </insert>
     </changeSet>
     <!-- 用户岗位关联表   -->
+
+    <changeSet author="udp6hx" id="BASE-USER-POST-20240226-001" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="COMMON_FUNCTION_INFO" remarks="常用功能表">
+            <column name="id" remarks="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TITLE" remarks="功能名称" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" remarks="路径名称" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MODEL_ID" remarks="模块id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SYSTEM_ID" remarks="系统id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BG_COLOR" remarks="背景颜色" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FILE_IDS" remarks="多个文件ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATE_ID" remarks="创建ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATE_TIME" remarks="创建时间" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_ID" remarks="更新ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_TIME" remarks="更新时间" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DEL_FLAG" remarks="删除" type="int(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IMG_PATH" remarks="图片路径" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MENU_ID" remarks="菜单ID" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS" remarks="状态" type="int(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MENU_NAME" remarks="关联菜单" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="udp6hx" id="BASE-USER-POST-20240226-002" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addPrimaryKey columnNames="id" constraintName="common_func_pk" tableName="COMMON_FUNCTION_INFO"/>
+    </changeSet>
+    <changeSet author="udp6hx" id="BASE-USER-POST-20240226-003" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="COMMON_FUNCTION_INFO">
+            <column name="id" valueNumeric="1"/>
+            <column name="TITLE" value="测试功能"/>
+            <column name="NAME" value="测试路径"/>
+            <column name="MODEL_ID" valueNumeric="10"/>
+            <column name="SYSTEM_ID" valueNumeric="100"/>
+            <column name="BG_COLOR" value="red"/>
+            <column name="FILE_IDS" value="测试多个文件ID"/>
+            <column name="CREATE_ID" valueNumeric="1000"/>
+            <column name="CREATE_TIME" valueDate="2022-08-31 14:19:46.0"/>
+            <column name="UPDATE_ID" valueNumeric="10000"/>
+            <column name="UPDATE_TIME" valueDate="2022-10-31 14:19:46.0"/>
+            <column name="DEL_FLAG" valueNumeric="0"/>
+            <column name="IMG_PATH" value="测试图片路径"/>
+            <column name="MENU_ID" value="测试菜单ID"/>
+            <column name="STATUS" valueNumeric="0"/>
+            <column name="MENU_NAME" value="测试关联菜单"/>
+        </insert>
+    </changeSet>
+    <changeSet author="udp6hx" id="BASE-USER-POST-20240307-001" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="cscp_menus">
+            <column name="id" valueNumeric="1566698533702492163"/>
+            <column name="name" value="dataquality"/>
+            <column name="icon" value="md-battery-full"/>
+            <column name="title" value="数据质量管理"/>
+            <column name="url" value="/dataquality"/>
+            <column name="http_method" value="*"/>
+            <column name="component" value="views/main/main.vue"/>
+            <column name="parent_id" valueNumeric="0"/>
+            <column name="type" value="menu1"/>
+            <column name="permission_code" value="cscp.authority"/>
+            <column name="orderby" valueNumeric="4000"/>
+        </insert>
+    </changeSet>
+    <changeSet author="udp6hx" id="BASE-USER-POST-20240307-002" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="cscp_menus">
+            <column name="id" valueNumeric="1566698533702492164"/>
+            <column name="name" value="datamodel"/>
+            <column name="icon" value="md-barcode"/>
+            <column name="title" value="数据模型管理"/>
+            <column name="url" value="/datamodel"/>
+            <column name="http_method" value="*"/>
+            <column name="component" value="views/admin/system-page/dataquality/datamodel.vue"/>
+            <column name="parent_id" valueNumeric="1566698533702492163"/>
+            <column name="type" value="menu2"/>
+            <column name="permission_code" value="cscp.authority"/>
+            <column name="orderby" valueNumeric="4001"/>
+        </insert>
+    </changeSet>
+    <changeSet author="udp6hx" id="BASE-USER-POST-20240307-003" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="cscp_role_menu">
+            <column name="id" valueNumeric="1566698534365192257"/>
+            <column name="role_id" valueNumeric="1"/>
+            <column name="menu_id" valueNumeric="1566698533702492163"/>
+        </insert>
+    </changeSet>
+    <changeSet author="udp6hx" id="BASE-USER-POST-20240307-004" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="cscp_role_menu">
+            <column name="id" valueNumeric="1566698534365192258"/>
+            <column name="role_id" valueNumeric="1"/>
+            <column name="menu_id" valueNumeric="1566698533702492164"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

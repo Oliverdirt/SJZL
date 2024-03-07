@@ -86,3 +86,60 @@ export function updateOrAddPostByData (method, data) {
     data
   })
 }
+// /api/systemDics/getSystemList
+// 查询系统列表
+export function getPostByParams11 () {
+  return Util.http({
+    url: `/api/systemDics/getSystemList`,
+    method: 'get',
+
+  })
+}
+// /api/systemDics/getSystemList
+// 查询模块列表
+export function getPostByParams12 () {
+  return Util.http({
+    url: `/api/dic/getCscpHxDicItemsListByDicCode?dicCode=model`,
+    method: 'get',
+
+  })
+}// /api/commonFunc/queryPageCommonFunctionByCondition url
+// 根据条件查询
+export function getPostByParams22 (params) {
+  return Util.http({
+
+    url: `/api/commonFunc/queryPageCommonFunctionByCondition${params}`,
+    method: 'get'
+  })
+}
+// /api/cscpPost/getList
+// 根据条件查询
+export function getPostByParams33 (params) {
+
+  return Util.http({
+    url: `/api/commonFunc/queryPageCommonFunctionByCondition?${params}`,
+    method: 'get'
+  })
+}// /api/cscpPosts/postId
+// 根据id删除
+export function delPostByPostId1 (postId) {
+  return Util.http({
+    url: `/api/commonFunc/deleteCommonFunctionInfo/${postId}`,
+    method: 'delete'
+  })
+}// /api/cscpPosts/' + row.postId
+// 根据id编辑
+export function getPostByPostId1 (postId) {
+  return Util.http({
+    url: `/api/commonFunc/queryOne/${postId}`,
+    method: 'get'
+  })
+}// /api/cscpPosts
+// 更新或者新增
+export function updateOrAddPostByData1 (method, data) {
+  return Util.http({
+    url: `/api/commonFunc/insertOrUpdateCommonFunctionInfo`,
+    method,
+    data
+  })
+}

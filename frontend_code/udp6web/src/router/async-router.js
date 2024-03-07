@@ -14,7 +14,7 @@ async function initAsyncRouter() {
   try {
     const menus = await getDynamicMenus()
     const asyncMenuRes = initMenuTree(menus)
-    //console.log('asyncMenuRes', asyncMenuRes)
+    console.log('asyncMenuRes', asyncMenuRes)
     // 添加动态获取的菜单
     store.commit('app/setMenuList', asyncMenuRes.menuList || [])
     // 添加动态路由
@@ -32,6 +32,7 @@ async function initAsyncRouter() {
 function getDynamicMenus() {
   return new Promise((resolve, reject) => {
     requestMethod.get('/api/system/cscpMenus').then(response => {
+      console.log(response,'opop')
       if (response && response.data) {
         resolve(response.data)
       } else {

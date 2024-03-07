@@ -28,6 +28,14 @@ public class CscpUserDetailLike implements Serializable {
 
     private String deptIdEquals;
 
+    private String roleIdEquals;
+
+    private String dataStatusEquals;
+
+    private String accountTypeEquals;
+
+	private String systemIdEquals;
+
 	public String getDeptIdEquals() {
 		return deptIdEquals;
 	}
@@ -90,6 +98,38 @@ public class CscpUserDetailLike implements Serializable {
 
 	public void setDiscDetailLike(String discDetailLike) {
 		this.discDetailLike = discDetailLike;
+	}
+
+	public String getRoleIdEquals() {
+		return roleIdEquals;
+	}
+
+	public void setRoleIdEquals(String roleIdEquals) {
+		this.roleIdEquals = roleIdEquals;
+	}
+
+	public String getDataStatusEquals() {
+		return dataStatusEquals;
+	}
+
+	public void setDataStatusEquals(String dataStatusEquals) {
+		this.dataStatusEquals = dataStatusEquals;
+	}
+
+	public String getAccountTypeEquals() {
+		return accountTypeEquals;
+	}
+
+	public void setAccountTypeEquals(String accountTypeEquals) {
+		this.accountTypeEquals = accountTypeEquals;
+	}
+
+	public String getSystemIdEquals() {
+		return systemIdEquals;
+	}
+
+	public void setSystemIdEquals(String systemIdEquals) {
+		this.systemIdEquals = systemIdEquals;
 	}
 
 	@Override

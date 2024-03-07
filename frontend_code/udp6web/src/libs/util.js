@@ -1,30 +1,24 @@
 import axios from 'axios'
 import vm from '../main'
-// import { JSEncrypt } from 'jsencrypt'
-import JSEncrypt from './jsencrypt.min'
+import { JSEncrypt } from 'jsencrypt'
 import qs from 'qs'
-import Setting from '@/setting'
 
-const util = {Setting}
+const util = {}
 // read env from configs file
 const env = window['$env'] ? window['$env'] : process.env.NODE_ENV
 
-
+//util.baseUrl = env === 'development' ? 'http://apicenter.devops.com/apicenter' : '/apicenter'
 util.baseUrl = env === 'development' ? 'http://localhost:9000' : 'http://udp6hx.devops.com'
-
-// 数据库字段名根据数据库类型动态校验 0代表mysql,1代表高斯,2代表pg数据库
-Setting.dataBankType = '0'
 
 // 租户模式是否打开，true打开，false是关闭
 util.sassModel = false
-
 // 将需要外挂文件覆盖的属性写在该函数执行前
 loadConfigs()
 
 export var requestMethod = util.http = axios.create({
   baseURL: util.baseUrl,
   timeout: 10000,
-  withCredentials: false
+  withCredentials: true
 })
 
 // http请求拦截
@@ -59,7 +53,7 @@ util.http.interceptors.response.use(
               content: '身份认证信息已失效，请重新登录。',
               duration: 2,
               onClose: () => {
-                vm.$router.push({name: 'login'})
+                vm.$router.push({ name: 'login' })
               }
             })
           } else {
@@ -138,8 +132,8 @@ util.initCurrentPath = function (route, routesTree) {
   return res
 }
 
-function getPathOfChild(route, sourceArr) {
-  let res = {value: [], done: false}
+function getPathOfChild (route, sourceArr) {
+  let res = { value: [], done: false }
   if (!(sourceArr instanceof Array) || sourceArr.length === 0) {
     return res
   }
@@ -148,12 +142,12 @@ function getPathOfChild(route, sourceArr) {
     const temp = []
     temp.push(item.title)
     if (name === item.name) {
-      return {value: temp, done: true}
+      return { value: temp, done: true }
     } else {
       if (item.children && item.children.length > 0) {
         const tempRes = getPathOfChild(route, item.children)
         if (tempRes.done) {
-          return {value: temp.concat(tempRes.value), done: true}
+          return { value: temp.concat(tempRes.value), done: true }
         }
       }
     }
@@ -199,7 +193,7 @@ util.getMenuRoutes = function (tree) {
   return menuRoutes
 }
 
-function buildMenuRoutesStep1(menus) {
+function buildMenuRoutesStep1 (menus) {
   const tempRoutes = []
   menus.forEach((ele) => {
     const tempObj = {}
@@ -218,7 +212,7 @@ function buildMenuRoutesStep1(menus) {
   return tempRoutes
 }
 
-function buildMenuRoutesStep2(routes, root) {
+function buildMenuRoutesStep2 (routes, root) {
   routes.forEach((ele) => {
     if (ele.children) {
       // rootEle保存根节点对象
@@ -238,7 +232,7 @@ function buildMenuRoutesStep2(routes, root) {
   })
 }
 
-function buildMenuRoutesStep3(routes) {
+function buildMenuRoutesStep3 (routes) {
   routes.forEach((ele, index) => {
     if (ele.children) {
       buildMenuRoutesStep3(ele.children)
@@ -249,7 +243,7 @@ function buildMenuRoutesStep3(routes) {
   })
 }
 
-function loadConfigs() {
+function loadConfigs () {
   // load api from config file
   Object.keys(window).forEach((key) => {
     if (key.startsWith('$')) {
@@ -259,71 +253,6 @@ function loadConfigs() {
       delete window[key]
     }
   })
-}
-
-// 数据合并
-export function mergeRecursive(source, target) {
-  for (var p in target) {
-    try {
-      if (target[p].constructor == Object) {
-        source[p] = mergeRecursive(source[p], target[p])
-      } else {
-        source[p] = target[p]
-      }
-    } catch (e) {
-      source[p] = target[p]
-    }
-  }
-  return source
-}
-
-// 回显数据字典（字符串、数组）
-export function selectDictLabels(datas, value, separator) {
-  if (value === undefined || value === null || value.length === 0) {
-    return ''
-  }
-  // 修复数值类型字典列表显示异常问题
-  else {
-    value += ''
-  }
-  // if (Array.isArray(value)) {
-  //   value = value.join(',')
-  // }
-  var actions = []
-  var currentSeparator = undefined === separator ? ',' : separator
-  var temp = value.split(currentSeparator)
-  Object.keys(value.split(currentSeparator)).some((val) => {
-    var match = false
-    Object.keys(datas).some((key) => {
-      if (datas[key].value == ('' + temp[val])) {
-        actions.push(datas[key].label + currentSeparator)
-        match = true
-        return false
-      }
-    })
-    if (!match) {
-      actions.push(temp[val] + currentSeparator)
-    }
-    return false
-  })
-  return actions.join('').substring(0, actions.join('').length - 1)
-}
-
-// 防抖
-export function _debounce(fn, delay) {
-  let duration = delay || 200
-  let timer
-  return function () {
-    let th = this
-    let args = arguments
-    if (timer) {
-      clearTimeout(timer)
-    }
-    timer = setTimeout(function () {
-      timer = null
-      fn.apply(th, args)
-    }, duration)
-  }
 }
 
 export default util

@@ -11,207 +11,267 @@ import java.io.Serializable;
  * Criteria for the entity CscpRoles
  *
  * @author ctsi biyi generator
- *
  */
 public class CscpRolesCriteria implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private LongCriteria id;
-	private LongCriteria tenantId;
-	private StringCriteria name;
-	private StringCriteria roleExtent;
-	private LongCriteria parentId;
-	private StringCriteria icon;
-	private StringCriteria dataScope;
+    private LongCriteria id;
+    private LongCriteria tenantId;
+    private StringCriteria name;
+    private StringCriteria roleExtent;
+    private LongCriteria parentId;
+    private StringCriteria icon;
+    private StringCriteria dataScope;
+    /**
+     * 角色编码
+     */
+    private StringCriteria roleCode;
 
-	public StringCriteria getDataScope() {
-		return dataScope;
-	}
+    /**
+     * 所属系统
+     */
+    private StringCriteria systemId;
 
-	public void setDataScope(StringCriteria dataScope) {
-		this.dataScope = dataScope;
-	}
 
-	public LongCriteria getTenantId() {
-		return tenantId;
-	}
+    public StringCriteria getDataScope() {
+        return dataScope;
+    }
 
-	public void setTenantId(LongCriteria tenantId) {
-		this.tenantId = tenantId;
-	}
+    public void setDataScope(StringCriteria dataScope) {
+        this.dataScope = dataScope;
+    }
 
-	public LongCriteria getId() {
-		return id;
-	}
+    public LongCriteria getTenantId() {
+        return tenantId;
+    }
 
-	public void setId(LongCriteria id) {
-		this.id = id;
-	}
+    public void setTenantId(LongCriteria tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	public StringCriteria getName() {
-		return name;
-	}
+    public LongCriteria getId() {
+        return id;
+    }
 
-	public void setName(StringCriteria name) {
-		this.name = name;
-	}
+    public void setId(LongCriteria id) {
+        this.id = id;
+    }
 
-	public StringCriteria getRoleExtent() {
-		return roleExtent;
-	}
+    public StringCriteria getName() {
+        return name;
+    }
 
-	public void setRoleExtent(StringCriteria roleExtent) {
-		this.roleExtent = roleExtent;
-	}
+    public void setName(StringCriteria name) {
+        this.name = name;
+    }
 
-	public LongCriteria getParentId() {
-		return parentId;
-	}
+    public StringCriteria getRoleExtent() {
+        return roleExtent;
+    }
 
-	public void setParentId(LongCriteria parentId) {
-		this.parentId = parentId;
-	}
+    public void setRoleExtent(StringCriteria roleExtent) {
+        this.roleExtent = roleExtent;
+    }
 
-	public StringCriteria getIcon() {
-		return icon;
-	}
+    public LongCriteria getParentId() {
+        return parentId;
+    }
 
-	public void setIcon(StringCriteria icon) {
-		this.icon = icon;
-	}
+    public void setParentId(LongCriteria parentId) {
+        this.parentId = parentId;
+    }
 
-	public Criteria buildCriteria(Criteria criteria) {
-		if (criteria == null) {
-			return criteria;
-		}
-		
-		this.buildIdCriteria(criteria);
-		this.buildTenantIdCriteria(criteria);
-		this.buildNameCriteria(criteria);
-		this.buildRoleExtentCriteria(criteria);
-		this.buildParentIdCriteria(criteria);
-		this.buildIconCriteria(criteria);
-		this.buildDataScopeCriteria(criteria);
-		return criteria;
-	}
+    public StringCriteria getIcon() {
+        return icon;
+    }
 
-	private void buildDataScopeCriteria(Criteria criteria) {
+    public void setIcon(StringCriteria icon) {
+        this.icon = icon;
+    }
 
-		if (this.getDataScope() == null) {
-			return;
-		}
+    public StringCriteria getRoleCode() {
+        return roleCode;
+    }
 
-		if (this.getDataScope().getEquals() != null) {
-			criteria.andDataScopeEqualTo(this.getDataScope().getEquals());
-		} else {
-			if (StringUtils.isNotBlank(this.getDataScope().getContains())) {
-				criteria.andDataScopeLike(String.format("%%%s%%", this.getDataScope().getContains()));
-			}
-		}
-	}
-	private void buildIdCriteria(Criteria criteria) {
+    public void setRoleCode(StringCriteria roleCode) {
+        this.roleCode = roleCode;
+    }
 
-		if (this.getId() == null) {
-			return;
-		}
+    public StringCriteria getSystemId() {
+        return systemId;
+    }
 
-		if (this.getId().getEquals() != null) {
-			criteria.andIdEqualTo(this.getId().getEquals());
-		} else {
+    public void setSystemId(StringCriteria systemId) {
+        this.systemId = systemId;
+    }
 
-			if (this.getId().getGreaterOrEqualThan() != null) {
-				criteria.andIdGreaterThanOrEqualTo(this.getId().getGreaterOrEqualThan());
-			}
+    public Criteria buildCriteria(Criteria criteria) {
+        if (criteria == null) {
+            return criteria;
+        }
 
-			if (this.getId().getLessOrEqualThan() != null) {
-				criteria.andIdLessThanOrEqualTo(this.getId().getLessOrEqualThan());
-			}
-		}
-	}
-	private void buildTenantIdCriteria(Criteria criteria) {
+        this.buildIdCriteria(criteria);
+        this.buildTenantIdCriteria(criteria);
+        this.buildNameCriteria(criteria);
+        this.buildRoleExtentCriteria(criteria);
+        this.buildParentIdCriteria(criteria);
+        this.buildIconCriteria(criteria);
+        this.buildDataScopeCriteria(criteria);
+        this.buildRoleCodeCriteria(criteria);
+        this.buildSystemIdCriteria(criteria);
+        return criteria;
+    }
 
-		if (this.getTenantId() == null) {
-			return;
-		}
+    private void buildDataScopeCriteria(Criteria criteria) {
 
-		if (this.getTenantId().getEquals() != null) {
-			criteria.andTenantIdEqualTo(this.getTenantId().getEquals());
-		} else {
+        if (this.getDataScope() == null) {
+            return;
+        }
 
-			if (this.getTenantId().getGreaterOrEqualThan() != null) {
-				criteria.andTenantIdGreaterThanOrEqualTo(this.getTenantId().getGreaterOrEqualThan());
-			}
+        if (this.getDataScope().getEquals() != null) {
+            criteria.andDataScopeEqualTo(this.getDataScope().getEquals());
+        } else {
+            if (StringUtils.isNotBlank(this.getDataScope().getContains())) {
+                criteria.andDataScopeLike(String.format("%%%s%%", this.getDataScope().getContains()));
+            }
+        }
+    }
 
-			if (this.getTenantId().getLessOrEqualThan() != null) {
-				criteria.andTenantIdLessThanOrEqualTo(this.getTenantId().getLessOrEqualThan());
-			}
-		}
-	}
+    private void buildRoleCodeCriteria(Criteria criteria) {
 
-	private void buildNameCriteria(Criteria criteria) {
+        if (this.getRoleCode() == null) {
+            return;
+        }
 
-		if (this.getName() == null) {
-			return;
-		}
+        if (this.getRoleCode().getEquals() != null) {
+            criteria.andRoleCodeEqualTo(this.getRoleCode().getEquals());
+        } else {
+            if (StringUtils.isNotBlank(this.getRoleCode().getContains())) {
+                criteria.andRoleCodeLike(String.format("%%%s%%", this.getRoleCode().getContains()));
+            }
+        }
+    }
 
-		if (this.getName().getEquals() != null) {
-			criteria.andNameEqualTo(this.getName().getEquals());
-		} else {
-			if (StringUtils.isNotBlank(this.getName().getContains())) {
-				criteria.andNameLike(String.format("%%%s%%", this.getName().getContains()));
-			}
-		}
-	}
+    private void buildSystemIdCriteria(Criteria criteria) {
 
-	private void buildRoleExtentCriteria(Criteria criteria) {
+        if (this.getSystemId() == null) {
+            return;
+        }
 
-		if (this.getRoleExtent() == null) {
-			return;
-		}
+        if (this.getSystemId().getEquals() != null) {
+            criteria.andSystemIdEqualTo(this.getSystemId().getEquals());
+        } else {
+            if (StringUtils.isNotBlank(this.getSystemId().getContains())) {
+                criteria.andSystemIdLike(String.format("%%%s%%", this.getSystemId().getContains()));
+            }
+        }
+    }
 
-		if (this.getRoleExtent().getEquals() != null) {
-			criteria.andRoleExtentEqualTo(this.getRoleExtent().getEquals());
-		} else {
-			if (StringUtils.isNotBlank(this.getRoleExtent().getContains())) {
-				criteria.andRoleExtentLike(String.format("%%%s%%", this.getRoleExtent().getContains()));
-			}
-		}
-	}
 
-	private void buildParentIdCriteria(Criteria criteria) {
+    private void buildIdCriteria(Criteria criteria) {
 
-		if (this.getParentId() == null) {
-			return;
-		}
+        if (this.getId() == null) {
+            return;
+        }
 
-		if (this.getParentId().getEquals() != null) {
-			criteria.andParentIdEqualTo(this.getParentId().getEquals());
-		} else {
+        if (this.getId().getEquals() != null) {
+            criteria.andIdEqualTo(this.getId().getEquals());
+        } else {
 
-			if (this.getParentId().getGreaterOrEqualThan() != null) {
-				criteria.andParentIdGreaterThanOrEqualTo(this.getParentId().getGreaterOrEqualThan());
-			}
+            if (this.getId().getGreaterOrEqualThan() != null) {
+                criteria.andIdGreaterThanOrEqualTo(this.getId().getGreaterOrEqualThan());
+            }
 
-			if (this.getParentId().getLessOrEqualThan() != null) {
-				criteria.andParentIdLessThanOrEqualTo(this.getParentId().getLessOrEqualThan());
-			}
-		}
-	}
+            if (this.getId().getLessOrEqualThan() != null) {
+                criteria.andIdLessThanOrEqualTo(this.getId().getLessOrEqualThan());
+            }
+        }
+    }
 
-	private void buildIconCriteria(Criteria criteria) {
+    private void buildTenantIdCriteria(Criteria criteria) {
 
-		if (this.getIcon() == null) {
-			return;
-		}
+        if (this.getTenantId() == null) {
+            return;
+        }
 
-		if (this.getIcon().getEquals() != null) {
-			criteria.andIconEqualTo(this.getIcon().getEquals());
-		} else {
-			if (StringUtils.isNotBlank(this.getIcon().getContains())) {
-				criteria.andIconLike(String.format("%%%s%%", this.getIcon().getContains()));
-			}
-		}
-	}
+        if (this.getTenantId().getEquals() != null) {
+            criteria.andTenantIdEqualTo(this.getTenantId().getEquals());
+        } else {
+
+            if (this.getTenantId().getGreaterOrEqualThan() != null) {
+                criteria.andTenantIdGreaterThanOrEqualTo(this.getTenantId().getGreaterOrEqualThan());
+            }
+
+            if (this.getTenantId().getLessOrEqualThan() != null) {
+                criteria.andTenantIdLessThanOrEqualTo(this.getTenantId().getLessOrEqualThan());
+            }
+        }
+    }
+
+    private void buildNameCriteria(Criteria criteria) {
+
+        if (this.getName() == null) {
+            return;
+        }
+
+        if (this.getName().getEquals() != null) {
+            criteria.andNameEqualTo(this.getName().getEquals());
+        } else {
+            if (StringUtils.isNotBlank(this.getName().getContains())) {
+                criteria.andNameLike(String.format("%%%s%%", this.getName().getContains()));
+            }
+        }
+    }
+
+    private void buildRoleExtentCriteria(Criteria criteria) {
+
+        if (this.getRoleExtent() == null) {
+            return;
+        }
+
+        if (this.getRoleExtent().getEquals() != null) {
+            criteria.andRoleExtentEqualTo(this.getRoleExtent().getEquals());
+        } else {
+            if (StringUtils.isNotBlank(this.getRoleExtent().getContains())) {
+                criteria.andRoleExtentLike(String.format("%%%s%%", this.getRoleExtent().getContains()));
+            }
+        }
+    }
+
+    private void buildParentIdCriteria(Criteria criteria) {
+
+        if (this.getParentId() == null) {
+            return;
+        }
+
+        if (this.getParentId().getEquals() != null) {
+            criteria.andParentIdEqualTo(this.getParentId().getEquals());
+        } else {
+
+            if (this.getParentId().getGreaterOrEqualThan() != null) {
+                criteria.andParentIdGreaterThanOrEqualTo(this.getParentId().getGreaterOrEqualThan());
+            }
+
+            if (this.getParentId().getLessOrEqualThan() != null) {
+                criteria.andParentIdLessThanOrEqualTo(this.getParentId().getLessOrEqualThan());
+            }
+        }
+    }
+
+    private void buildIconCriteria(Criteria criteria) {
+
+        if (this.getIcon() == null) {
+            return;
+        }
+
+        if (this.getIcon().getEquals() != null) {
+            criteria.andIconEqualTo(this.getIcon().getEquals());
+        } else {
+            if (StringUtils.isNotBlank(this.getIcon().getContains())) {
+                criteria.andIconLike(String.format("%%%s%%", this.getIcon().getContains()));
+            }
+        }
+    }
 
 }

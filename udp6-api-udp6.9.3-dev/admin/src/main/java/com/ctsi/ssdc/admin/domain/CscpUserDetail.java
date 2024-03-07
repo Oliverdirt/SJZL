@@ -152,6 +152,85 @@ public class CscpUserDetail implements Serializable {
      */
     private Long thirdType = 0L;
 
+    /**
+     * 证件类型
+     */
+    private String cardType;
+
+    /**
+     * 证件号码
+     */
+    private String idCard;
+
+    /**
+     * 账号类型（account_type: 0:永久、1:临时;99:其他）
+     */
+    private String accountType;
+
+
+    /**
+     * 有效时间:开始时间-结束时间
+     */
+    private String effectiveTime;
+
+    /**
+     * 状态（0:有效、1:无效）
+     */
+    private String dataStatus;
+
+    /**
+     * 所属系统id，多个系统id之间使用逗号隔开
+     */
+    private String systemId;
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
+    }
+
+    public String getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(String effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
+    public String getDataStatus() {
+        return dataStatus;
+    }
+
+    public void setDataStatus(String dataStatus) {
+        this.dataStatus = dataStatus;
+    }
+
     public Long getThirdType() {
         return thirdType;
     }

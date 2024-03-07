@@ -966,6 +966,11 @@ public class CscpMenusExample {
             addCriterion("orderby not between", value1, value2, "orderby");
             return (Criteria) this;
         }
+
+        public Criteria andSystemIdEqualTo(String value) {
+            addCriterion("system_id =", value, "systemId");
+            return (Criteria) this;
+        }
     }
 
     /**

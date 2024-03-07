@@ -114,6 +114,10 @@ public class CscpMenusDTO implements Serializable {
 
     private Integer orderby;
 
+    private String modelId;
+
+    private String systemId;
+
 //    @JsonSerialize(using = LongtoStringSerialize.class)
     private List<Long> roleId;
 
@@ -426,6 +430,22 @@ public class CscpMenusDTO implements Serializable {
 
     public void setChildMenusList(List<CscpMenusDTO> childMenusList) {
         this.childMenusList = childMenusList;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
     }
 
     /**

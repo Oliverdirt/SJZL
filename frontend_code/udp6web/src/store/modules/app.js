@@ -19,7 +19,7 @@ const app = {
   mutations: {
     // 添加动态路由
     updateAppRouter (state, routes) {
-      console.log(routes,'routes')
+      //console.log(routes,'routes111')
       router.addRoutes(routes)
       state.asyncRoutesCompleted = true
     },
